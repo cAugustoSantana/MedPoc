@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Inbox, Pill, Search, Settings, SquareLibrary, TestTubeDiagonal, UsersRound } from "lucide-react";
 
 import {
   Sidebar,
@@ -19,19 +19,29 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
+    title: "Patients",
     url: "#",
-    icon: Inbox,
+    icon: UsersRound,
   },
   {
-    title: "Calendar",
+    title: "Appointments",
     url: "#",
     icon: Calendar,
   },
   {
-    title: "Search",
+    title: "Records",
     url: "#",
-    icon: Search,
+    icon: SquareLibrary,
+  },
+  {
+    title: "Prescriptions",
+    url: "#",
+    icon: Pill,
+  },
+  {
+    title: "Tests",
+    url: "#",
+    icon: TestTubeDiagonal,
   },
   {
     title: "Settings",
