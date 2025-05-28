@@ -66,7 +66,7 @@ const data = {
       items: [
         {
           title: "Placeholder",
-          url: "#",
+          url: "/appointment",
         },
       ],
     },
