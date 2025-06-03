@@ -48,13 +48,13 @@ const data = {
     },
     {
       title: "Patients",
-      url: "#",
+      url: "patient",
       icon: UsersRound,
       isActive: true,
       items: [
         {
           title: "Placeholder",
-          url: "#",
+          url: "/patient",
         },
       ],
     },
@@ -66,7 +66,7 @@ const data = {
       items: [
         {
           title: "Placeholder",
-          url: "#",
+          url: "/appoinment",
         },
       ],
     },
