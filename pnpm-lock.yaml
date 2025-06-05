@@ -61,7 +61,7 @@ importers:
         version: 16.5.0
       drizzle-orm:
         specifier: ^0.44.0
-        version: 0.44.0(@types/pg@8.15.2)(pg@8.16.0)
+        version: 0.44.0(@types/pg@8.15.2)(pg@8.16.0)(postgres@3.4.7)
       lucide-react:
         specifier: ^0.511.0
         version: 0.511.0(react@19.1.0)
@@ -71,6 +71,9 @@ importers:
       pg:
         specifier: ^8.16.0
         version: 8.16.0
+      postgres:
+        specifier: ^3.4.7
+        version: 3.4.7
       react:
         specifier: ^19.0.0
         version: 19.1.0
@@ -3158,6 +3161,10 @@ packages:
   postgres-range@1.1.4:
     resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
 
+  postgres@3.4.7:
+    resolution: {integrity: sha512-Jtc2612XINuBjIl/QTWsV5UvE8UHuNblcO3vVADSrKsrc6RqGX6lOW1cEo3CM2v0XG4Nat8nI+YM7/f26VxXLw==}
+    engines: {node: '>=12'}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -5969,10 +5976,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.0(@types/pg@8.15.2)(pg@8.16.0):
+  drizzle-orm@0.44.0(@types/pg@8.15.2)(pg@8.16.0)(postgres@3.4.7):
     optionalDependencies:
       '@types/pg': 8.15.2
       pg: 8.16.0
+      postgres: 3.4.7
 
   dunder-proto@1.0.1:
     dependencies:
@@ -6961,6 +6969,8 @@ snapshots:
   postgres-interval@3.0.0: {}
 
   postgres-range@1.1.4: {}
+
+  postgres@3.4.7: {}
 
   prelude-ls@1.2.1: {}
 
