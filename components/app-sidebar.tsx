@@ -48,7 +48,7 @@ const data = {
     },
     {
       title: "Patients",
-      url: "patient",
+      url: "#",
       icon: UsersRound,
       isActive: true,
       items: [

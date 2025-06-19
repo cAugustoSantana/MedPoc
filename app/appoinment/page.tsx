@@ -14,7 +14,7 @@ export default function HomePage() {
         </h1>
         <Calendar />
       </div>
-        <Table/>
+        <TableBlock/>
     </main>
   );
 }
