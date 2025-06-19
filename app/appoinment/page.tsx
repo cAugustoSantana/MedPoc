@@ -2,8 +2,8 @@
 import React from 'react';
 
 import Calendar from '@/components/comp-488';
-import TableBlock from '@/components/patient-table';
-import { Table } from '@/components/ui/table';
+// import TableBlock from '@/components/patient-table';
+// import { Table } from '@/components/ui/table';
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Appointments</h1>
         <Calendar />
       </div>
-      <Table />
+      {/* <TableBlock /> */}
     </main>
   );
 }
