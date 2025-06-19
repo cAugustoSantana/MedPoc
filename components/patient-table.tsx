@@ -91,16 +91,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-type Patient = {
-  id: string;
-  name: string;
-  email: string;
-  location: string;
-  flag: string;
-  status: 'Active' | 'Inactive' | 'Pending';
-  balance: number;
-};
+import { Patient } from '@/types/patient';
 
 // Custom filter function for multi-column searching
 const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
@@ -212,7 +203,8 @@ const columns: ColumnDef<Patient>[] = [
   },
 ];
 
-export default function Component() {
+// rececive data from the parent component
+export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
   const id = useId();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -229,24 +221,33 @@ export default function Component() {
     },
   ]);
 
-  const [data, setData] = useState<Patient[]>([]);
-  useEffect(() => {
-    async function fetchPosts() {
-      const res = await fetch(
-        'https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/users-01_fertyx.json',
-      );
-      const data = await res.json();
-      setData(data);
-    }
-    fetchPosts();
-  }, []);
+  // const [data, setData] = useState<Patient[]>([]);
+  // useEffect(() => {
+  //   async function fetchPosts() {
+  //     // const res = await fetch(
+  //     //   'https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/users-01_fertyx.json',
+  //     // );
+  //     // const res = await getAllPatients();
+  //     // data should be in the format of the Patient type
+  //     const data = res.map((item) => ({
+  //       id: item.patientId,
+  //       name: item.name,
+  //       email: item.email,
+  //       location: item.address,
+  //       flag: item.gender,
+  //       status: 'status',
+  //       balance: 0,
+  //     }));
+  //   }
+  //   fetchPosts();
+  // }, []);
 
   const handleDeleteRows = () => {
     const selectedRows = table.getSelectedRowModel().rows;
     const updatedData = data.filter(
       (item) => !selectedRows.some((row) => row.original.id === item.id),
     );
-    setData(updatedData);
+    // setData(updatedData);
     table.resetRowSelection();
   };
 
