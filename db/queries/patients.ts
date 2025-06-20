@@ -9,10 +9,12 @@ export async function getAllPatients(): Promise<Patient[]> {
     id: patient.patientId.toString(),
     name: patient.name,
     email: patient.email ?? '',
-    location: patient.address ?? '',
-    flag: patient.gender ?? '',
-    status: 'Active',
-    balance: 0,
+    dob: patient.dob ?? '',
+    gender: patient.gender ?? '',
+    phone: patient.phone ?? '',
+    address: patient.address ?? '',
+    createdAt: patient.createdAt ?? '',
+    updatedAt: patient.updatedAt ?? '',
   }));
   return patientsData;
 }

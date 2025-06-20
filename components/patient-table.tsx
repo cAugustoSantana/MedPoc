@@ -151,48 +151,24 @@ const columns: ColumnDef<Patient>[] = [
     size: 220,
   },
   {
-    header: 'Location',
-    accessorKey: 'location',
-    cell: ({ row }) => (
-      <div>
-        <span className="text-lg leading-none">{row.original.flag}</span>{' '}
-        {row.getValue('location')}
-      </div>
-    ),
+    header: 'Address',
+    accessorKey: 'address',
+    cell: ({ row }) => <div> {row.getValue('address')}</div>,
     size: 180,
   },
   {
-    header: 'Status',
-    accessorKey: 'status',
-    cell: ({ row }) => (
-      <Badge
-        className={cn(
-          row.getValue('status') === 'Inactive' &&
-            'bg-muted-foreground/60 text-primary-foreground',
-        )}
-      >
-        {row.getValue('status')}
-      </Badge>
-    ),
+    header: 'Phone',
+    accessorKey: 'phone',
+    cell: ({ row }) => {
+      const phone: string = row.getValue('phone');
+      const formattedPhone = phone.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        '($1) $2-$3',
+      );
+      return <Badge>{formattedPhone}</Badge>;
+    },
     size: 100,
     filterFn: statusFilterFn,
-  },
-  {
-    header: 'Performance',
-    accessorKey: 'performance',
-  },
-  {
-    header: 'Balance',
-    accessorKey: 'balance',
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('balance'));
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
-      return formatted;
-    },
-    size: 120,
   },
   {
     id: 'actions',
