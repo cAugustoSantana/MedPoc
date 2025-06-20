@@ -36,87 +36,45 @@ const data = {
   navMain: [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: Home,
-      isActive: true,
-      items: [
-        {
-          title: "Placeholder",
-          url: "#",
-        },
-      ],
+      isActive: true ,
     },
     {
       title: "Patients",
-      url: "#",
+      url: "/patient",
       icon: UsersRound,
       isActive: true,
-      items: [
-        {
-          title: "Placeholder",
-          url: "/patient",
-        },
-      ],
     },
     {
       title: "Appointments",
-      url: "#",
+      url: "/appoinment",
       icon: Calendar,
       isActive: true,
-      items: [
-        {
-          title: "Placeholder",
-          url: "/appoinment",
-        },
-      ],
     },
     {
       title: "Records",
-      url: "#",
+      url: "/records",
       icon: SquareLibrary,
       isActive: true,
-      items: [
-        {
-          title: "Placeholder",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Prescriptions",
       url: "#",
       icon: Pill,
       isActive: true,
-      items: [
-        {
-          title: "Placeholder",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Tests",
       url: "#",
       icon: Home,
       isActive: true,
-      items: [
-        {
-          title: "TestTubeDiagonal",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Settings",
       url: "#",
       icon: Settings,
       isActive: true,
-      items: [
-        {
-          title: "Placeholder",
-          url: "#",
-        },
-      ],
     },
   ],
 };

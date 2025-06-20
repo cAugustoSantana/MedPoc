@@ -9,7 +9,7 @@ export async function getAllPatients(): Promise<Patient[]> {
     id: patient.patientId.toString(),
     name: patient.name,
     email: patient.email ?? '',
-    location: patient.address ?? '',
+    location: patient.dob ?? '',
     flag: patient.gender ?? '',
     status: 'Active',
     balance: 0,
