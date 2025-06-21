@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PlusIcon } from 'lucide-react';
-import { NewPatient } from '@/types/patient';
+import { PatientFormData } from '@/lib/validations/patient';
 import { createPatientAction } from '@/app/actions/patients';
 
 interface AddPatientDialogProps {
@@ -31,7 +31,8 @@ interface AddPatientDialogProps {
 export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<Partial<NewPatient>>({
+  const [errors, setErrors] = useState<string[]>([]);
+  const [formData, setFormData] = useState<PatientFormData>({
     name: '',
     email: '',
     dob: '',
@@ -43,18 +44,17 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrors([]);
 
     try {
-      // Validate required fields
-      if (!formData.name) {
-        alert('Name is required');
-        return;
-      }
-
-      const result = await createPatientAction(formData as NewPatient);
+      const result = await createPatientAction(formData);
 
       if (!result.success) {
-        alert(result.error || 'Failed to create patient');
+        if (result.details) {
+          setErrors(result.details);
+        } else {
+          setErrors([result.error || 'Failed to create patient']);
+        }
         return;
       }
 
@@ -72,17 +72,21 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
       onPatientAdded();
     } catch (error) {
       console.error('Error creating patient:', error);
-      alert('Failed to create patient');
+      setErrors(['An unexpected error occurred']);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleInputChange = (field: keyof NewPatient, value: string) => {
+  const handleInputChange = (field: keyof PatientFormData, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+    // Clear errors when user starts typing
+    if (errors.length > 0) {
+      setErrors([]);
+    }
   };
 
   return (
@@ -101,6 +105,17 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
+          {/* Error messages */}
+          {errors.length > 0 && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <ul className="text-sm text-red-600 space-y-1">
+                {errors.map((error, index) => (
+                  <li key={index}>• {error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">

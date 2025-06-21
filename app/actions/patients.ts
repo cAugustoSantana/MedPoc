@@ -3,10 +3,22 @@
 import { createPatient, updatePatient, deletePatient } from '@/db/queries/patients';
 import { NewPatient } from '@/types/patient';
 import { revalidatePath } from 'next/cache';
+import { validateCreatePatient, validateUpdatePatient, CreatePatientData, UpdatePatientData } from '@/lib/validations/patient';
 
-export async function createPatientAction(patientData: NewPatient) {
+export async function createPatientAction(patientData: CreatePatientData) {
   try {
-    const patient = await createPatient(patientData);
+    // Validate the input data
+    const validation = validateCreatePatient(patientData);
+
+    if (!validation.success) {
+      return {
+        success: false,
+        error: 'Validation failed',
+        details: validation.errors
+      };
+    }
+
+    const patient = await createPatient(validation.data);
     revalidatePath('/patient');
     return { success: true, data: patient };
   } catch (error) {
@@ -15,9 +27,20 @@ export async function createPatientAction(patientData: NewPatient) {
   }
 }
 
-export async function updatePatientAction(id: number, patientData: Partial<NewPatient>) {
+export async function updatePatientAction(id: number, patientData: UpdatePatientData) {
   try {
-    const patient = await updatePatient(id, patientData);
+    // Validate the input data
+    const validation = validateUpdatePatient(patientData);
+
+    if (!validation.success) {
+      return {
+        success: false,
+        error: 'Validation failed',
+        details: validation.errors
+      };
+    }
+
+    const patient = await updatePatient(id, validation.data);
     revalidatePath('/patient');
     return { success: true, data: patient };
   } catch (error) {
