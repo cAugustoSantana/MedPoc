@@ -67,6 +67,14 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
     },
   });
 
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    if (!newOpen) {
+      // Reset form when dialog closes
+      form.reset();
+    }
+  };
+
   const onSubmit = async (data: CreatePatientData) => {
     setLoading(true);
 
@@ -97,7 +105,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <PlusIcon className="h-4 w-4" />
@@ -259,7 +267,10 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  form.reset();
+                  setOpen(false);
+                }}
               >
                 Cancel
               </Button>
