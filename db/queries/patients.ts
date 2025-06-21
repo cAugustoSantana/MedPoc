@@ -21,6 +21,12 @@ export async function updatePatient(id: number, updatedPatient: Partial<NewPatie
   return updatedPatientResult[0];
 }
 
+export async function deletePatient(id: number): Promise<Patient> {
+  const deletedPatient = await db.delete(patient).where(eq(patient.patientId, id)).returning();
+  console.log("Deleted patient:", deletedPatient);
+  return deletedPatient[0];
+}
+
 // If you need a frontend-friendly version with string ID, you can add this utility function
 export function toFrontendPatient(dbPatient: Patient): PatientForFrontend {
   return {
