@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select';
 import { PlusIcon } from 'lucide-react';
 import { PatientFormData } from '@/lib/validations/patient';
-import { createPatientAction } from '@/app/actions/patients';
+import { createPatientAction } from '@/app/patient/actions';
 
 interface AddPatientDialogProps {
   onPatientAdded: () => void;
