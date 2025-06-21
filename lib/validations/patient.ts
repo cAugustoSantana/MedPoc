@@ -6,7 +6,14 @@ export const patientSchema = z.object({
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
   dob: z.string().optional().or(z.literal("")),
   gender: z.enum(["male", "female", "other"]).optional().or(z.literal("")),
-  phone: z.string().optional().or(z.literal("")),
+  phone: z.string()
+    .optional()
+    .or(z.literal(""))
+    .refine((val) => {
+      if (!val) return true; // Allow empty
+      const digitsOnly = val.replace(/\D/g, ''); // Remove non-digits
+      return digitsOnly.length === 10;
+    }, "Phone number must be exactly 10 digits"),
   address: z.string().optional().or(z.literal("")),
 });
 
