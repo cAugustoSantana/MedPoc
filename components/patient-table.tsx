@@ -193,7 +193,13 @@ const columns: ColumnDef<Patient>[] = [
 ];
 
 // rececive data from the parent component
-export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
+export default function PatientTable({
+  data,
+  addPatientComponent,
+}: Readonly<{
+  data: Patient[];
+  addPatientComponent?: React.ReactNode;
+}>) {
   const id = useId();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -234,7 +240,8 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
   const handleDeleteRows = () => {
     const selectedRows = table.getSelectedRowModel().rows;
     const updatedData = data.filter(
-      (item) => !selectedRows.some((row) => row.original.id === item.id),
+      (item) =>
+        !selectedRows.some((row) => row.original.patientId === item.patientId),
     );
     // setData(updatedData);
     table.resetRowSelection();
@@ -475,14 +482,16 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
             </AlertDialog>
           )}
           {/* Add user button */}
-          <Button className="ml-auto" variant="outline">
-            <PlusIcon
-              className="-ms-1 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            Add user
-          </Button>
+          {addPatientComponent || (
+            <Button className="ml-auto" variant="outline">
+              <PlusIcon
+                className="-ms-1 opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+              Add user
+            </Button>
+          )}
         </div>
       </div>
 
@@ -763,8 +772,14 @@ function RowActions({ row }: { row: Row<Patient> }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Share</DropdownMenuItem>
-          <DropdownMenuItem>Add to favorites</DropdownMenuItem>
+          <DropdownMenuItem>
+            <span>Share</span>
+            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <span>Add to favorites</span>
+            <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-destructive focus:text-destructive">
