@@ -8,8 +8,8 @@ export default async function PatientPage() {
   const patientsData = await getAllPatients();
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="text-center w-full max-w-6xl">
+    <main className="min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-6">Patients</h1>
         <PatientTable
           data={patientsData}
