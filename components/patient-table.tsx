@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { useEffect, useId, useMemo, useRef, useState } from "react"
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -16,7 +16,7 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 import {
   ChevronDownIcon,
   ChevronFirstIcon,
@@ -32,9 +32,9 @@ import {
   ListFilterIcon,
   PlusIcon,
   TrashIcon,
-} from "lucide-react"
+} from 'lucide-react';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,10 +45,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -63,26 +63,26 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@/components/ui/pagination"
+} from '@/components/ui/pagination';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -90,44 +90,35 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-
-type Item = {
-  id: string
-  name: string
-  email: string
-  location: string
-  flag: string
-  status: "Active" | "Inactive" | "Pending"
-  balance: number
-}
+} from '@/components/ui/table';
+import { Patient } from '@/types/patient';
 
 // Custom filter function for multi-column searching
-const multiColumnFilterFn: FilterFn<Item> = (row, columnId, filterValue) => {
+const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
   const searchableRowContent =
-    `${row.original.name} ${row.original.email}`.toLowerCase()
-  const searchTerm = (filterValue ?? "").toLowerCase()
-  return searchableRowContent.includes(searchTerm)
-}
+    `${row.original.name} ${row.original.email}`.toLowerCase();
+  const searchTerm = (filterValue ?? '').toLowerCase();
+  return searchableRowContent.includes(searchTerm);
+};
 
-const statusFilterFn: FilterFn<Item> = (
+const statusFilterFn: FilterFn<Patient> = (
   row,
   columnId,
-  filterValue: string[]
+  filterValue: string[],
 ) => {
-  if (!filterValue?.length) return true
-  const status = row.getValue(columnId) as string
-  return filterValue.includes(status)
-}
+  if (!filterValue?.length) return true;
+  const status = row.getValue(columnId) as string;
+  return filterValue.includes(status);
+};
 
-const columns: ColumnDef<Item>[] = [
+const columns: ColumnDef<Patient>[] = [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -143,112 +134,118 @@ const columns: ColumnDef<Item>[] = [
     size: 28,
     enableSorting: false,
     enableHiding: false,
+    meta: { align: 'center' },
   },
   {
-    header: "Name",
-    accessorKey: "name",
+    header: 'Name',
+    accessorKey: 'name',
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("name")}</div>
+      <div className="font-medium text-left">{row.getValue('name')}</div>
     ),
     size: 180,
     filterFn: multiColumnFilterFn,
     enableHiding: false,
+    meta: { align: 'left' },
   },
   {
-    header: "Email",
-    accessorKey: "email",
+    header: 'Email',
+    accessorKey: 'email',
+    cell: ({ row }) => <div className="text-left">{row.getValue('email')}</div>,
     size: 220,
+    meta: { align: 'left' },
   },
   {
-    header: "Location",
-    accessorKey: "location",
+    header: 'Address',
+    accessorKey: 'address',
     cell: ({ row }) => (
-      <div>
-        <span className="text-lg leading-none">{row.original.flag}</span>{" "}
-        {row.getValue("location")}
-      </div>
+      <div className="text-left"> {row.getValue('address')}</div>
     ),
     size: 180,
+    meta: { align: 'left' },
   },
   {
-    header: "Status",
-    accessorKey: "status",
-    cell: ({ row }) => (
-      <Badge
-        className={cn(
-          row.getValue("status") === "Inactive" &&
-            "bg-muted-foreground/60 text-primary-foreground"
-        )}
-      >
-        {row.getValue("status")}
-      </Badge>
-    ),
+    header: 'Phone',
+    accessorKey: 'phone',
+    cell: ({ row }) => {
+      const phone: string = row.getValue('phone');
+      const formattedPhone = phone.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        '($1) $2-$3',
+      );
+      return (
+        <div className="text-right w-full justify-end flex">
+          {formattedPhone}
+        </div>
+      );
+    },
     size: 100,
     filterFn: statusFilterFn,
+    meta: { align: 'right' },
   },
   {
-    header: "Performance",
-    accessorKey: "performance",
-  },
-  {
-    header: "Balance",
-    accessorKey: "balance",
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("balance"))
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-      return formatted
-    },
-    size: 120,
-  },
-  {
-    id: "actions",
+    id: 'actions',
     header: () => <span className="sr-only">Actions</span>,
     cell: ({ row }) => <RowActions row={row} />,
     size: 60,
     enableHiding: false,
+    meta: { align: 'center' },
   },
-]
+];
 
-export default function Component() {
-  const id = useId()
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+// rececive data from the parent component
+export default function PatientTable({
+  data,
+  addPatientComponent,
+}: Readonly<{
+  data: Patient[];
+  addPatientComponent?: React.ReactNode;
+}>) {
+  const id = useId();
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
-  })
-  const inputRef = useRef<HTMLInputElement>(null)
+  });
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [sorting, setSorting] = useState<SortingState>([
     {
-      id: "name",
+      id: 'name',
       desc: false,
     },
-  ])
+  ]);
 
-  const [data, setData] = useState<Item[]>([])
-  useEffect(() => {
-    async function fetchPosts() {
-      const res = await fetch(
-        "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/users-01_fertyx.json"
-      )
-      const data = await res.json()
-      setData(data)
-    }
-    fetchPosts()
-  }, [])
+  // const [data, setData] = useState<Patient[]>([]);
+  // useEffect(() => {
+  //   async function fetchPosts() {
+  //     // const res = await fetch(
+  //     //   'https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/users-01_fertyx.json',
+  //     // );
+  //     // const res = await getAllPatients();
+  //     // data should be in the format of the Patient type
+  //     const data = res.map((item) => ({
+  //       id: item.patientId,
+  //       name: item.name,
+  //       email: item.email,
+  //       location: item.address,
+  //       flag: item.gender,
+  //       status: 'status',
+  //       balance: 0,
+  //     }));
+  //   }
+  //   fetchPosts();
+  // }, []);
 
   const handleDeleteRows = () => {
-    const selectedRows = table.getSelectedRowModel().rows
+    const selectedRows = table.getSelectedRowModel().rows;
     const updatedData = data.filter(
-      (item) => !selectedRows.some((row) => row.original.id === item.id)
-    )
-    setData(updatedData)
-    table.resetRowSelection()
-  }
+      (item) =>
+        !selectedRows.some((row) => row.original.patientId === item.patientId),
+    );
+    // setData(updatedData);
+    table.resetRowSelection();
+  };
 
   const table = useReactTable({
     data,
@@ -269,48 +266,48 @@ export default function Component() {
       columnFilters,
       columnVisibility,
     },
-  })
+  });
 
   // Get unique status values
   const uniqueStatusValues = useMemo(() => {
-    const statusColumn = table.getColumn("status")
+    const statusColumn = table.getColumn('status');
 
-    if (!statusColumn) return []
+    if (!statusColumn) return [];
 
-    const values = Array.from(statusColumn.getFacetedUniqueValues().keys())
+    const values = Array.from(statusColumn.getFacetedUniqueValues().keys());
 
-    return values.sort()
-  }, [table.getColumn("status")?.getFacetedUniqueValues()])
+    return values.sort();
+  }, [table.getColumn('status')?.getFacetedUniqueValues()]);
 
   // Get counts for each status
   const statusCounts = useMemo(() => {
-    const statusColumn = table.getColumn("status")
-    if (!statusColumn) return new Map()
-    return statusColumn.getFacetedUniqueValues()
-  }, [table.getColumn("status")?.getFacetedUniqueValues()])
+    const statusColumn = table.getColumn('status');
+    if (!statusColumn) return new Map();
+    return statusColumn.getFacetedUniqueValues();
+  }, [table.getColumn('status')?.getFacetedUniqueValues()]);
 
   const selectedStatuses = useMemo(() => {
-    const filterValue = table.getColumn("status")?.getFilterValue() as string[]
-    return filterValue ?? []
-  }, [table.getColumn("status")?.getFilterValue()])
+    const filterValue = table.getColumn('status')?.getFilterValue() as string[];
+    return filterValue ?? [];
+  }, [table.getColumn('status')?.getFilterValue()]);
 
   const handleStatusChange = (checked: boolean, value: string) => {
-    const filterValue = table.getColumn("status")?.getFilterValue() as string[]
-    const newFilterValue = filterValue ? [...filterValue] : []
+    const filterValue = table.getColumn('status')?.getFilterValue() as string[];
+    const newFilterValue = filterValue ? [...filterValue] : [];
 
     if (checked) {
-      newFilterValue.push(value)
+      newFilterValue.push(value);
     } else {
-      const index = newFilterValue.indexOf(value)
+      const index = newFilterValue.indexOf(value);
       if (index > -1) {
-        newFilterValue.splice(index, 1)
+        newFilterValue.splice(index, 1);
       }
     }
 
     table
-      .getColumn("status")
-      ?.setFilterValue(newFilterValue.length ? newFilterValue : undefined)
-  }
+      .getColumn('status')
+      ?.setFilterValue(newFilterValue.length ? newFilterValue : undefined);
+  };
 
   return (
     <div className="space-y-4">
@@ -323,14 +320,14 @@ export default function Component() {
               id={`${id}-input`}
               ref={inputRef}
               className={cn(
-                "peer min-w-60 ps-9",
-                Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9"
+                'peer min-w-60 ps-9',
+                Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9',
               )}
               value={
-                (table.getColumn("name")?.getFilterValue() ?? "") as string
+                (table.getColumn('name')?.getFilterValue() ?? '') as string
               }
               onChange={(e) =>
-                table.getColumn("name")?.setFilterValue(e.target.value)
+                table.getColumn('name')?.setFilterValue(e.target.value)
               }
               placeholder="Filter by name or email..."
               type="text"
@@ -339,14 +336,14 @@ export default function Component() {
             <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
               <ListFilterIcon size={16} aria-hidden="true" />
             </div>
-            {Boolean(table.getColumn("name")?.getFilterValue()) && (
+            {Boolean(table.getColumn('name')?.getFilterValue()) && (
               <button
                 className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Clear filter"
                 onClick={() => {
-                  table.getColumn("name")?.setFilterValue("")
+                  table.getColumn('name')?.setFilterValue('');
                   if (inputRef.current) {
-                    inputRef.current.focus()
+                    inputRef.current.focus();
                   }
                 }}
               >
@@ -390,7 +387,7 @@ export default function Component() {
                         htmlFor={`${id}-${i}`}
                         className="flex grow justify-between gap-2 font-normal"
                       >
-                        {value}{" "}
+                        {value}{' '}
                         <span className="text-muted-foreground ms-2 text-xs">
                           {statusCounts.get(value)}
                         </span>
@@ -431,7 +428,7 @@ export default function Component() {
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -466,11 +463,11 @@ export default function Component() {
                       Are you absolutely sure?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete{" "}
-                      {table.getSelectedRowModel().rows.length} selected{" "}
+                      This action cannot be undone. This will permanently delete{' '}
+                      {table.getSelectedRowModel().rows.length} selected{' '}
                       {table.getSelectedRowModel().rows.length === 1
-                        ? "row"
-                        : "rows"}
+                        ? 'row'
+                        : 'rows'}
                       .
                     </AlertDialogDescription>
                   </AlertDialogHeader>
@@ -485,14 +482,16 @@ export default function Component() {
             </AlertDialog>
           )}
           {/* Add user button */}
-          <Button className="ml-auto" variant="outline">
-            <PlusIcon
-              className="-ms-1 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            Add user
-          </Button>
+          {addPatientComponent || (
+            <Button className="ml-auto" variant="outline">
+              <PlusIcon
+                className="-ms-1 opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+              Add user
+            </Button>
+          )}
         </div>
       </div>
 
@@ -503,34 +502,35 @@ export default function Component() {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
+                  const align = header.column.columnDef.meta?.align || 'left';
                   return (
                     <TableHead
                       key={header.id}
                       style={{ width: `${header.getSize()}px` }}
-                      className="h-11"
+                      className={`h-11 text-${align}`}
                     >
                       {header.isPlaceholder ? null : header.column.getCanSort() ? (
                         <div
                           className={cn(
                             header.column.getCanSort() &&
-                              "flex h-full cursor-pointer items-center justify-between gap-2 select-none"
+                              'flex h-full cursor-pointer items-center justify-between gap-2 select-none',
                           )}
                           onClick={header.column.getToggleSortingHandler()}
                           onKeyDown={(e) => {
                             // Enhanced keyboard handling for sorting
                             if (
                               header.column.getCanSort() &&
-                              (e.key === "Enter" || e.key === " ")
+                              (e.key === 'Enter' || e.key === ' ')
                             ) {
-                              e.preventDefault()
-                              header.column.getToggleSortingHandler()?.(e)
+                              e.preventDefault();
+                              header.column.getToggleSortingHandler()?.(e);
                             }
                           }}
                           tabIndex={header.column.getCanSort() ? 0 : undefined}
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                           {{
                             asc: (
@@ -552,11 +552,11 @@ export default function Component() {
                       ) : (
                         flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )
                       )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -566,16 +566,22 @@ export default function Component() {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="last:py-0">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const align = cell.column.columnDef.meta?.align || 'left';
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={`last:py-0 text-${align}`}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
@@ -602,7 +608,7 @@ export default function Component() {
           <Select
             value={table.getState().pagination.pageSize.toString()}
             onValueChange={(value) => {
-              table.setPageSize(Number(value))
+              table.setPageSize(Number(value));
             }}
           >
             <SelectTrigger id={id} className="w-fit whitespace-nowrap">
@@ -633,12 +639,12 @@ export default function Component() {
                   table.getState().pagination.pageIndex *
                     table.getState().pagination.pageSize +
                     table.getState().pagination.pageSize,
-                  0
+                  0,
                 ),
-                table.getRowCount()
+                table.getRowCount(),
               )}
-            </span>{" "}
-            of{" "}
+            </span>{' '}
+            of{' '}
             <span className="text-foreground">
               {table.getRowCount().toString()}
             </span>
@@ -706,7 +712,7 @@ export default function Component() {
         </div>
       </div>
       <p className="text-muted-foreground mt-4 text-center text-sm">
-        Example of a more complex table made with{" "}
+        Example of a more complex table made with{' '}
         <a
           className="hover:text-foreground underline"
           href="https://tanstack.com/table"
@@ -717,10 +723,10 @@ export default function Component() {
         </a>
       </p>
     </div>
-  )
+  );
 }
 
-function RowActions({ row }: { row: Row<Item> }) {
+function RowActions({ row }: { row: Row<Patient> }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -766,8 +772,14 @@ function RowActions({ row }: { row: Row<Item> }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Share</DropdownMenuItem>
-          <DropdownMenuItem>Add to favorites</DropdownMenuItem>
+          <DropdownMenuItem>
+            <span>Share</span>
+            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <span>Add to favorites</span>
+            <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-destructive focus:text-destructive">
@@ -776,5 +788,5 @@ function RowActions({ row }: { row: Row<Item> }) {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
