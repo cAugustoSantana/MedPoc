@@ -1,4 +1,6 @@
 'use client';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
@@ -93,6 +95,7 @@ import {
 } from '@/components/ui/table';
 import { Patient } from '@/types/patient';
 
+
 // Custom filter function for multi-column searching
 const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
   const searchableRowContent =
@@ -139,7 +142,12 @@ const columns: ColumnDef<Patient>[] = [
     header: 'Name',
     accessorKey: 'name',
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue('name')}</div>
+       <Link
+      href={`/patients/${row.original.uuid}`} // ✅ use uuid here
+      className="font-medium text-blue-600 hover:underline"
+    >
+      {row.getValue('name')}
+    </Link>
     ),
     size: 180,
     filterFn: multiColumnFilterFn,
@@ -206,6 +214,7 @@ const columns: ColumnDef<Patient>[] = [
 // rececive data from the parent component
 export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
   const id = useId();
+  const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -563,33 +572,42 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="last:py-0">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                onClick={() => router.push(`/patients/${row.original.uuid}`)}
+                data-state={row.getIsSelected() && 'selected'}
+                className="cursor-pointer hover:bg-muted/50 transition-colors"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    className="last:py-0"
+                    onClick={(e) => {
+                      const target = e.target as HTMLElement;
+                      if (
+                        target.closest('button') ||
+                        target.closest('[role="menuitem"]') ||
+                        target.closest('[data-no-nav]')
+                      ) {
+                        e.stopPropagation();
+                      }
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
-          </TableBody>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="text-center h-24">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
         </Table>
       </div>
 
