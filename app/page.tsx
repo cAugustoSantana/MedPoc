@@ -4,62 +4,94 @@ import {
   CardHeader
 } from "@/components/ui/card";
 
-import {Calendar} from '@/components/ui/calendar-rac'
-import Image from "next/image";
+import { Calendar } from '@/components/ui/calendar-rac'
 import { getAllPatients } from '@/db/queries/patients';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { patient } from "@/db/migrations/schema";
-
-
 
 const patientsData = await getAllPatients();
 
 export default function Home() {
-  return ( 
-    <div>
-        <div>
-          <Card>
+  return (
+    <div className="min-h-screen bg-white-100 p-6 flex flex-col space-y-6">
+      
+      {/* Horizontal stack of cards */}
+      <div className="flex flex-row gap-6">
+        
+        {/* Card 1: Calendar */}
+        <div className="w-fit">
+          <Card className="rounded-2xl shadow-md bg-white inline-block">
+            <CardHeader>
+              <h2 className="text-xl font-semibold text-center  ">Schedule</h2>
+            </CardHeader>
             <CardContent>
-            <Calendar></Calendar>
+              <Calendar />
             </CardContent>
           </Card>
         </div>
-    <div>
-      <Card>
-        <Table> 
-          <TableHeader> 
-            <TableRow>
-              <TableHead>  Name </TableHead>
-              <TableHead>  Gender </TableHead>
-              <TableHead >  Email </TableHead>
-              <TableHead>  Date of birth </TableHead>
-      </TableRow>
-      </TableHeader>
-      <TableBody>
-        {patientsData.map((patient) => (
-          <TableRow key = {patient.name}>
-            <TableCell>{patient.name}</TableCell>
-            <TableCell>{patient.flag}</TableCell>
-            <TableCell>{patient.email}</TableCell>
-            <TableCell>{patient.location}</TableCell>
-          </TableRow>
 
-        ))}   
-      </TableBody>
-      </Table>
-    </Card>
-    </div>
-    </div>
-   
+        {/* Card 2: Patients Table */}
+        <div className="flex-1">
+          <Card className="rounded-2xl shadow-md bg-white w-full">
+            <CardHeader>
+              <h2 className="text-xl font-semibold text-center">Patients</h2>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">Name</TableHead>
+                    <TableHead className="text-center">Gender</TableHead>
+                    <TableHead className="text-center">Email</TableHead>
+                    <TableHead className="text-center">Date of Birth</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {patientsData.map((patient) => (
+                    <TableRow key={patient.name}>
+                      <TableCell className="text-center">{patient.name}</TableCell>
+                      <TableCell className="text-center">{patient.flag}</TableCell>
+                      <TableCell className="text-center">{patient.email}</TableCell>
+                      <TableCell className="text-center">{patient.location}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
 
+        {/* Card 3: Placeholder */}
+        <div className="w-64">
+          <Card className="rounded-2xl shadow-md bg-white h-full">
+            <CardHeader>
+              <h2 className="text-xl font-semibold">Placeholder</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-500">This space is reserved.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Bottom full-width stacked card */}
+      <div className="w-full">
+        <Card className="rounded-2xl shadow-md bg-white w-full">
+          <CardHeader>
+            <h2 className="text-xl font-semibold">Extra Info</h2>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-500">This card is vertically stacked and full width.</p>
+          </CardContent>
+        </Card>
+      </div>
+
+    </div>
   );
 }
