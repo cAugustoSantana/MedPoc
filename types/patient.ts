@@ -4,9 +4,7 @@ import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 // Use Drizzle's inferred types
 export type Patient = InferSelectModel<typeof patient>;
 export type NewPatient = InferInsertModel<typeof patient>;
-
-// Frontend-friendly  type (if you need the id as string)
-
+// Frontend-friendly type (if you need the id as string)
 export type PatientForFrontend = {
   id: string;
   name: string;
