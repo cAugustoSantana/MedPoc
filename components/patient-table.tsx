@@ -134,65 +134,53 @@ const columns: ColumnDef<Patient>[] = [
     size: 28,
     enableSorting: false,
     enableHiding: false,
+    meta: { align: 'center' },
   },
   {
     header: 'Name',
     accessorKey: 'name',
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue('name')}</div>
+      <div className="font-medium text-left">{row.getValue('name')}</div>
     ),
     size: 180,
     filterFn: multiColumnFilterFn,
     enableHiding: false,
+    meta: { align: 'left' },
   },
   {
     header: 'Email',
     accessorKey: 'email',
+    cell: ({ row }) => <div className="text-left">{row.getValue('email')}</div>,
     size: 220,
+    meta: { align: 'left' },
   },
   {
-    header: 'Location',
-    accessorKey: 'location',
+    header: 'Address',
+    accessorKey: 'address',
     cell: ({ row }) => (
-      <div>
-        <span className="text-lg leading-none">{row.original.flag}</span>{' '}
-        {row.getValue('location')}
-      </div>
+      <div className="text-left"> {row.getValue('address')}</div>
     ),
     size: 180,
+    meta: { align: 'left' },
   },
   {
-    header: 'Status',
-    accessorKey: 'status',
-    cell: ({ row }) => (
-      <Badge
-        className={cn(
-          row.getValue('status') === 'Inactive' &&
-            'bg-muted-foreground/60 text-primary-foreground',
-        )}
-      >
-        {row.getValue('status')}
-      </Badge>
-    ),
+    header: 'Phone',
+    accessorKey: 'phone',
+    cell: ({ row }) => {
+      const phone: string = row.getValue('phone');
+      const formattedPhone = phone.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        '($1) $2-$3',
+      );
+      return (
+        <div className="text-right w-full justify-end flex">
+          {formattedPhone}
+        </div>
+      );
+    },
     size: 100,
     filterFn: statusFilterFn,
-  },
-  {
-    header: 'Performance',
-    accessorKey: 'performance',
-  },
-  {
-    header: 'Balance',
-    accessorKey: 'balance',
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('balance'));
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
-      return formatted;
-    },
-    size: 120,
+    meta: { align: 'right' },
   },
   {
     id: 'actions',
@@ -200,11 +188,18 @@ const columns: ColumnDef<Patient>[] = [
     cell: ({ row }) => <RowActions row={row} />,
     size: 60,
     enableHiding: false,
+    meta: { align: 'center' },
   },
 ];
 
 // rececive data from the parent component
-export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
+export default function PatientTable({
+  data,
+  addPatientComponent,
+}: Readonly<{
+  data: Patient[];
+  addPatientComponent?: React.ReactNode;
+}>) {
   const id = useId();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -245,7 +240,8 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
   const handleDeleteRows = () => {
     const selectedRows = table.getSelectedRowModel().rows;
     const updatedData = data.filter(
-      (item) => !selectedRows.some((row) => row.original.id === item.id),
+      (item) =>
+        !selectedRows.some((row) => row.original.patientId === item.patientId),
     );
     // setData(updatedData);
     table.resetRowSelection();
@@ -486,14 +482,16 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
             </AlertDialog>
           )}
           {/* Add user button */}
-          <Button className="ml-auto" variant="outline">
-            <PlusIcon
-              className="-ms-1 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            Add user
-          </Button>
+          {addPatientComponent || (
+            <Button className="ml-auto" variant="outline">
+              <PlusIcon
+                className="-ms-1 opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+              Add user
+            </Button>
+          )}
         </div>
       </div>
 
@@ -504,11 +502,12 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
+                  const align = header.column.columnDef.meta?.align || 'left';
                   return (
                     <TableHead
                       key={header.id}
                       style={{ width: `${header.getSize()}px` }}
-                      className="h-11"
+                      className={`h-11 text-${align}`}
                     >
                       {header.isPlaceholder ? null : header.column.getCanSort() ? (
                         <div
@@ -569,14 +568,20 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="last:py-0">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const align = cell.column.columnDef.meta?.align || 'left';
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={`last:py-0 text-${align}`}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
@@ -706,6 +711,17 @@ export default function PatientTable({ data }: Readonly<{ data: Patient[] }>) {
           </Pagination>
         </div>
       </div>
+      <p className="text-muted-foreground mt-4 text-center text-sm">
+        Example of a more complex table made with{' '}
+        <a
+          className="hover:text-foreground underline"
+          href="https://tanstack.com/table"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          TanStack Table
+        </a>
+      </p>
     </div>
   );
 }
@@ -756,8 +772,14 @@ function RowActions({ row }: { row: Row<Patient> }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Share</DropdownMenuItem>
-          <DropdownMenuItem>Add to favorites</DropdownMenuItem>
+          <DropdownMenuItem>
+            <span>Share</span>
+            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <span>Add to favorites</span>
+            <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-destructive focus:text-destructive">
