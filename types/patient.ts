@@ -7,6 +7,7 @@ export type NewPatient = InferInsertModel<typeof patient>;
 // Frontend-friendly type (if you need the id as string)
 export type PatientForFrontend = {
   id: string;
+  uuid: string;
   name: string;
   email: string;
   dob: string;
