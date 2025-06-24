@@ -12,7 +12,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
-  Row,
   SortingState,
   useReactTable,
   VisibilityState,
@@ -184,7 +183,7 @@ const columns: ColumnDef<Patient>[] = [
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
-    cell: ({ row }) => <RowActions row={row} />,
+    cell: () => <RowActions />,
     size: 60,
     enableHiding: false,
     meta: { align: "center" },
@@ -267,28 +266,26 @@ export default function PatientTable({
     },
   });
 
-  // Get unique status values
+  // Get unique status values for filter
   const uniqueStatusValues = useMemo(() => {
     const statusColumn = table.getColumn("status");
-
     if (!statusColumn) return [];
-
     const values = Array.from(statusColumn.getFacetedUniqueValues().keys());
-
     return values.sort();
-  }, [table.getColumn("status")?.getFacetedUniqueValues()]);
+  }, [table]);
 
   // Get counts for each status
   const statusCounts = useMemo(() => {
     const statusColumn = table.getColumn("status");
     if (!statusColumn) return new Map();
     return statusColumn.getFacetedUniqueValues();
-  }, [table.getColumn("status")?.getFacetedUniqueValues()]);
+  }, [table]);
 
   const selectedStatuses = useMemo(() => {
-    const filterValue = table.getColumn("status")?.getFilterValue() as string[];
+    const statusColumn = table.getColumn("status");
+    const filterValue = statusColumn?.getFilterValue() as string[];
     return filterValue ?? [];
-  }, [table.getColumn("status")?.getFilterValue()]);
+  }, [table]);
 
   const handleStatusChange = (checked: boolean, value: string) => {
     const filterValue = table.getColumn("status")?.getFilterValue() as string[];
@@ -725,7 +722,7 @@ export default function PatientTable({
   );
 }
 
-function RowActions({ row }: { row: Row<Patient> }) {
+function RowActions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -51,7 +51,7 @@ export function validateCreatePatient(
 
   return {
     success: false,
-    errors: result.error.errors.map((err: any) => err.message),
+    errors: result.error.errors.map((err: z.ZodIssue) => err.message),
   };
 }
 
@@ -68,6 +68,6 @@ export function validateUpdatePatient(
 
   return {
     success: false,
-    errors: result.error.errors.map((err: any) => err.message),
+    errors: result.error.errors.map((err: z.ZodIssue) => err.message),
   };
 }
