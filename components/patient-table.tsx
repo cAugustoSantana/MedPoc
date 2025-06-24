@@ -90,6 +90,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Patient } from "@/types/patient";
+import {
+  deletePatientAction,
+  deleteMultiplePatientsAction,
+} from "@/app/patient/actions";
 
 // Custom filter function for multi-column searching
 const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
@@ -109,87 +113,6 @@ const statusFilterFn: FilterFn<Patient> = (
   return filterValue.includes(status);
 };
 
-const columns: ColumnDef<Patient>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    size: 28,
-    enableSorting: false,
-    enableHiding: false,
-    meta: { align: "center" },
-  },
-  {
-    header: "Name",
-    accessorKey: "name",
-    cell: ({ row }) => (
-      <div className="font-medium text-left">{row.getValue("name")}</div>
-    ),
-    size: 180,
-    filterFn: multiColumnFilterFn,
-    enableHiding: false,
-    meta: { align: "left" },
-  },
-  {
-    header: "Email",
-    accessorKey: "email",
-    cell: ({ row }) => <div className="text-left">{row.getValue("email")}</div>,
-    size: 220,
-    meta: { align: "left" },
-  },
-  {
-    header: "Address",
-    accessorKey: "address",
-    cell: ({ row }) => (
-      <div className="text-left"> {row.getValue("address")}</div>
-    ),
-    size: 180,
-    meta: { align: "left" },
-  },
-  {
-    header: "Phone",
-    accessorKey: "phone",
-    cell: ({ row }) => {
-      const phone: string = row.getValue("phone");
-      const formattedPhone = phone.replace(
-        /(\d{3})(\d{3})(\d{4})/,
-        "($1) $2-$3",
-      );
-      return (
-        <div className="text-right w-full justify-end flex">
-          {formattedPhone}
-        </div>
-      );
-    },
-    size: 100,
-    filterFn: statusFilterFn,
-    meta: { align: "right" },
-  },
-  {
-    id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
-    cell: () => <RowActions />,
-    size: 60,
-    enableHiding: false,
-    meta: { align: "center" },
-  },
-];
-
 // rececive data from the parent component
 export default function PatientTable({
   data,
@@ -206,6 +129,7 @@ export default function PatientTable({
     pageSize: 10,
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -214,35 +138,114 @@ export default function PatientTable({
     },
   ]);
 
-  // const [data, setData] = useState<Patient[]>([]);
-  // useEffect(() => {
-  //   async function fetchPosts() {
-  //     // const res = await fetch(
-  //     //   'https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/users-01_fertyx.json',
-  //     // );
-  //     // const res = await getAllPatients();
-  //     // data should be in the format of the Patient type
-  //     const data = res.map((item) => ({
-  //       id: item.patientId,
-  //       name: item.name,
-  //       email: item.email,
-  //       location: item.address,
-  //       flag: item.gender,
-  //       status: 'status',
-  //       balance: 0,
-  //     }));
-  //   }
-  //   fetchPosts();
-  // }, []);
+  const columns: ColumnDef<Patient>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      size: 28,
+      enableSorting: false,
+      enableHiding: false,
+      meta: { align: "center" },
+    },
+    {
+      header: "Name",
+      accessorKey: "name",
+      cell: ({ row }) => (
+        <div className="font-medium text-left">{row.getValue("name")}</div>
+      ),
+      size: 180,
+      filterFn: multiColumnFilterFn,
+      enableHiding: false,
+      meta: { align: "left" },
+    },
+    {
+      header: "Email",
+      accessorKey: "email",
+      cell: ({ row }) => (
+        <div className="text-left">{row.getValue("email")}</div>
+      ),
+      size: 220,
+      meta: { align: "left" },
+    },
+    {
+      header: "Address",
+      accessorKey: "address",
+      cell: ({ row }) => (
+        <div className="text-left"> {row.getValue("address")}</div>
+      ),
+      size: 180,
+      meta: { align: "left" },
+    },
+    {
+      header: "Phone",
+      accessorKey: "phone",
+      cell: ({ row }) => {
+        const phone: string = row.getValue("phone");
+        const formattedPhone = phone.replace(
+          /(\d{3})(\d{3})(\d{4})/,
+          "($1) $2-$3",
+        );
+        return (
+          <div className="text-right w-full justify-end flex">
+            {formattedPhone}
+          </div>
+        );
+      },
+      size: 100,
+      filterFn: statusFilterFn,
+      meta: { align: "right" },
+    },
+    {
+      id: "actions",
+      header: () => <span className="sr-only">Actions</span>,
+      cell: ({ row }) => <RowActions patient={row.original} />,
+      size: 60,
+      enableHiding: false,
+      meta: { align: "center" },
+    },
+  ];
 
-  const handleDeleteRows = () => {
-    // const selectedRows = table.getSelectedRowModel().rows;
-    // const updatedData = data.filter(
-    //   (item) =>
-    //     !selectedRows.some((row) => row.original.patientId === item.patientId),
-    // );
-    // setData(updatedData);
-    table.resetRowSelection();
+  const handleDeleteRows = async () => {
+    const selectedRows = table.getSelectedRowModel().rows;
+
+    if (selectedRows.length === 0) return;
+
+    setIsDeleting(true);
+
+    try {
+      // Delete all selected patients using server action
+      const patientIds = selectedRows.map((row) => row.original.patientId);
+      const result = await deleteMultiplePatientsAction(patientIds);
+
+      if (result.success) {
+        // Reset row selection
+        table.resetRowSelection();
+      } else {
+        console.error("Failed to delete patients:", result.error);
+        // You might want to show a toast notification here
+      }
+    } catch (error) {
+      console.error("Error deleting patients:", error);
+      // You might want to show a toast notification here
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const table = useReactTable({
@@ -469,9 +472,14 @@ export default function PatientTable({
                   </AlertDialogHeader>
                 </div>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteRows}>
-                    Delete
+                  <AlertDialogCancel disabled={isDeleting}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteRows}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -722,7 +730,21 @@ export default function PatientTable({
   );
 }
 
-function RowActions() {
+function RowActions({ patient }: { patient: Patient }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deletePatientAction(patient.patientId);
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+      // You might want to show a toast notification here
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -778,10 +800,43 @@ function RowActions() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive focus:text-destructive">
-          <span>Delete</span>
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              disabled={isDeleting}
+              onSelect={(e) => e.preventDefault()}
+            >
+              <span>{isDeleting ? "Deleting..." : "Delete"}</span>
+              <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+              <div
+                className="flex size-9 shrink-0 items-center justify-center rounded-full border"
+                aria-hidden="true"
+              >
+                <CircleAlertIcon className="opacity-80" size={16} />
+              </div>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  patient <strong>{patient.name}</strong>.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
+                {isDeleting ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DropdownMenuContent>
     </DropdownMenu>
   );

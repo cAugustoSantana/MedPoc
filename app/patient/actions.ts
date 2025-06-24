@@ -60,13 +60,27 @@ export async function updatePatientAction(
   }
 }
 
-export async function deletePatientAction(id: number) {
+export async function deletePatientAction(patientId: number) {
   try {
-    const patient = await deletePatient(id);
+    await deletePatient(patientId);
     revalidatePath("/patient");
-    return { success: true, data: patient };
+    revalidatePath("/appoinment");
+    return { success: true };
   } catch (error) {
     console.error("Error deleting patient:", error);
     return { success: false, error: "Failed to delete patient" };
+  }
+}
+
+export async function deleteMultiplePatientsAction(patientIds: number[]) {
+  try {
+    const deletePromises = patientIds.map((id) => deletePatient(id));
+    await Promise.all(deletePromises);
+    revalidatePath("/patient");
+    revalidatePath("/appoinment");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting patients:", error);
+    return { success: false, error: "Failed to delete patients" };
   }
 }
