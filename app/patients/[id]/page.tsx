@@ -1,5 +1,5 @@
-import { getPatientById } from '@/db/queries/patients';
-import { notFound } from 'next/navigation';
+import { getPatientById } from "@/db/queries/patients";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: { id: string }; // 'id' is the UUID
@@ -21,7 +21,8 @@ export default async function PatientDetailPage({ params }: Props) {
           <span className="font-semibold">Gender:</span> {patient.flag}
         </p>
         <p className="text-gray-700">
-          <span className="font-semibold">Date of Birth:</span> {patient.location}
+          <span className="font-semibold">Date of Birth:</span>{" "}
+          {patient.location}
         </p>
       </div>
     </div>

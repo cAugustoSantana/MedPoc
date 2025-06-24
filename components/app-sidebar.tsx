@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
   Calendar,
-  Command,
   Home,
   Pill,
   Settings,
@@ -12,11 +11,7 @@ import {
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarRail,
-} from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarRail } from "@/components/ui/sidebar";
 
 const data = {
   navMain: [
@@ -24,7 +19,7 @@ const data = {
       title: "Home",
       url: "/",
       icon: Home,
-      isActive: true ,
+      isActive: true,
     },
     {
       title: "Patients",
