@@ -1,10 +1,13 @@
 // app/patients/[id]/page.tsx
 
+
+
 import { getAllPatients, getPatientById } from '@/db/queries/patients';
 import { notFound } from 'next/navigation';
 import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { CollapsibleContent } from '@radix-ui/react-collapsible';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ChevronDown } from 'lucide-react';
 
 type Props = {
   params: { id: string }; // UUID
@@ -31,9 +34,11 @@ export default async function PatientDetailPage({ params }: Props) {
           <DetailItem label="Created At" value={patient.createdAt?.toString()} />
         </div>
       </div>
-      <div className="max-w-10/10 mx-auto bg-gray-50 rounded-xl shadow p-6 m-5">
+      <div className='max-w-10/10 mx-auto bg-gray-50 rounded-xl shadow p-6 m-5 cursor-pointer bg-gray-100 p-4 rounded border border-gray-300 hover:shadow-md hover:bg-gray-200 transition"'>
       <Collapsible>
-        <CollapsibleTrigger><h1>Medical Records</h1></CollapsibleTrigger>
+        <CollapsibleTrigger asChild>
+               <h1 className="text-xl font-bold">Medical Record</h1>
+        </CollapsibleTrigger>
          <CollapsibleContent>
           <Table>
                 <TableHeader>
@@ -58,9 +63,11 @@ export default async function PatientDetailPage({ params }: Props) {
         </CollapsibleContent>
       </Collapsible> 
       </div>
-       <div className="max-w-10/10 mx-auto bg-gray-50 rounded-xl shadow p-6 m-5">
+      <div className='max-w-10/10 mx-auto bg-gray-50 rounded-xl shadow p-6 m-5 cursor-pointer bg-gray-100 p-4 rounded border border-gray-300 hover:shadow-md hover:bg-gray-200 transition"'>
       <Collapsible>
-        <CollapsibleTrigger><h1>Appoinments</h1></CollapsibleTrigger>
+        <CollapsibleTrigger asChild>
+               <h1 className="text-xl font-bold">Appointments</h1>
+        </CollapsibleTrigger>
          <CollapsibleContent>
           <Table>
                 <TableHeader>
@@ -85,9 +92,11 @@ export default async function PatientDetailPage({ params }: Props) {
         </CollapsibleContent>
       </Collapsible> 
       </div>
-      <div className="max-w-10/10 mx-auto bg-gray-50 rounded-xl shadow p-6 m-5">
+      <div className='max-w-10/10 mx-auto bg-gray-50 rounded-xl shadow p-6 m-5 cursor-pointer bg-gray-100 p-4 rounded border border-gray-300 hover:shadow-md hover:bg-gray-200 transition"'>
       <Collapsible>
-        <CollapsibleTrigger><h1>Tests</h1></CollapsibleTrigger>
+        <CollapsibleTrigger asChild>
+               <h1 className="text-xl font-bold">Tests</h1>
+        </CollapsibleTrigger>
          <CollapsibleContent>
           <Table>
                 <TableHeader>
