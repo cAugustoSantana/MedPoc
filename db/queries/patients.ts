@@ -30,6 +30,7 @@ export async function deletePatient(id: number): Promise<Patient> {
 // If you need a frontend-friendly version with string ID, you can add this utility function
 export function toFrontendPatient(dbPatient: Patient): PatientForFrontend {
   return {
+    uuid: dbPatient.uuid?.toString(),
     id: dbPatient.patientId.toString(),
     name: dbPatient.name,
     email: dbPatient.email ?? '',
@@ -40,4 +41,27 @@ export function toFrontendPatient(dbPatient: Patient): PatientForFrontend {
     createdAt: dbPatient.createdAt ?? '',
     updatedAt: dbPatient.updatedAt ?? '',
   };
+}
+export async function getPatientById(uuid: string): Promise<PatientForFrontend | null> {
+  const result = await db
+    .select()
+    .from(patient)
+    .where(eq(patient.uuid, uuid)); // 🟢 query by UUID
+
+  if (!result.length) return null;
+
+  const p = result[0];
+
+  const patientData: Patient = {
+    uuid: p.uuid.toString(),
+    patientId: p.patientId, // or p.uuid depending on what you want to expose
+    name: p.name,
+    email: p.email ?? '',
+    address: p.address ?? '',
+    gender: p.gender ?? '',
+    dob: p.dob,
+    phone: p.phone,
+  };
+
+  return patientData;
 }
