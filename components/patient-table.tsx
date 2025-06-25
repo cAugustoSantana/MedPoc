@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from 'next/navigation';
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
@@ -215,6 +216,8 @@ export default function PatientTable({
       desc: false,
     },
   ]);
+  const router = useRouter();
+
 
   // const [data, setData] = useState<Patient[]>([]);
   // useEffect(() => {
@@ -561,40 +564,43 @@ export default function PatientTable({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    const align = cell.column.columnDef.meta?.align || 'left';
-                    return (
-                      <TableCell
-                        key={cell.id}
-                        className={`last:py-0 text-${align}`}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+            <TableBody>
+  {table.getRowModel().rows?.length ? (
+    table.getRowModel().rows.map((row) => (
+      <TableRow
+        key={row.id}
+        onClick={() => router.push(`/patients/${row.original.uuid}`)}
+        className="cursor-pointer hover:bg-muted/50 transition-colors"
+        data-state={row.getIsSelected() && 'selected'}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell
+            key={cell.id}
+            className="last:py-0 text-center"
+            onClick={(e) => {
+              const target = e.target as HTMLElement;
+              if (
+                target.closest('button') ||
+                target.closest('[role="menuitem"]') ||
+                target.closest('[data-no-nav]')
+              ) {
+                e.stopPropagation();
+              }
+            }}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        ))}
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
+        No results.
+      </TableCell>
+    </TableRow>
+  )}
+            </TableBody>
         </Table>
       </div>
 
@@ -711,17 +717,6 @@ export default function PatientTable({
           </Pagination>
         </div>
       </div>
-      <p className="text-muted-foreground mt-4 text-center text-sm">
-        Example of a more complex table made with{' '}
-        <a
-          className="hover:text-foreground underline"
-          href="https://tanstack.com/table"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          TanStack Table
-        </a>
-      </p>
     </div>
   );
 }

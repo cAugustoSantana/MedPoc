@@ -31,6 +31,7 @@ export async function deletePatient(id: number): Promise<Patient> {
 export function toFrontendPatient(dbPatient: Patient): PatientForFrontend {
   return {
     id: dbPatient.patientId.toString(),
+    uuid: dbPatient.uuid?.toString(),
     name: dbPatient.name,
     email: dbPatient.email ?? '',
     dob: dbPatient.dob?.toString() ?? '',
@@ -40,4 +41,29 @@ export function toFrontendPatient(dbPatient: Patient): PatientForFrontend {
     createdAt: dbPatient.createdAt ?? '',
     updatedAt: dbPatient.updatedAt ?? '',
   };
+}
+
+
+export async function getPatientById(uuid: string): Promise<Patient | null> {
+  const result = await db.select().from(patient).where(eq(patient.uuid, uuid));
+
+  if (!result.length) return null;
+
+  const p = result[0];
+
+  const patientData: PatientForFrontend = {
+    patientId: p.patientId,
+    uuid: p.uuid,
+    name: p.name,
+    email: p.email ?? '',
+    dob: p.dob ?? '',
+    gender: p.gender ?? '',
+    phone: p.phone ?? '',
+    address:  p.address ?? '',
+    createdAt: p.createdAt ?? '',
+    updatedAt: p.updatedAt ?? '',
+
+  };
+
+  return patientData;
 }
