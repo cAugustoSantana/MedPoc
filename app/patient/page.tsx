@@ -1,8 +1,7 @@
-// app/page.tsx
-import React from 'react';
-import PatientTable from '@/components/patient-table';
-import { getAllPatients } from '@/db/queries/patients';
-import { PatientActions } from '@/components/patient-actions';
+import React from "react";
+import PatientTable from "@/components/patient-table";
+import { getAllPatients } from "@/db/queries/patients";
+import { PatientActions } from "@/components/patient-actions";
 
 export default async function PatientPage() {
   const patientsData = await getAllPatients();

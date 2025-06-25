@@ -1,11 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardHeader
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { Calendar } from '@/components/ui/calendar-rac'
-import { getAllPatients } from '@/db/queries/patients';
+import { Calendar } from "@/components/ui/calendar-rac";
+import { getAllPatients } from "@/db/queries/patients";
 import {
   Table,
   TableBody,
@@ -13,17 +9,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 const patientsData = await getAllPatients();
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white-100 p-6 flex flex-col space-y-6">
-      
       {/* Horizontal stack of cards */}
       <div className="flex flex-row gap-6">
-        
         {/* Card 1: Calendar */}
         <div className="w-fit">
           <Card className="rounded-2xl shadow-md bg-white inline-block">
@@ -55,10 +49,18 @@ export default function Home() {
                 <TableBody>
                   {patientsData.map((patient) => (
                     <TableRow key={patient.name}>
-                      <TableCell className="text-center">{patient.name}</TableCell>
-                      <TableCell className="text-center">{patient.flag}</TableCell>
-                      <TableCell className="text-center">{patient.email}</TableCell>
-                      <TableCell className="text-center">{patient.location}</TableCell>
+                      <TableCell className="text-center">
+                        {patient.name}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {patient.flag}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {patient.email}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {patient.location}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -87,11 +89,12 @@ export default function Home() {
             <h2 className="text-xl font-semibold">Extra Info</h2>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-500">This card is vertically stacked and full width.</p>
+            <p className="text-gray-500">
+              This card is vertically stacked and full width.
+            </p>
           </CardContent>
         </Card>
       </div>
-
     </div>
   );
 }

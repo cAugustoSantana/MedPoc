@@ -1,9 +1,17 @@
-'use server';
+"use server";
 
-import { createPatient, updatePatient, deletePatient } from '@/db/queries/patients';
-import { NewPatient } from '@/types/patient';
-import { revalidatePath } from 'next/cache';
-import { validateCreatePatient, validateUpdatePatient, CreatePatientData, UpdatePatientData } from '@/lib/validations/patient';
+import {
+  createPatient,
+  updatePatient,
+  deletePatient,
+} from "@/db/queries/patients";
+import { revalidatePath } from "next/cache";
+import {
+  validateCreatePatient,
+  validateUpdatePatient,
+  CreatePatientData,
+  UpdatePatientData,
+} from "@/lib/validations/patient";
 
 export async function createPatientAction(patientData: CreatePatientData) {
   try {
@@ -13,21 +21,24 @@ export async function createPatientAction(patientData: CreatePatientData) {
     if (!validation.success) {
       return {
         success: false,
-        error: 'Validation failed',
-        details: validation.errors
+        error: "Validation failed",
+        details: validation.errors,
       };
     }
 
     const patient = await createPatient(validation.data);
-    revalidatePath('/patient');
+    revalidatePath("/patient");
     return { success: true, data: patient };
   } catch (error) {
-    console.error('Error creating patient:', error);
-    return { success: false, error: 'Failed to create patient' };
+    console.error("Error creating patient:", error);
+    return { success: false, error: "Failed to create patient" };
   }
 }
 
-export async function updatePatientAction(id: number, patientData: UpdatePatientData) {
+export async function updatePatientAction(
+  id: number,
+  patientData: UpdatePatientData,
+) {
   try {
     // Validate the input data
     const validation = validateUpdatePatient(patientData);
@@ -35,27 +46,41 @@ export async function updatePatientAction(id: number, patientData: UpdatePatient
     if (!validation.success) {
       return {
         success: false,
-        error: 'Validation failed',
-        details: validation.errors
+        error: "Validation failed",
+        details: validation.errors,
       };
     }
 
     const patient = await updatePatient(id, validation.data);
-    revalidatePath('/patient');
+    revalidatePath("/patient");
     return { success: true, data: patient };
   } catch (error) {
-    console.error('Error updating patient:', error);
-    return { success: false, error: 'Failed to update patient' };
+    console.error("Error updating patient:", error);
+    return { success: false, error: "Failed to update patient" };
   }
 }
 
-export async function deletePatientAction(id: number) {
+export async function deletePatientAction(patientId: number) {
   try {
-    const patient = await deletePatient(id);
-    revalidatePath('/patient');
-    return { success: true, data: patient };
+    await deletePatient(patientId);
+    revalidatePath("/patient");
+    revalidatePath("/appoinment");
+    return { success: true };
   } catch (error) {
-    console.error('Error deleting patient:', error);
-    return { success: false, error: 'Failed to delete patient' };
+    console.error("Error deleting patient:", error);
+    return { success: false, error: "Failed to delete patient" };
   }
-} 
+}
+
+export async function deleteMultiplePatientsAction(patientIds: number[]) {
+  try {
+    const deletePromises = patientIds.map((id) => deletePatient(id));
+    await Promise.all(deletePromises);
+    revalidatePath("/patient");
+    revalidatePath("/appoinment");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting patients:", error);
+    return { success: false, error: "Failed to delete patients" };
+  }
+}

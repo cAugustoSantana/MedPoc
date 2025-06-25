@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -22,30 +22,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { PlusIcon } from 'lucide-react';
+} from "@/components/ui/popover";
+import { PlusIcon } from "lucide-react";
 import {
   createPatientSchema,
   CreatePatientData,
-} from '@/lib/validations/patient';
-import { createPatientAction } from '@/app/patient/actions';
-import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+} from "@/lib/validations/patient";
+import { createPatientAction } from "@/app/patient/actions";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface AddPatientDialogProps {
   onPatientAdded: () => void;
@@ -58,12 +58,12 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
   const form = useForm<CreatePatientData>({
     resolver: zodResolver(createPatientSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      dob: '',
-      gender: '',
-      phone: '',
-      address: '',
+      name: "",
+      email: "",
+      dob: "",
+      gender: "",
+      phone: "",
+      address: "",
     },
   });
 
@@ -87,18 +87,18 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
             toast.error(error);
           });
         } else {
-          toast.error(result.error || 'Failed to create patient');
+          toast.error(result.error || "Failed to create patient");
         }
         return;
       }
 
-      toast.success('Patient created successfully');
+      toast.success("Patient created successfully");
       form.reset();
       setOpen(false);
       onPatientAdded();
     } catch (error) {
-      console.error('Error creating patient:', error);
-      toast.error('An unexpected error occurred');
+      console.error("Error creating patient:", error);
+      toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,8 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
         <DialogHeader>
           <DialogTitle>Add New Patient</DialogTitle>
           <DialogDescription>
-            Fill in the patient information below. Click save when you're done.
+            Fill in the patient information below. Click save when you&apos;re
+            done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -163,12 +164,12 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                         <Button
                           variant="outline"
                           className={cn(
-                            'w-full pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground',
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground",
                           )}
                         >
                           {field.value ? (
-                            format(new Date(field.value + 'T00:00:00'), 'PPP')
+                            format(new Date(field.value + "T00:00:00"), "PPP")
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -181,7 +182,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                         mode="single"
                         selected={
                           field.value
-                            ? new Date(field.value + 'T00:00:00')
+                            ? new Date(field.value + "T00:00:00")
                             : undefined
                         }
                         onSelect={(date) => {
@@ -189,16 +190,16 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                             const year = date.getFullYear();
                             const month = String(date.getMonth() + 1).padStart(
                               2,
-                              '0',
+                              "0",
                             );
-                            const day = String(date.getDate()).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, "0");
                             field.onChange(`${year}-${month}-${day}`);
                           } else {
-                            field.onChange('');
+                            field.onChange("");
                           }
                         }}
                         disabled={(date) =>
-                          date > new Date() || date < new Date('1900-01-01')
+                          date > new Date() || date < new Date("1900-01-01")
                         }
                         captionLayout="dropdown"
                       />
@@ -275,7 +276,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Saving...' : 'Save Patient'}
+                {loading ? "Saving..." : "Save Patient"}
               </Button>
             </DialogFooter>
           </form>
