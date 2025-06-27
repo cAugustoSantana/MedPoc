@@ -1,16 +1,14 @@
 // app/patients/[id]/page.tsx
 
 import { getPatientById } from "@/db/queries/patients";
-import { notFound } from "next/navigation";
 
 type Props = {
-  params: { id: string }; // UUID
+  params: Promise<{ uuid: string }>; // UUID - Promise in Next.js 15
 };
 
 export default async function PatientDetailPage({ params }: Props) {
-  const patient = await getPatientById(params.id);
-
-  if (!patient) return notFound();
+  const { uuid } = await params;
+  const patient = await getPatientById(uuid);
 
   return (
     <div className="min-h-screen p-8 bg-white">
@@ -25,7 +23,7 @@ export default async function PatientDetailPage({ params }: Props) {
           <DetailItem label="Address" value={patient.address} />
           <DetailItem
             label="Created At"
-            value={patient.created_at?.toString()}
+            value={patient.createdAt?.toString()}
           />
         </div>
       </div>

@@ -9,6 +9,20 @@ export async function getAllPatients(): Promise<Patient[]> {
   return patients;
 }
 
+export async function getPatientById(uuid: string): Promise<Patient> {
+  const patients = await db
+    .select()
+    .from(patient)
+    .where(eq(patient.uuid, uuid));
+  console.log("Fetched patient by UUID:", patients);
+
+  if (!patients[0]) {
+    throw new Error(`Patient with UUID ${uuid} not found`);
+  }
+
+  return patients[0];
+}
+
 export async function createPatient(newPatient: NewPatient): Promise<Patient> {
   const createdPatient = await db
     .insert(patient)
