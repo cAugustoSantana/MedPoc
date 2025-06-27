@@ -64,7 +64,7 @@ export async function deletePatientAction(patientId: number) {
   try {
     await deletePatient(patientId);
     revalidatePath("/patient");
-    revalidatePath("/appoinment");
+    revalidatePath("/appointment");
     return { success: true };
   } catch (error) {
     console.error("Error deleting patient:", error);
@@ -77,7 +77,7 @@ export async function deleteMultiplePatientsAction(patientIds: number[]) {
     const deletePromises = patientIds.map((id) => deletePatient(id));
     await Promise.all(deletePromises);
     revalidatePath("/patient");
-    revalidatePath("/appoinment");
+    revalidatePath("/appointment");
     return { success: true };
   } catch (error) {
     console.error("Error deleting patients:", error);

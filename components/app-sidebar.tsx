@@ -29,7 +29,7 @@ const data = {
     },
     {
       title: "Appointments",
-      url: "/appoinment",
+      url: "/appointment",
       icon: Calendar,
       isActive: true,
     },
