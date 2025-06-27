@@ -6,7 +6,7 @@ import Calendar from "@/components/comp-488";
 import { Patient } from "@/types/patient";
 
 export default async function HomePage() {
-  let patientsData: Patient[] = [];
+  //let patientsData: Patient[] = [];
 
  /* try {
     patientsData = await getAllPatients();
