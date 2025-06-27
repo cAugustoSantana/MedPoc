@@ -3,7 +3,7 @@ import React from "react";
 import Calendar from "@/components/comp-488";
 // import PatientTable from "@/components/patient-table";
 // import { getAllPatients } from "@/db/queries/patients";
-import { Patient } from "@/types/patient";
+//import { Patient } from "@/types/patient";
 
 export default async function HomePage() {
   //let patientsData: Patient[] = [];
