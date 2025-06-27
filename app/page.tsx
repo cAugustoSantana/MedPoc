@@ -53,13 +53,13 @@ export default function Home() {
                         {patient.name}
                       </TableCell>
                       <TableCell className="text-center">
-                        {patient.flag}
+                        {patient.gender}
                       </TableCell>
                       <TableCell className="text-center">
                         {patient.email}
                       </TableCell>
                       <TableCell className="text-center">
-                        {patient.location}
+                        {patient.dob}
                       </TableCell>
                     </TableRow>
                   ))}
