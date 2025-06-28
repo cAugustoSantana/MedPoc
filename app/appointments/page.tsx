@@ -163,16 +163,6 @@ export default function AppointmentsPage() {
           onSelect={handleDateSelect}
           className="rounded-md border"
         />
-
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">
-            Quick Stats
-          </h3>
-          <div className="space-y-1 text-sm text-blue-700">
-            <div>Total Appointments: {appointments.length}</div>
-            <div>Today: {selectedDateAppointments.length}</div>
-          </div>
-        </div>
       </div>
 
       {/* Main Content Area */}
