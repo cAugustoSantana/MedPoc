@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
+import { AddAppointmentDialog } from "@/components/add-appointment-dialog";
 
 // Mock appointment data
 const mockAppointments = [
@@ -134,13 +135,14 @@ const mockAppointments = [
 ];
 
 export default function AppointmentsPage() {
+  const [appointments, setAppointments] = useState(mockAppointments);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(2024, 11, 15),
   ); // December 15, 2024
 
   // Filter appointments for selected date
   const selectedDateAppointments = selectedDate
-    ? mockAppointments.filter((appointment) =>
+    ? appointments.filter((appointment) =>
         isSameDay(appointment.date, selectedDate),
       )
     : [];
@@ -156,6 +158,30 @@ export default function AppointmentsPage() {
       default:
         return "bg-gray-100 text-gray-800 hover:bg-gray-100";
     }
+  };
+
+  const handleAppointmentAdded = (appointmentData: any) => {
+    // Convert form data to appointment object
+    const [hours, minutes] = appointmentData.time.split(":");
+    const appointmentDate = new Date(appointmentData.date);
+    appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+
+    const newAppointment = {
+      id: Math.max(...appointments.map((a) => a.id)) + 1,
+      patientName: appointmentData.patientName,
+      time: format(appointmentDate, "hh:mm a"),
+      duration: appointmentData.duration,
+      type: appointmentData.type,
+      phone: appointmentData.phone || "",
+      notes: appointmentData.notes || "",
+      status: appointmentData.status,
+      date: appointmentDate,
+    };
+
+    setAppointments((prev) => [...prev, newAppointment]);
+
+    // Update selected date to show the new appointment
+    setSelectedDate(appointmentDate);
   };
 
   return (
@@ -183,7 +209,7 @@ export default function AppointmentsPage() {
             Quick Stats
           </h3>
           <div className="space-y-1 text-sm text-blue-700">
-            <div>Total Appointments: {mockAppointments.length}</div>
+            <div>Total Appointments: {appointments.length}</div>
             <div>Today: {selectedDateAppointments.length}</div>
           </div>
         </div>
@@ -202,10 +228,7 @@ export default function AppointmentsPage() {
                   : "Select a date to view appointments"}
               </p>
             </div>
-            <Button className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Add Appointment
-            </Button>
+            <AddAppointmentDialog onAppointmentAdded={handleAppointmentAdded} />
           </div>
         </div>
 
@@ -273,13 +296,9 @@ export default function AppointmentsPage() {
                   There are no appointments scheduled for{" "}
                   {format(selectedDate, "MMMM d, yyyy")}.
                 </p>
-                <Button
-                  variant="outline"
-                  className="flex items-center gap-2 bg-transparent"
-                >
-                  <Plus className="h-4 w-4" />
-                  Schedule New Appointment
-                </Button>
+                <AddAppointmentDialog
+                  onAppointmentAdded={handleAppointmentAdded}
+                />
               </div>
             )
           ) : (
