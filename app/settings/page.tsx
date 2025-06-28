@@ -244,3 +244,12 @@
 //     </Form>
 //   )
 // }
+import React from "react";
+
+export default function SettingsPage() {
+  return (
+    <main>
+      <h1> Hola</h1>
+    </main>
+  );
+}

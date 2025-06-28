@@ -1,12 +1,20 @@
 import React from "react";
 
 import Calendar from "@/components/comp-488";
-import PatientTable from "@/components/patient-table";
-import { getAllPatients } from "@/db/queries/patients";
+// import PatientTable from "@/components/patient-table";
+// import { getAllPatients } from "@/db/queries/patients";
+//import { Patient } from "@/types/patient";
 
-const patientsData = await getAllPatients();
+export default async function HomePage() {
+  //let patientsData: Patient[] = [];
 
-export default function HomePage() {
+ /* try {
+    patientsData = await getAllPatients();
+  } catch (error) {
+    console.error("Failed to fetch patients:", error);
+    // Continue with empty data instead of crashing
+  }*/
+
   return (
     <main className="bg-white p-6 min-h-screen">
       {/* Row container with full screen height */}
@@ -23,7 +31,7 @@ export default function HomePage() {
 
         {/* Table Section */}
         <div className="flex-1">
-          <PatientTable data={patientsData} />
+
         </div>
       </div>
     </main>

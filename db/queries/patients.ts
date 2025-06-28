@@ -9,6 +9,20 @@ export async function getAllPatients(): Promise<Patient[]> {
   return patients;
 }
 
+export async function getPatientById(uuid: string): Promise<Patient> {
+  const patients = await db
+    .select()
+    .from(patient)
+    .where(eq(patient.uuid, uuid));
+  console.log("Fetched patient by UUID:", patients);
+
+  if (!patients[0]) {
+    throw new Error(`Patient with UUID ${uuid} not found`);
+  }
+
+  return patients[0];
+}
+
 export async function createPatient(newPatient: NewPatient): Promise<Patient> {
   const createdPatient = await db
     .insert(patient)
@@ -38,44 +52,4 @@ export async function deletePatient(id: number): Promise<Patient> {
     .returning();
   console.log("Deleted patient:", deletedPatient);
   return deletedPatient[0];
-}
-
-// If you need a frontend-friendly version with string ID, you can add this utility function
-export function toFrontendPatient(dbPatient: Patient): PatientForFrontend {
-  return {
-    id: dbPatient.patientId.toString(),
-    name: dbPatient.name,
-    email: dbPatient.email ?? '',
-    dob: dbPatient.dob?.toString() ?? '',
-    gender: dbPatient.gender ?? '',
-    phone: dbPatient.phone ?? '',
-    address: dbPatient.address ?? '',
-    createdAt: dbPatient.createdAt ?? '',
-    updatedAt: dbPatient.updatedAt ?? '',
-  };
-}
-
-
-export async function getPatientById(uuid: string): Promise<Patient | null> {
-  const result = await db.select().from(patient).where(eq(patient.uuid, uuid));
-
-  if (!result.length) return null;
-
-  const p = result[0];
-
-  const patientData: PatientForFrontend = {
-    patientId: p.patientId,
-    uuid: p.uuid,
-    name: p.name,
-    email: p.email ?? '',
-    dob: p.dob ?? '',
-    gender: p.gender ?? '',
-    phone: p.phone ?? '',
-    address:  p.address ?? '',
-    createdAt: p.createdAt ?? '',
-    updatedAt: p.updatedAt ?? '',
-
-  };
-
-  return patientData;
 }
