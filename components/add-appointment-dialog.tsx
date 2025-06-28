@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { format } from 'date-fns';
-import { PlusIcon, CalendarIcon } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { PlusIcon } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -24,40 +23,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Combobox } from '@/components/ui/combobox';
-import { cn, formatPhoneNumber } from '@/lib/utils';
-import { createAppointmentAction } from '@/app/appointments/actions';
-import { toast } from 'sonner';
-import { Patient } from '@/types/patient';
-import { AppointmentFormData, Appointment } from '@/types/appointment';
-import { AppointmentAvailabilityPicker } from './appointment-availability-picker';
+} from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
+import { formatPhoneNumber } from "@/lib/utils";
+import { createAppointmentAction } from "@/app/appointments/actions";
+import { toast } from "sonner";
+import { Patient } from "@/types/patient";
+import { AppointmentFormData, Appointment } from "@/types/appointment";
+import { AppointmentAvailabilityPicker } from "./appointment-availability-picker";
 
 // Appointment form schema
 const appointmentFormSchema = z.object({
-  patientId: z.string().min(1, 'Patient is required'),
-  date: z.string().min(1, 'Date is required'),
-  time: z.string().min(1, 'Time is required'),
-  duration: z.string().min(1, 'Duration is required'),
-  type: z.string().min(1, 'Appointment type is required'),
+  patientId: z.string().min(1, "Patient is required"),
+  date: z.string().min(1, "Date is required"),
+  time: z.string().min(1, "Time is required"),
+  duration: z.string().min(1, "Duration is required"),
+  type: z.string().min(1, "Appointment type is required"),
   phone: z.string(),
   notes: z.string(),
-  status: z.string().min(1, 'Status is required'),
+  status: z.string().min(1, "Status is required"),
 });
 
 interface AddAppointmentDialogProps {
@@ -76,14 +69,14 @@ export function AddAppointmentDialog({
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
-      patientId: '',
-      date: '',
-      time: '',
-      duration: '30 min',
-      type: '',
-      phone: '',
-      notes: '',
-      status: 'confirmed',
+      patientId: "",
+      date: "",
+      time: "",
+      duration: "30 min",
+      type: "",
+      phone: "",
+      notes: "",
+      status: "confirmed",
     },
   });
 
@@ -97,23 +90,23 @@ export function AddAppointmentDialog({
   const fetchPatients = async () => {
     setPatientsLoading(true);
     try {
-      const response = await fetch('/api/patients');
+      const response = await fetch("/api/patients");
       const result = await response.json();
 
       if (result.success) {
         setPatients(result.data);
       } else {
         setPatients([]);
-        toast.error('Failed to load patients', {
-          description: 'Please refresh and try again.',
+        toast.error("Failed to load patients", {
+          description: "Please refresh and try again.",
           duration: 5000,
         });
       }
     } catch (error) {
-      console.error('Error fetching patients:', error);
+      console.error("Error fetching patients:", error);
       setPatients([]);
-      toast.error('Failed to load patients', {
-        description: 'Please check your connection and try again.',
+      toast.error("Failed to load patients", {
+        description: "Please check your connection and try again.",
         duration: 5000,
       });
     } finally {
@@ -136,13 +129,13 @@ export function AddAppointmentDialog({
       const result = await createAppointmentAction(data);
 
       if (result.success) {
-        console.log('Created appointment:', result.data);
+        console.log("Created appointment:", result.data);
 
         // Get the selected patient name for the notification
         const selectedPatient = patients.find(
           (p) => p.patientId.toString() === data.patientId,
         );
-        const patientName = selectedPatient?.name || 'Unknown Patient';
+        const patientName = selectedPatient?.name || "Unknown Patient";
 
         // Show success message with patient name
         toast.success(`Appointment created successfully for ${patientName}!`, {
@@ -159,15 +152,15 @@ export function AddAppointmentDialog({
         form.reset();
         setOpen(false);
       } else {
-        toast.error('Failed to create appointment', {
-          description: result.error || 'Please check your input and try again.',
+        toast.error("Failed to create appointment", {
+          description: result.error || "Please check your input and try again.",
           duration: 5000,
         });
       }
     } catch (error) {
-      console.error('Error adding appointment:', error);
-      toast.error('Failed to create appointment', {
-        description: 'An unexpected error occurred. Please try again.',
+      console.error("Error adding appointment:", error);
+      toast.error("Failed to create appointment", {
+        description: "An unexpected error occurred. Please try again.",
         duration: 5000,
       });
     } finally {
@@ -188,14 +181,14 @@ export function AddAppointmentDialog({
     );
     if (selectedPatient && selectedPatient.phone) {
       const formattedPhone = formatPhoneNumber(selectedPatient.phone);
-      form.setValue('phone', formattedPhone);
+      form.setValue("phone", formattedPhone);
       setPhoneAutoFilled(true);
     } else {
       // Clear phone if patient doesn't have one or if no patient selected
-      form.setValue('phone', '');
+      form.setValue("phone", "");
       setPhoneAutoFilled(false);
     }
-    form.setValue('patientId', patientId);
+    form.setValue("patientId", patientId);
   };
 
   return (
@@ -281,17 +274,17 @@ export function AddAppointmentDialog({
               <div className="col-span-3">
                 <AppointmentAvailabilityPicker
                   value={{
-                    date: form.watch('date')
-                      ? new Date(form.watch('date'))
+                    date: form.watch("date")
+                      ? new Date(form.watch("date"))
                       : undefined,
-                    time: form.watch('time'),
+                    time: form.watch("time"),
                   }}
                   onChange={({ date, time }) => {
                     form.setValue(
-                      'date',
-                      date ? date.toISOString().slice(0, 10) : '',
+                      "date",
+                      date ? date.toISOString().slice(0, 10) : "",
                     );
-                    form.setValue('time', time || '');
+                    form.setValue("time", time || "");
                   }}
                 />
               </div>
@@ -413,7 +406,7 @@ export function AddAppointmentDialog({
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Saving...' : 'Save Appointment'}
+                {loading ? "Saving..." : "Save Appointment"}
               </Button>
             </DialogFooter>
           </form>

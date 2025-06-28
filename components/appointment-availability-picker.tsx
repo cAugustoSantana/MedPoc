@@ -1,8 +1,8 @@
-'use client';
-import * as React from 'react';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+"use client";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export function AppointmentAvailabilityPicker({
   value,
@@ -23,7 +23,7 @@ export function AppointmentAvailabilityPicker({
     const totalMinutes = i * 15;
     const hour = Math.floor(totalMinutes / 60) + 9;
     const minute = totalMinutes % 60;
-    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+    return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
   });
 
   // Fetch booked times when date changes
@@ -47,8 +47,10 @@ export function AppointmentAvailabilityPicker({
 
   // Sync with parent
   React.useEffect(() => {
-    onChange && onChange({ date, time: selectedTime ?? undefined });
-  }, [date, selectedTime]);
+    if (onChange) {
+      onChange({ date, time: selectedTime ?? undefined });
+    }
+  }, [date, selectedTime, onChange]);
 
   return (
     <Card className="gap-0 p-0">
@@ -67,7 +69,7 @@ export function AppointmentAvailabilityPicker({
             {timeSlots.map((time) => (
               <Button
                 key={time}
-                variant={selectedTime === time ? 'default' : 'outline'}
+                variant={selectedTime === time ? "default" : "outline"}
                 onClick={() => setSelectedTime(time)}
                 className="w-full shadow-none"
                 disabled={bookedTimes.includes(time) || loading || !date}
@@ -82,15 +84,15 @@ export function AppointmentAvailabilityPicker({
         <div className="text-sm">
           {date && selectedTime ? (
             <>
-              Your meeting is booked for{' '}
+              Your meeting is booked for{" "}
               <span className="font-medium">
-                {date?.toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
+                {date?.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
                 })}
               </span>
-              {' at '}
+              {" at "}
               <span className="font-medium">{selectedTime}</span>.
             </>
           ) : (

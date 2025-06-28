@@ -5,7 +5,7 @@ import {
 } from "@/types/appointment";
 import { db } from "@/db";
 import { appointment, patient, appUser } from "../migrations/schema";
-import { eq, and, gte, lte, desc, asc, sql } from "drizzle-orm";
+import { eq, and, gte, lte, desc, asc } from "drizzle-orm";
 
 export async function getAllAppointments(): Promise<Appointment[]> {
   const appointments = await db.select().from(appointment);
@@ -296,7 +296,7 @@ export async function getAppointmentsByStatus(
 
 export async function getBookedTimesForDate(date: string): Promise<string[]> {
   // Build start and end of the day in local time
-  const [year, month, day] = date.split('-').map(Number);
+  const [year, month, day] = date.split("-").map(Number);
   const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0);
   const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999);
 
@@ -306,14 +306,14 @@ export async function getBookedTimesForDate(date: string): Promise<string[]> {
     .where(
       and(
         gte(appointment.scheduledAt, startOfDay.toISOString()),
-        lte(appointment.scheduledAt, endOfDay.toISOString())
-      )
+        lte(appointment.scheduledAt, endOfDay.toISOString()),
+      ),
     );
 
   return results
-    .map(r => r.scheduledAt)
-    .filter((dt): dt is string => typeof dt === 'string')
-    .map(dt => {
+    .map((r) => r.scheduledAt)
+    .filter((dt): dt is string => typeof dt === "string")
+    .map((dt) => {
       const d = new Date(dt);
       return d.toTimeString().slice(0, 5); // 'HH:mm' in local time
     });
