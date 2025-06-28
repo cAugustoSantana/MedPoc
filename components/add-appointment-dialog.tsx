@@ -41,6 +41,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { createAppointmentAction } from '@/app/appointments/actions';
+import { toast } from 'sonner';
 
 // Appointment form schema
 const appointmentFormSchema = z.object({
@@ -57,7 +59,7 @@ const appointmentFormSchema = z.object({
 type AppointmentFormData = z.infer<typeof appointmentFormSchema>;
 
 interface AddAppointmentDialogProps {
-  onAppointmentAdded?: (appointment: AppointmentFormData) => void;
+  onAppointmentAdded?: (appointment: any) => void;
 }
 
 export function AddAppointmentDialog({
@@ -90,19 +92,29 @@ export function AddAppointmentDialog({
   const onSubmit = async (data: AppointmentFormData) => {
     setLoading(true);
     try {
-      // Here you would typically save to your database
-      console.log('New appointment:', data);
+      // Call the server action to create the appointment
+      const result = await createAppointmentAction(data);
 
-      // Call the callback if provided
-      if (onAppointmentAdded) {
-        onAppointmentAdded(data);
+      if (result.success) {
+        console.log('Created appointment:', result.data);
+
+        // Show success message
+        toast.success('Appointment created successfully!');
+
+        // Call the callback if provided
+        if (onAppointmentAdded) {
+          onAppointmentAdded(result.data);
+        }
+
+        // Reset form and close dialog
+        form.reset();
+        setOpen(false);
+      } else {
+        toast.error(result.error || 'Failed to create appointment');
       }
-
-      // Reset form and close dialog
-      form.reset();
-      setOpen(false);
     } catch (error) {
       console.error('Error adding appointment:', error);
+      toast.error('Failed to create appointment. Please try again.');
     } finally {
       setLoading(false);
     }

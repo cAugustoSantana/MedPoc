@@ -1,187 +1,136 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { format, isSameDay } from "date-fns";
-import { Calendar, Clock, Plus, User, Phone, FileText } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { format, isSameDay } from 'date-fns';
+import { Calendar, Clock, Plus, User, Phone, FileText } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
-import { AddAppointmentDialog } from "@/components/add-appointment-dialog";
-
-// Mock appointment data
-const mockAppointments = [
-  // Today's appointments
-  {
-    id: 1,
-    patientName: "Sarah Johnson",
-    time: "09:00 AM",
-    duration: "30 min",
-    type: "Consultation",
-    phone: "(555) 123-4567",
-    notes: "Follow-up for blood pressure medication",
-    status: "confirmed",
-    date: new Date(), // Today
-  },
-  {
-    id: 2,
-    patientName: "Michael Chen",
-    time: "10:30 AM",
-    duration: "45 min",
-    type: "Physical Exam",
-    phone: "(555) 987-6543",
-    notes: "Annual physical examination",
-    status: "confirmed",
-    date: new Date(), // Today
-  },
-  {
-    id: 3,
-    patientName: "Emily Rodriguez",
-    time: "02:00 PM",
-    duration: "30 min",
-    type: "Consultation",
-    phone: "(555) 456-7890",
-    notes: "Diabetes management consultation",
-    status: "pending",
-    date: new Date(), // Today
-  },
-  // December 15, 2024 appointments
-  {
-    id: 4,
-    patientName: "David Wilson",
-    time: "09:30 AM",
-    duration: "30 min",
-    type: "Follow-up",
-    phone: "(555) 234-5678",
-    notes: "Post-surgery follow-up",
-    status: "confirmed",
-    date: new Date(2024, 11, 15),
-  },
-  {
-    id: 5,
-    patientName: "Lisa Thompson",
-    time: "11:00 AM",
-    duration: "60 min",
-    type: "Consultation",
-    phone: "(555) 345-6789",
-    notes: "Initial consultation for chronic pain",
-    status: "confirmed",
-    date: new Date(2024, 11, 15),
-  },
-  {
-    id: 6,
-    patientName: "Robert Martinez",
-    time: "03:30 PM",
-    duration: "30 min",
-    type: "Check-up",
-    phone: "(555) 567-8901",
-    notes: "Routine health check-up",
-    status: "confirmed",
-    date: new Date(2024, 11, 15),
-  },
-  // December 16, 2024 appointments
-  {
-    id: 7,
-    patientName: "Jennifer Lee",
-    time: "10:00 AM",
-    duration: "45 min",
-    type: "Consultation",
-    phone: "(555) 678-9012",
-    notes: "Allergy consultation and testing",
-    status: "pending",
-    date: new Date(2024, 11, 16),
-  },
-  {
-    id: 8,
-    patientName: "Thomas Brown",
-    time: "02:15 PM",
-    duration: "30 min",
-    type: "Follow-up",
-    phone: "(555) 789-0123",
-    notes: "Blood test results review",
-    status: "confirmed",
-    date: new Date(2024, 11, 16),
-  },
-  // Tomorrow's appointments
-  {
-    id: 9,
-    patientName: "Amanda Davis",
-    time: "09:15 AM",
-    duration: "30 min",
-    type: "Consultation",
-    phone: "(555) 890-1234",
-    notes: "New patient consultation",
-    status: "confirmed",
-    date: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
-  },
-  {
-    id: 10,
-    patientName: "Kevin White",
-    time: "01:00 PM",
-    duration: "45 min",
-    type: "Physical Exam",
-    phone: "(555) 901-2345",
-    notes: "Pre-employment physical examination",
-    status: "confirmed",
-    date: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
-  },
-];
+} from '@/components/ui/card';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { Badge } from '@/components/ui/badge';
+import { AddAppointmentDialog } from '@/components/add-appointment-dialog';
+import { AppointmentWithDetails } from '@/types/appointment';
+import { toast } from 'sonner';
 
 export default function AppointmentsPage() {
-  const [appointments, setAppointments] = useState(mockAppointments);
+  const [appointments, setAppointments] = useState<AppointmentWithDetails[]>(
+    [],
+  );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(2024, 11, 15),
   ); // December 15, 2024
+  const [loading, setLoading] = useState(false);
+
+  // Load appointments for selected date
+  const loadAppointmentsForDate = async (date: Date) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/appointments?date=${date.toISOString()}`,
+      );
+      const result = await response.json();
+
+      if (result.success) {
+        setAppointments(result.data);
+      } else {
+        toast.error('Failed to load appointments');
+      }
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+      toast.error('Failed to load appointments');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load all appointments on component mount
+  useEffect(() => {
+    const loadAllAppointments = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/appointments');
+        const result = await response.json();
+
+        if (result.success) {
+          setAppointments(result.data);
+        } else {
+          toast.error('Failed to load appointments');
+        }
+      } catch (error) {
+        console.error('Error loading appointments:', error);
+        toast.error('Failed to load appointments');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAllAppointments();
+  }, []);
+
+  // Handle date selection
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
+    if (date) {
+      loadAppointmentsForDate(date);
+    }
+  };
 
   // Filter appointments for selected date
   const selectedDateAppointments = selectedDate
-    ? appointments.filter((appointment) =>
-        isSameDay(appointment.date, selectedDate),
+    ? appointments.filter(
+        (appointment) =>
+          appointment.scheduledAt &&
+          isSameDay(new Date(appointment.scheduledAt), selectedDate),
       )
     : [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "bg-green-100 text-green-800 hover:bg-green-100";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100";
-      case "cancelled":
-        return "bg-red-100 text-red-800 hover:bg-red-100";
+      case 'confirmed':
+        return 'bg-green-100 text-green-800 hover:bg-green-100';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 hover:bg-red-100';
       default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+        return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
     }
   };
 
-  const handleAppointmentAdded = (appointmentData: any) => {
-    // Convert form data to appointment object
-    const [hours, minutes] = appointmentData.time.split(":");
-    const appointmentDate = new Date(appointmentData.date);
-    appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+  const handleAppointmentAdded = async (newAppointment: any) => {
+    // Refresh appointments for the selected date
+    if (selectedDate) {
+      await loadAppointmentsForDate(selectedDate);
+    }
 
-    const newAppointment = {
-      id: Math.max(...appointments.map((a) => a.id)) + 1,
-      patientName: appointmentData.patientName,
-      time: format(appointmentDate, "hh:mm a"),
-      duration: appointmentData.duration,
-      type: appointmentData.type,
-      phone: appointmentData.phone || "",
-      notes: appointmentData.notes || "",
-      status: appointmentData.status,
-      date: appointmentDate,
-    };
+    // Also refresh all appointments
+    try {
+      const response = await fetch('/api/appointments');
+      const result = await response.json();
 
-    setAppointments((prev) => [...prev, newAppointment]);
+      if (result.success) {
+        setAppointments(result.data);
+      }
+    } catch (error) {
+      console.error('Error refreshing appointments:', error);
+    }
+  };
 
-    // Update selected date to show the new appointment
-    setSelectedDate(appointmentDate);
+  const formatAppointmentTime = (scheduledAt: string | null) => {
+    if (!scheduledAt) return '';
+    return format(new Date(scheduledAt), 'hh:mm a');
+  };
+
+  const formatAppointmentDuration = (duration: string) => {
+    // Extract duration from the appointment type or use a default
+    // This could be enhanced based on your business logic
+    return '30 min'; // Default duration
   };
 
   return (
@@ -200,7 +149,7 @@ export default function AppointmentsPage() {
         <CalendarComponent
           mode="single"
           selected={selectedDate}
-          onSelect={setSelectedDate}
+          onSelect={handleDateSelect}
           className="rounded-md border"
         />
 
@@ -224,8 +173,8 @@ export default function AppointmentsPage() {
               <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
               <p className="text-gray-600">
                 {selectedDate
-                  ? format(selectedDate, "EEEE, MMMM d, yyyy")
-                  : "Select a date to view appointments"}
+                  ? format(selectedDate, 'EEEE, MMMM d, yyyy')
+                  : 'Select a date to view appointments'}
               </p>
             </div>
             <AddAppointmentDialog onAppointmentAdded={handleAppointmentAdded} />
@@ -234,12 +183,16 @@ export default function AppointmentsPage() {
 
         {/* Appointments List */}
         <div className="flex-1 p-6 overflow-auto">
-          {selectedDate ? (
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-gray-500">Loading appointments...</div>
+            </div>
+          ) : selectedDate ? (
             selectedDateAppointments.length > 0 ? (
               <div className="space-y-4">
                 {selectedDateAppointments.map((appointment) => (
                   <Card
-                    key={appointment.id}
+                    key={appointment.appointmentId}
                     className="hover:shadow-md transition-shadow"
                   >
                     <CardHeader className="pb-3">
@@ -250,29 +203,35 @@ export default function AppointmentsPage() {
                           </div>
                           <div>
                             <CardTitle className="text-lg">
-                              {appointment.patientName}
+                              {appointment.patientName || 'Unknown Patient'}
                             </CardTitle>
                             <CardDescription className="flex items-center gap-4 mt-1">
                               <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
-                                {appointment.time} ({appointment.duration})
+                                {formatAppointmentTime(
+                                  appointment.scheduledAt,
+                                )}{' '}
+                                ({formatAppointmentDuration('30 min')})
                               </span>
-                              <span className="flex items-center gap-1">
-                                <Phone className="h-4 w-4" />
-                                {appointment.phone}
-                              </span>
+                              {appointment.patientName && (
+                                <span className="flex items-center gap-1">
+                                  <Phone className="h-4 w-4" />
+                                  {/* Phone would come from patient data */}
+                                  (555) 123-4567
+                                </span>
+                              )}
                             </CardDescription>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="capitalize">
-                            {appointment.type}
+                            {appointment.reason || 'Consultation'}
                           </Badge>
                           <Badge
                             variant="secondary"
-                            className={`capitalize ${getStatusColor(appointment.status)}`}
+                            className={`capitalize ${getStatusColor(appointment.status || 'pending')}`}
                           >
-                            {appointment.status}
+                            {appointment.status || 'pending'}
                           </Badge>
                         </div>
                       </div>
@@ -280,7 +239,7 @@ export default function AppointmentsPage() {
                     <CardContent>
                       <div className="flex items-start gap-2 text-sm text-gray-600">
                         <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                        <p>{appointment.notes}</p>
+                        <p>{appointment.reason || 'No notes available'}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -293,8 +252,8 @@ export default function AppointmentsPage() {
                   No appointments scheduled
                 </h3>
                 <p className="text-center mb-4">
-                  There are no appointments scheduled for{" "}
-                  {format(selectedDate, "MMMM d, yyyy")}.
+                  There are no appointments scheduled for{' '}
+                  {format(selectedDate, 'MMMM d, yyyy')}.
                 </p>
                 <AddAppointmentDialog
                   onAppointmentAdded={handleAppointmentAdded}
