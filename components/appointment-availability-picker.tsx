@@ -45,12 +45,18 @@ export function AppointmentAvailabilityPicker({
       .finally(() => setLoading(false));
   }, [date]);
 
-  // Sync with parent
-  React.useEffect(() => {
-    if (onChange) {
-      onChange({ date, time: selectedTime ?? undefined });
-    }
-  }, [date, selectedTime, onChange]);
+  // Handle date selection
+  const handleDateSelect = (newDate: Date | undefined) => {
+    setDate(newDate);
+    setSelectedTime(null); // Reset time when date changes
+    onChange({ date: newDate, time: undefined });
+  };
+
+  // Handle time selection
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time);
+    onChange({ date, time });
+  };
 
   return (
     <Card className="gap-0 p-0">
@@ -59,7 +65,7 @@ export function AppointmentAvailabilityPicker({
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateSelect}
             showOutsideDays={false}
             className="bg-transparent p-0"
           />
@@ -70,7 +76,7 @@ export function AppointmentAvailabilityPicker({
               <Button
                 key={time}
                 variant={selectedTime === time ? "default" : "outline"}
-                onClick={() => setSelectedTime(time)}
+                onClick={() => handleTimeSelect(time)}
                 className="w-full shadow-none"
                 disabled={bookedTimes.includes(time) || loading || !date}
               >
