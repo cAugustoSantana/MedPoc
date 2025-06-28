@@ -93,7 +93,7 @@ import { Patient } from "@/types/patient";
 import {
   deletePatientAction,
   deleteMultiplePatientsAction,
-} from "@/app/patient/actions";
+} from "@/app/patients/actions";
 import { toast } from "sonner";
 
 // Custom filter function for multi-column searching

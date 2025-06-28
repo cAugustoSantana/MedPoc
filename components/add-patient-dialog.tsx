@@ -43,7 +43,7 @@ import {
   createPatientSchema,
   CreatePatientData,
 } from "@/lib/validations/patient";
-import { createPatientAction } from "@/app/patient/actions";
+import { createPatientAction } from "@/app/patients/actions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
