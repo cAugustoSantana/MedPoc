@@ -4,6 +4,7 @@ import {
   createPatient,
   updatePatient,
   deletePatient,
+  getAllPatients,
 } from "@/db/queries/patients";
 import { revalidatePath } from "next/cache";
 import {
@@ -82,5 +83,15 @@ export async function deleteMultiplePatientsAction(patientIds: number[]) {
   } catch (error) {
     console.error("Error deleting patients:", error);
     return { success: false, error: "Failed to delete patients" };
+  }
+}
+
+export async function getAllPatientsAction() {
+  try {
+    const patients = await getAllPatients();
+    return { success: true, data: patients };
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    return { success: false, error: "Failed to fetch patients" };
   }
 }

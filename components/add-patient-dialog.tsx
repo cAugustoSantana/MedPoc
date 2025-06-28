@@ -84,21 +84,34 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
       if (!result.success) {
         if (result.details) {
           result.details.forEach((error) => {
-            toast.error(error);
+            toast.error("Validation Error", {
+              description: error,
+              duration: 5000,
+            });
           });
         } else {
-          toast.error(result.error || "Failed to create patient");
+          toast.error("Failed to create patient", {
+            description:
+              result.error || "Please check your input and try again.",
+            duration: 5000,
+          });
         }
         return;
       }
 
-      toast.success("Patient created successfully");
+      toast.success(`Patient created successfully!`, {
+        description: `${data.name} has been added to the system.`,
+        duration: 5000,
+      });
       form.reset();
       setOpen(false);
       onPatientAdded();
     } catch (error) {
       console.error("Error creating patient:", error);
-      toast.error("An unexpected error occurred");
+      toast.error("Failed to create patient", {
+        description: "An unexpected error occurred. Please try again.",
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }
