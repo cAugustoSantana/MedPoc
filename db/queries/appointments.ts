@@ -33,7 +33,7 @@ export async function getAppointmentsWithDetails(): Promise<
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
-    .orderBy(desc(appointment.scheduledAt));
+    .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
 }
