@@ -23,7 +23,7 @@ const data = {
     },
     {
       title: "Patients",
-      url: "/patient",
+      url: "/patients",
       icon: UsersRound,
       isActive: true,
     },
