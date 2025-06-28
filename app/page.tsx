@@ -10,10 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Patient } from "@/types/patient";
 
-const patientsData = await getAllPatients();
+export default async function Home() {
+  let patientsData: Patient[] = [];
 
-export default function Home() {
+  try {
+    patientsData = await getAllPatients();
+  } catch (error) {
+    console.error("Failed to fetch patients:", error);
+    // Continue with empty data instead of crashing
+  }
+
   return (
     <div className="min-h-screen bg-white-100 p-6 flex flex-col space-y-6">
       {/* Horizontal stack of cards */}
@@ -47,22 +55,33 @@ export default function Home() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {patientsData.map((patient) => (
-                    <TableRow key={patient.name}>
-                      <TableCell className="text-center">
-                        {patient.name}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {patient.flag}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {patient.email}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {patient.location}
+                  {patientsData.length > 0 ? (
+                    patientsData.map((patient) => (
+                      <TableRow key={patient.name}>
+                        <TableCell className="text-center">
+                          {patient.name}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {patient.gender}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {patient.email}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {patient.dob}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={4}
+                        className="text-center text-gray-500"
+                      >
+                        No patients found or database connection failed
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </CardContent>

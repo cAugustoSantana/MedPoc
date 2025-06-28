@@ -5,10 +5,11 @@ import {
   createAppointment,
   getAppointmentsByDate,
   getAppointmentsWithDetails,
-  convertFormDataToAppointment
+  convertFormDataToAppointment,
 } from "@/db/queries/appointments";
+import { AppointmentFormData } from "@/types/appointment";
 
-export async function createAppointmentAction(formData: any) {
+export async function createAppointmentAction(formData: AppointmentFormData) {
   try {
     // Get the patient ID from the form data
     const patientId = parseInt(formData.patientId);
@@ -16,11 +17,15 @@ export async function createAppointmentAction(formData: any) {
 
     // Strip phone formatting if present (store only digits)
     if (formData.phone) {
-      formData.phone = formData.phone.replace(/\D/g, '');
+      formData.phone = formData.phone.replace(/\D/g, "");
     }
 
     // Convert form data to database format
-    const newAppointment = convertFormDataToAppointment(formData, patientId, doctorId);
+    const newAppointment = convertFormDataToAppointment(
+      formData,
+      patientId,
+      doctorId,
+    );
 
     // Create the appointment in the database
     const createdAppointment = await createAppointment(newAppointment);

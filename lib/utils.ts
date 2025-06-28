@@ -6,10 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPhoneNumber(phone: string | null | undefined): string {
-  if (!phone) return '';
+  if (!phone) return "";
 
   // Remove any non-digit characters
-  const digitsOnly = phone.replace(/\D/g, '');
+  const digitsOnly = phone.replace(/\D/g, "");
 
   // Format as (xxx) xxx-xxxx
   return digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");

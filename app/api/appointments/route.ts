@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAppointmentsByDate, getAppointmentsWithDetails } from "@/db/queries/appointments";
+import {
+  getAppointmentsByDate,
+  getAppointmentsWithDetails,
+} from "@/db/queries/appointments";
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +24,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching appointments:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch appointments" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

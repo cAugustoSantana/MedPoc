@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useId, useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -15,7 +15,7 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 import {
   ChevronDownIcon,
   ChevronFirstIcon,
@@ -31,9 +31,9 @@ import {
   ListFilterIcon,
   PlusIcon,
   TrashIcon,
-} from 'lucide-react';
+} from "lucide-react";
 
-import { cn, formatPhoneNumber } from '@/lib/utils';
+import { cn, formatPhoneNumber } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,9 +44,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -61,26 +61,26 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -88,19 +88,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Patient } from '@/types/patient';
+} from "@/components/ui/table";
+import { Patient } from "@/types/patient";
 import {
   deletePatientAction,
   deleteMultiplePatientsAction,
-} from '@/app/patient/actions';
-import { toast } from 'sonner';
+} from "@/app/patient/actions";
+import { toast } from "sonner";
 
 // Custom filter function for multi-column searching
 const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
   const searchableRowContent =
     `${row.original.name} ${row.original.email}`.toLowerCase();
-  const searchTerm = (filterValue ?? '').toLowerCase();
+  const searchTerm = (filterValue ?? "").toLowerCase();
   return searchableRowContent.includes(searchTerm);
 };
 
@@ -134,19 +134,19 @@ export default function PatientTable({
 
   const [sorting, setSorting] = useState<SortingState>([
     {
-      id: 'name',
+      id: "name",
       desc: false,
     },
   ]);
 
   const columns: ColumnDef<Patient>[] = [
     {
-      id: 'select',
+      id: "select",
       header: ({ table }) => (
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
+            (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
@@ -162,42 +162,42 @@ export default function PatientTable({
       size: 28,
       enableSorting: false,
       enableHiding: false,
-      meta: { align: 'center' },
+      meta: { align: "center" },
     },
     {
-      header: 'Name',
-      accessorKey: 'name',
+      header: "Name",
+      accessorKey: "name",
       cell: ({ row }) => (
-        <div className="font-medium text-left">{row.getValue('name')}</div>
+        <div className="font-medium text-left">{row.getValue("name")}</div>
       ),
       size: 180,
       filterFn: multiColumnFilterFn,
       enableHiding: false,
-      meta: { align: 'left' },
+      meta: { align: "left" },
     },
     {
-      header: 'Email',
-      accessorKey: 'email',
+      header: "Email",
+      accessorKey: "email",
       cell: ({ row }) => (
-        <div className="text-left">{row.getValue('email')}</div>
+        <div className="text-left">{row.getValue("email")}</div>
       ),
       size: 220,
-      meta: { align: 'left' },
+      meta: { align: "left" },
     },
     {
-      header: 'Address',
-      accessorKey: 'address',
+      header: "Address",
+      accessorKey: "address",
       cell: ({ row }) => (
-        <div className="text-left"> {row.getValue('address')}</div>
+        <div className="text-left"> {row.getValue("address")}</div>
       ),
       size: 180,
-      meta: { align: 'left' },
+      meta: { align: "left" },
     },
     {
-      header: 'Phone',
-      accessorKey: 'phone',
+      header: "Phone",
+      accessorKey: "phone",
       cell: ({ row }) => {
-        const phone: string = row.getValue('phone');
+        const phone: string = row.getValue("phone");
         const formattedPhone = formatPhoneNumber(phone);
         return (
           <div className="text-right w-full justify-end flex">
@@ -207,15 +207,15 @@ export default function PatientTable({
       },
       size: 100,
       filterFn: statusFilterFn,
-      meta: { align: 'right' },
+      meta: { align: "right" },
     },
     {
-      id: 'actions',
+      id: "actions",
       header: () => <span className="sr-only">Actions</span>,
       cell: ({ row }) => <RowActions patient={row.original} />,
       size: 60,
       enableHiding: false,
-      meta: { align: 'center' },
+      meta: { align: "center" },
     },
   ];
 
@@ -234,21 +234,21 @@ export default function PatientTable({
       if (result.success) {
         // Reset row selection
         table.resetRowSelection();
-        toast.success('Patients deleted successfully!', {
-          description: `${selectedRows.length} patient${selectedRows.length === 1 ? '' : 's'} removed from the system.`,
+        toast.success("Patients deleted successfully!", {
+          description: `${selectedRows.length} patient${selectedRows.length === 1 ? "" : "s"} removed from the system.`,
           duration: 5000,
         });
       } else {
-        console.error('Failed to delete patients:', result.error);
-        toast.error('Failed to delete patients', {
-          description: result.error || 'Please try again.',
+        console.error("Failed to delete patients:", result.error);
+        toast.error("Failed to delete patients", {
+          description: result.error || "Please try again.",
           duration: 5000,
         });
       }
     } catch (error) {
-      console.error('Error deleting patients:', error);
-      toast.error('Failed to delete patients', {
-        description: 'An unexpected error occurred. Please try again.',
+      console.error("Error deleting patients:", error);
+      toast.error("Failed to delete patients", {
+        description: "An unexpected error occurred. Please try again.",
         duration: 5000,
       });
     } finally {
@@ -279,7 +279,7 @@ export default function PatientTable({
 
   // Get unique status values for filter
   const uniqueStatusValues = useMemo(() => {
-    const statusColumn = table.getColumn('status');
+    const statusColumn = table.getColumn("status");
     if (!statusColumn) return [];
     const values = Array.from(statusColumn.getFacetedUniqueValues().keys());
     return values.sort();
@@ -287,19 +287,19 @@ export default function PatientTable({
 
   // Get counts for each status
   const statusCounts = useMemo(() => {
-    const statusColumn = table.getColumn('status');
+    const statusColumn = table.getColumn("status");
     if (!statusColumn) return new Map();
     return statusColumn.getFacetedUniqueValues();
   }, [table]);
 
   const selectedStatuses = useMemo(() => {
-    const statusColumn = table.getColumn('status');
+    const statusColumn = table.getColumn("status");
     const filterValue = statusColumn?.getFilterValue() as string[];
     return filterValue ?? [];
   }, [table]);
 
   const handleStatusChange = (checked: boolean, value: string) => {
-    const filterValue = table.getColumn('status')?.getFilterValue() as string[];
+    const filterValue = table.getColumn("status")?.getFilterValue() as string[];
     const newFilterValue = filterValue ? [...filterValue] : [];
 
     if (checked) {
@@ -312,7 +312,7 @@ export default function PatientTable({
     }
 
     table
-      .getColumn('status')
+      .getColumn("status")
       ?.setFilterValue(newFilterValue.length ? newFilterValue : undefined);
   };
 
@@ -327,14 +327,14 @@ export default function PatientTable({
               id={`${id}-input`}
               ref={inputRef}
               className={cn(
-                'peer min-w-60 ps-9',
-                Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9',
+                "peer min-w-60 ps-9",
+                Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9",
               )}
               value={
-                (table.getColumn('name')?.getFilterValue() ?? '') as string
+                (table.getColumn("name")?.getFilterValue() ?? "") as string
               }
               onChange={(e) =>
-                table.getColumn('name')?.setFilterValue(e.target.value)
+                table.getColumn("name")?.setFilterValue(e.target.value)
               }
               placeholder="Filter by name or email..."
               type="text"
@@ -343,12 +343,12 @@ export default function PatientTable({
             <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
               <ListFilterIcon size={16} aria-hidden="true" />
             </div>
-            {Boolean(table.getColumn('name')?.getFilterValue()) && (
+            {Boolean(table.getColumn("name")?.getFilterValue()) && (
               <button
                 className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Clear filter"
                 onClick={() => {
-                  table.getColumn('name')?.setFilterValue('');
+                  table.getColumn("name")?.setFilterValue("");
                   if (inputRef.current) {
                     inputRef.current.focus();
                   }
@@ -394,7 +394,7 @@ export default function PatientTable({
                         htmlFor={`${id}-${i}`}
                         className="flex grow justify-between gap-2 font-normal"
                       >
-                        {value}{' '}
+                        {value}{" "}
                         <span className="text-muted-foreground ms-2 text-xs">
                           {statusCounts.get(value)}
                         </span>
@@ -470,11 +470,11 @@ export default function PatientTable({
                       Are you absolutely sure?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete{' '}
-                      {table.getSelectedRowModel().rows.length} selected{' '}
+                      This action cannot be undone. This will permanently delete{" "}
+                      {table.getSelectedRowModel().rows.length} selected{" "}
                       {table.getSelectedRowModel().rows.length === 1
-                        ? 'row'
-                        : 'rows'}
+                        ? "row"
+                        : "rows"}
                       .
                     </AlertDialogDescription>
                   </AlertDialogHeader>
@@ -487,7 +487,7 @@ export default function PatientTable({
                     onClick={handleDeleteRows}
                     disabled={isDeleting}
                   >
-                    {isDeleting ? 'Deleting...' : 'Delete'}
+                    {isDeleting ? "Deleting..." : "Delete"}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -514,7 +514,7 @@ export default function PatientTable({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
-                  const align = header.column.columnDef.meta?.align || 'left';
+                  const align = header.column.columnDef.meta?.align || "left";
                   return (
                     <TableHead
                       key={header.id}
@@ -525,14 +525,14 @@ export default function PatientTable({
                         <div
                           className={cn(
                             header.column.getCanSort() &&
-                              'flex h-full cursor-pointer items-center justify-between gap-2 select-none',
+                              "flex h-full cursor-pointer items-center justify-between gap-2 select-none",
                           )}
                           onClick={header.column.getToggleSortingHandler()}
                           onKeyDown={(e) => {
                             // Enhanced keyboard handling for sorting
                             if (
                               header.column.getCanSort() &&
-                              (e.key === 'Enter' || e.key === ' ')
+                              (e.key === "Enter" || e.key === " ")
                             ) {
                               e.preventDefault();
                               header.column.getToggleSortingHandler()?.(e);
@@ -578,10 +578,10 @@ export default function PatientTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const align = cell.column.columnDef.meta?.align || 'left';
+                    const align = cell.column.columnDef.meta?.align || "left";
                     return (
                       <TableCell
                         key={cell.id}
@@ -655,8 +655,8 @@ export default function PatientTable({
                 ),
                 table.getRowCount(),
               )}
-            </span>{' '}
-            of{' '}
+            </span>{" "}
+            of{" "}
             <span className="text-foreground">
               {table.getRowCount().toString()}
             </span>
@@ -736,20 +736,20 @@ function RowActions({ patient }: { patient: Patient }) {
       const result = await deletePatientAction(patient.patientId);
 
       if (result.success) {
-        toast.success('Patient deleted successfully!', {
+        toast.success("Patient deleted successfully!", {
           description: `${patient.name} has been removed from the system.`,
           duration: 5000,
         });
       } else {
-        toast.error('Failed to delete patient', {
-          description: result.error || 'Please try again.',
+        toast.error("Failed to delete patient", {
+          description: result.error || "Please try again.",
           duration: 5000,
         });
       }
     } catch (error) {
-      console.error('Error deleting patient:', error);
-      toast.error('Failed to delete patient', {
-        description: 'An unexpected error occurred. Please try again.',
+      console.error("Error deleting patient:", error);
+      toast.error("Failed to delete patient", {
+        description: "An unexpected error occurred. Please try again.",
         duration: 5000,
       });
     } finally {
@@ -819,7 +819,7 @@ function RowActions({ patient }: { patient: Patient }) {
               disabled={isDeleting}
               onSelect={(e) => e.preventDefault()}
             >
-              <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+              <span>{isDeleting ? "Deleting..." : "Delete"}</span>
               <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
             </DropdownMenuItem>
           </AlertDialogTrigger>
@@ -844,7 +844,7 @@ function RowActions({ patient }: { patient: Patient }) {
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                {isDeleting ? "Deleting..." : "Delete"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

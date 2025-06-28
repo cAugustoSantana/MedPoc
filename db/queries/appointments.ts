@@ -1,4 +1,8 @@
-import { Appointment, NewAppointment, AppointmentWithDetails } from "@/types/appointment";
+import {
+  Appointment,
+  NewAppointment,
+  AppointmentWithDetails,
+} from "@/types/appointment";
 import { db } from "../index";
 import { appointment, patient, appUser } from "../migrations/schema";
 import { eq, and, gte, lte, desc, asc } from "drizzle-orm";
@@ -9,7 +13,9 @@ export async function getAllAppointments(): Promise<Appointment[]> {
   return appointments;
 }
 
-export async function getAppointmentsWithDetails(): Promise<AppointmentWithDetails[]> {
+export async function getAppointmentsWithDetails(): Promise<
+  AppointmentWithDetails[]
+> {
   const appointments = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -34,7 +40,7 @@ export async function getAppointmentsWithDetails(): Promise<AppointmentWithDetai
 
 export async function getAppointmentsByDateRange(
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
@@ -56,15 +62,17 @@ export async function getAppointmentsByDateRange(
     .where(
       and(
         gte(appointment.scheduledAt, startDate.toISOString()),
-        lte(appointment.scheduledAt, endDate.toISOString())
-      )
+        lte(appointment.scheduledAt, endDate.toISOString()),
+      ),
     )
     .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
 }
 
-export async function getAppointmentsByDate(date: Date): Promise<AppointmentWithDetails[]> {
+export async function getAppointmentsByDate(
+  date: Date,
+): Promise<AppointmentWithDetails[]> {
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -74,7 +82,9 @@ export async function getAppointmentsByDate(date: Date): Promise<AppointmentWith
   return getAppointmentsByDateRange(startOfDay, endOfDay);
 }
 
-export async function getAppointmentsByPatient(patientId: number): Promise<AppointmentWithDetails[]> {
+export async function getAppointmentsByPatient(
+  patientId: number,
+): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -98,7 +108,9 @@ export async function getAppointmentsByPatient(patientId: number): Promise<Appoi
   return appointments;
 }
 
-export async function getAppointmentsByDoctor(doctorId: number): Promise<AppointmentWithDetails[]> {
+export async function getAppointmentsByDoctor(
+  doctorId: number,
+): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -122,7 +134,9 @@ export async function getAppointmentsByDoctor(doctorId: number): Promise<Appoint
   return appointments;
 }
 
-export async function createAppointment(newAppointment: NewAppointment): Promise<Appointment> {
+export async function createAppointment(
+  newAppointment: NewAppointment,
+): Promise<Appointment> {
   const createdAppointment = await db
     .insert(appointment)
     .values(newAppointment)
@@ -133,7 +147,7 @@ export async function createAppointment(newAppointment: NewAppointment): Promise
 
 export async function updateAppointment(
   id: number,
-  updatedAppointment: Partial<NewAppointment>
+  updatedAppointment: Partial<NewAppointment>,
 ): Promise<Appointment> {
   const updatedAppointmentResult = await db
     .update(appointment)
@@ -156,7 +170,9 @@ export async function deleteAppointment(id: number): Promise<Appointment> {
   return deletedAppointment[0];
 }
 
-export async function getAppointmentById(id: number): Promise<AppointmentWithDetails | null> {
+export async function getAppointmentById(
+  id: number,
+): Promise<AppointmentWithDetails | null> {
   const result = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -180,7 +196,9 @@ export async function getAppointmentById(id: number): Promise<AppointmentWithDet
   return result[0];
 }
 
-export async function getAppointmentByUuid(uuid: string): Promise<AppointmentWithDetails | null> {
+export async function getAppointmentByUuid(
+  uuid: string,
+): Promise<AppointmentWithDetails | null> {
   const result = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -208,13 +226,19 @@ export async function getAppointmentByUuid(uuid: string): Promise<AppointmentWit
 export function convertFormDataToAppointment(
   formData: any,
   patientId: number,
-  doctorId: number
+  doctorId: number,
 ): NewAppointment {
   const [hours, minutes] = formData.time.split(":");
 
   // Create date in local timezone to avoid timezone conversion issues
   const [year, month, day] = formData.date.split("-").map(Number);
-  const appointmentDate = new Date(year, month - 1, day, parseInt(hours), parseInt(minutes));
+  const appointmentDate = new Date(
+    year,
+    month - 1,
+    day,
+    parseInt(hours),
+    parseInt(minutes),
+  );
 
   return {
     appUserId: doctorId,
@@ -226,7 +250,9 @@ export function convertFormDataToAppointment(
 }
 
 // Get upcoming appointments (next 7 days)
-export async function getUpcomingAppointments(): Promise<AppointmentWithDetails[]> {
+export async function getUpcomingAppointments(): Promise<
+  AppointmentWithDetails[]
+> {
   const today = new Date();
   const nextWeek = new Date();
   nextWeek.setDate(today.getDate() + 7);
@@ -235,12 +261,16 @@ export async function getUpcomingAppointments(): Promise<AppointmentWithDetails[
 }
 
 // Get today's appointments
-export async function getTodayAppointments(): Promise<AppointmentWithDetails[]> {
+export async function getTodayAppointments(): Promise<
+  AppointmentWithDetails[]
+> {
   return getAppointmentsByDate(new Date());
 }
 
 // Get appointments by status
-export async function getAppointmentsByStatus(status: string): Promise<AppointmentWithDetails[]> {
+export async function getAppointmentsByStatus(
+  status: string,
+): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -262,4 +292,4 @@ export async function getAppointmentsByStatus(status: string): Promise<Appointme
     .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
-} 
+}

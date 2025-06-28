@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import PatientTable from '@/components/patient-table';
-import { PatientActions } from '@/components/patient-actions';
-import { Patient } from '@/types/patient';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import PatientTable from "@/components/patient-table";
+import { PatientActions } from "@/components/patient-actions";
+import { Patient } from "@/types/patient";
+import { toast } from "sonner";
 
 export default function PatientPage() {
   const [patientsData, setPatientsData] = useState<Patient[]>([]);
@@ -13,21 +13,21 @@ export default function PatientPage() {
   const loadPatients = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/patients');
+      const response = await fetch("/api/patients");
       const result = await response.json();
 
       if (result.success) {
         setPatientsData(result.data);
       } else {
-        toast.error('Failed to load patients', {
-          description: 'Please refresh the page and try again.',
+        toast.error("Failed to load patients", {
+          description: "Please refresh the page and try again.",
           duration: 5000,
         });
       }
     } catch (error) {
-      console.error('Error loading patients:', error);
-      toast.error('Failed to load patients', {
-        description: 'Please check your connection and try again.',
+      console.error("Error loading patients:", error);
+      toast.error("Failed to load patients", {
+        description: "Please check your connection and try again.",
         duration: 5000,
       });
     } finally {
