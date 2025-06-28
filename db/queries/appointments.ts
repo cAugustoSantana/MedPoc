@@ -210,9 +210,20 @@ export function convertFormDataToAppointment(
   patientId: number,
   doctorId: number
 ): NewAppointment {
+  console.log("Converting form data to appointment:");
+  console.log("Input date:", formData.date);
+  console.log("Input time:", formData.time);
+
   const [hours, minutes] = formData.time.split(":");
-  const appointmentDate = new Date(formData.date);
-  appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+  console.log("Parsed hours:", hours, "minutes:", minutes);
+
+  // Create date in local timezone to avoid timezone conversion issues
+  const [year, month, day] = formData.date.split("-").map(Number);
+  const appointmentDate = new Date(year, month - 1, day, parseInt(hours), parseInt(minutes));
+  console.log("Created date object:", appointmentDate);
+
+  console.log("Final appointment date:", appointmentDate);
+  console.log("Final ISO string:", appointmentDate.toISOString());
 
   return {
     appUserId: doctorId,
