@@ -38,11 +38,17 @@ export default function AppointmentsPage() {
       if (result.success) {
         setAppointments(result.data);
       } else {
-        toast.error('Failed to load appointments');
+        toast.error('Failed to load appointments', {
+          description: 'Please refresh the page and try again.',
+          duration: 5000,
+        });
       }
     } catch (error) {
       console.error('Error loading appointments:', error);
-      toast.error('Failed to load appointments');
+      toast.error('Failed to load appointments', {
+        description: 'Please check your connection and try again.',
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }
@@ -59,11 +65,17 @@ export default function AppointmentsPage() {
         if (result.success) {
           setAppointments(result.data);
         } else {
-          toast.error('Failed to load appointments');
+          toast.error('Failed to load appointments', {
+            description: 'Please refresh the page and try again.',
+            duration: 5000,
+          });
         }
       } catch (error) {
         console.error('Error loading appointments:', error);
-        toast.error('Failed to load appointments');
+        toast.error('Failed to load appointments', {
+          description: 'Please check your connection and try again.',
+          duration: 5000,
+        });
       } finally {
         setLoading(false);
       }

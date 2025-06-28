@@ -103,12 +103,18 @@ export function AddAppointmentDialog({
         setPatients(result.data);
       } else {
         setPatients([]);
-        toast.error('Failed to load patients');
+        toast.error('Failed to load patients', {
+          description: 'Please refresh and try again.',
+          duration: 5000,
+        });
       }
     } catch (error) {
       console.error('Error fetching patients:', error);
       setPatients([]);
-      toast.error('Failed to load patients');
+      toast.error('Failed to load patients', {
+        description: 'Please check your connection and try again.',
+        duration: 5000,
+      });
     } finally {
       setPatientsLoading(false);
     }
@@ -131,8 +137,17 @@ export function AddAppointmentDialog({
       if (result.success) {
         console.log('Created appointment:', result.data);
 
-        // Show success message
-        toast.success('Appointment created successfully!');
+        // Get the selected patient name for the notification
+        const selectedPatient = patients.find(
+          (p) => p.patientId.toString() === data.patientId,
+        );
+        const patientName = selectedPatient?.name || 'Unknown Patient';
+
+        // Show success message with patient name
+        toast.success(`Appointment created successfully for ${patientName}!`, {
+          description: `Scheduled for ${data.date} at ${data.time}`,
+          duration: 5000,
+        });
 
         // Call the callback if provided
         if (onAppointmentAdded) {
@@ -143,11 +158,17 @@ export function AddAppointmentDialog({
         form.reset();
         setOpen(false);
       } else {
-        toast.error(result.error || 'Failed to create appointment');
+        toast.error('Failed to create appointment', {
+          description: result.error || 'Please check your input and try again.',
+          duration: 5000,
+        });
       }
     } catch (error) {
       console.error('Error adding appointment:', error);
-      toast.error('Failed to create appointment. Please try again.');
+      toast.error('Failed to create appointment', {
+        description: 'An unexpected error occurred. Please try again.',
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }

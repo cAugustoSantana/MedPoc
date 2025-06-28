@@ -94,6 +94,7 @@ import {
   deletePatientAction,
   deleteMultiplePatientsAction,
 } from '@/app/patient/actions';
+import { toast } from 'sonner';
 
 // Custom filter function for multi-column searching
 const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
@@ -233,13 +234,23 @@ export default function PatientTable({
       if (result.success) {
         // Reset row selection
         table.resetRowSelection();
+        toast.success('Patients deleted successfully!', {
+          description: `${selectedRows.length} patient${selectedRows.length === 1 ? '' : 's'} removed from the system.`,
+          duration: 5000,
+        });
       } else {
         console.error('Failed to delete patients:', result.error);
-        // You might want to show a toast notification here
+        toast.error('Failed to delete patients', {
+          description: result.error || 'Please try again.',
+          duration: 5000,
+        });
       }
     } catch (error) {
       console.error('Error deleting patients:', error);
-      // You might want to show a toast notification here
+      toast.error('Failed to delete patients', {
+        description: 'An unexpected error occurred. Please try again.',
+        duration: 5000,
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -733,10 +744,25 @@ function RowActions({ patient }: { patient: Patient }) {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deletePatientAction(patient.patientId);
+      const result = await deletePatientAction(patient.patientId);
+
+      if (result.success) {
+        toast.success('Patient deleted successfully!', {
+          description: `${patient.name} has been removed from the system.`,
+          duration: 5000,
+        });
+      } else {
+        toast.error('Failed to delete patient', {
+          description: result.error || 'Please try again.',
+          duration: 5000,
+        });
+      }
     } catch (error) {
       console.error('Error deleting patient:', error);
-      // You might want to show a toast notification here
+      toast.error('Failed to delete patient', {
+        description: 'An unexpected error occurred. Please try again.',
+        duration: 5000,
+      });
     } finally {
       setIsDeleting(false);
     }
