@@ -43,7 +43,6 @@ import {
 import { Combobox } from '@/components/ui/combobox';
 import { cn, formatPhoneNumber } from '@/lib/utils';
 import { createAppointmentAction } from '@/app/appointments/actions';
-import { getAllPatientsAction } from '@/app/patient/actions';
 import { toast } from 'sonner';
 import { Patient } from '@/types/patient';
 
@@ -98,8 +97,10 @@ export function AddAppointmentDialog({
   const fetchPatients = async () => {
     setPatientsLoading(true);
     try {
-      const result = await getAllPatientsAction();
-      if (result.success && result.data) {
+      const response = await fetch('/api/patients');
+      const result = await response.json();
+
+      if (result.success) {
         setPatients(result.data);
       } else {
         setPatients([]);

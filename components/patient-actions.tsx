@@ -1,11 +1,17 @@
-"use client";
+'use client';
 
-import { AddPatientDialog } from "@/components/add-patient-dialog";
+import { AddPatientDialog } from '@/components/add-patient-dialog';
 
-export function PatientActions() {
+interface PatientActionsProps {
+  onPatientAdded?: () => void;
+}
+
+export function PatientActions({ onPatientAdded }: PatientActionsProps) {
   const handlePatientAdded = () => {
-    // Server action handles revalidation automatically
-    // No need to manually refresh
+    // Call the callback if provided
+    if (onPatientAdded) {
+      onPatientAdded();
+    }
   };
 
   return <AddPatientDialog onPatientAdded={handlePatientAdded} />;

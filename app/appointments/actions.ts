@@ -10,11 +10,6 @@ import {
 
 export async function createAppointmentAction(formData: any) {
   try {
-    // Debug: Log the incoming form data
-    console.log("Incoming form data:", formData);
-    console.log("Date:", formData.date);
-    console.log("Time:", formData.time);
-
     // Get the patient ID from the form data
     const patientId = parseInt(formData.patientId);
     const doctorId = 1; // This should come from auth context
@@ -26,9 +21,6 @@ export async function createAppointmentAction(formData: any) {
 
     // Convert form data to database format
     const newAppointment = convertFormDataToAppointment(formData, patientId, doctorId);
-
-    // Debug: Log the converted appointment data
-    console.log("Converted appointment:", newAppointment);
 
     // Create the appointment in the database
     const createdAppointment = await createAppointment(newAppointment);
