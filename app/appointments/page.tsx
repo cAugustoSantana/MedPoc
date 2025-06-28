@@ -22,8 +22,8 @@ export default function AppointmentsPage() {
     [],
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(2024, 11, 15),
-  ); // December 15, 2024
+    new Date(),
+  ); // Today's date
   const [loading, setLoading] = useState(false);
 
   // Load appointments for selected date
