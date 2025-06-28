@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { format, isSameDay } from "date-fns";
-import { Calendar, Clock, User, Phone, FileText } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { format, isSameDay } from 'date-fns';
+import { Calendar, Clock, User, Phone, FileText } from 'lucide-react';
 
 import {
   Card,
@@ -10,12 +10,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
-import { AddAppointmentDialog } from "@/components/add-appointment-dialog";
-import { AppointmentWithDetails } from "@/types/appointment";
-import { toast } from "sonner";
+} from '@/components/ui/card';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { Badge } from '@/components/ui/badge';
+import { AddAppointmentDialog } from '@/components/add-appointment-dialog';
+import { AppointmentWithDetails } from '@/types/appointment';
+import { toast } from 'sonner';
 
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<AppointmentWithDetails[]>(
@@ -38,15 +38,15 @@ export default function AppointmentsPage() {
       if (result.success) {
         setAppointments(result.data);
       } else {
-        toast.error("Failed to load appointments", {
-          description: "Please refresh the page and try again.",
+        toast.error('Failed to load appointments', {
+          description: 'Please refresh the page and try again.',
           duration: 5000,
         });
       }
     } catch (error) {
-      console.error("Error loading appointments:", error);
-      toast.error("Failed to load appointments", {
-        description: "Please check your connection and try again.",
+      console.error('Error loading appointments:', error);
+      toast.error('Failed to load appointments', {
+        description: 'Please check your connection and try again.',
         duration: 5000,
       });
     } finally {
@@ -59,21 +59,21 @@ export default function AppointmentsPage() {
     const loadAllAppointments = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/appointments");
+        const response = await fetch('/api/appointments');
         const result = await response.json();
 
         if (result.success) {
           setAppointments(result.data);
         } else {
-          toast.error("Failed to load appointments", {
-            description: "Please refresh the page and try again.",
+          toast.error('Failed to load appointments', {
+            description: 'Please refresh the page and try again.',
             duration: 5000,
           });
         }
       } catch (error) {
-        console.error("Error loading appointments:", error);
-        toast.error("Failed to load appointments", {
-          description: "Please check your connection and try again.",
+        console.error('Error loading appointments:', error);
+        toast.error('Failed to load appointments', {
+          description: 'Please check your connection and try again.',
           duration: 5000,
         });
       } finally {
@@ -103,14 +103,14 @@ export default function AppointmentsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "bg-green-100 text-green-800 hover:bg-green-100";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100";
-      case "cancelled":
-        return "bg-red-100 text-red-800 hover:bg-red-100";
+      case 'confirmed':
+        return 'bg-green-100 text-green-800 hover:bg-green-100';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 hover:bg-red-100';
       default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+        return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
     }
   };
 
@@ -122,26 +122,26 @@ export default function AppointmentsPage() {
 
     // Also refresh all appointments
     try {
-      const response = await fetch("/api/appointments");
+      const response = await fetch('/api/appointments');
       const result = await response.json();
 
       if (result.success) {
         setAppointments(result.data);
       }
     } catch (error) {
-      console.error("Error refreshing appointments:", error);
+      console.error('Error refreshing appointments:', error);
     }
   };
 
   const formatAppointmentTime = (scheduledAt: string | null) => {
-    if (!scheduledAt) return "";
-    return format(new Date(scheduledAt), "hh:mm a");
+    if (!scheduledAt) return '';
+    return format(new Date(scheduledAt), 'hh:mm a');
   };
 
   const formatAppointmentDuration = () => {
     // Extract duration from the appointment type or use a default
     // This could be enhanced based on your business logic
-    return "30 min"; // Default duration
+    return '30 min'; // Default duration
   };
 
   return (
@@ -184,11 +184,14 @@ export default function AppointmentsPage() {
               <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
               <p className="text-gray-600">
                 {selectedDate
-                  ? format(selectedDate, "EEEE, MMMM d, yyyy")
-                  : "Select a date to view appointments"}
+                  ? format(selectedDate, 'EEEE, MMMM d, yyyy')
+                  : 'Select a date to view appointments'}
               </p>
             </div>
-            <AddAppointmentDialog onAppointmentAdded={handleAppointmentAdded} />
+            <AddAppointmentDialog
+              onAppointmentAdded={handleAppointmentAdded}
+              defaultDate={selectedDate}
+            />
           </div>
         </div>
 
@@ -214,14 +217,14 @@ export default function AppointmentsPage() {
                           </div>
                           <div>
                             <CardTitle className="text-lg">
-                              {appointment.patientName || "Unknown Patient"}
+                              {appointment.patientName || 'Unknown Patient'}
                             </CardTitle>
                             <CardDescription className="flex items-center gap-4 mt-1">
                               <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
                                 {formatAppointmentTime(
                                   appointment.scheduledAt,
-                                )}{" "}
+                                )}{' '}
                                 ({formatAppointmentDuration()})
                               </span>
                               {appointment.patientName && (
@@ -236,13 +239,13 @@ export default function AppointmentsPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="capitalize">
-                            {appointment.reason || "Consultation"}
+                            {appointment.reason || 'Consultation'}
                           </Badge>
                           <Badge
                             variant="secondary"
-                            className={`capitalize ${getStatusColor(appointment.status || "pending")}`}
+                            className={`capitalize ${getStatusColor(appointment.status || 'pending')}`}
                           >
-                            {appointment.status || "pending"}
+                            {appointment.status || 'pending'}
                           </Badge>
                         </div>
                       </div>
@@ -250,7 +253,7 @@ export default function AppointmentsPage() {
                     <CardContent>
                       <div className="flex items-start gap-2 text-sm text-gray-600">
                         <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                        <p>{appointment.reason || "No notes available"}</p>
+                        <p>{appointment.reason || 'No notes available'}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -263,11 +266,12 @@ export default function AppointmentsPage() {
                   No appointments scheduled
                 </h3>
                 <p className="text-center mb-4">
-                  There are no appointments scheduled for{" "}
-                  {format(selectedDate, "MMMM d, yyyy")}.
+                  There are no appointments scheduled for{' '}
+                  {format(selectedDate, 'MMMM d, yyyy')}.
                 </p>
                 <AddAppointmentDialog
                   onAppointmentAdded={handleAppointmentAdded}
+                  defaultDate={selectedDate}
                 />
               </div>
             )

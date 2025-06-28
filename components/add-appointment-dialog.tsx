@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { PlusIcon } from 'lucide-react';
+import { format, parse } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -55,10 +56,12 @@ const appointmentFormSchema = z.object({
 
 interface AddAppointmentDialogProps {
   onAppointmentAdded?: (appointment: Appointment) => void;
+  defaultDate?: Date;
 }
 
 export function AddAppointmentDialog({
   onAppointmentAdded,
+  defaultDate,
 }: AddAppointmentDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -71,7 +74,7 @@ export function AddAppointmentDialog({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
       patientId: '',
-      date: '',
+      date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
       time: '',
       duration: '30 min',
       type: '',
@@ -119,8 +122,30 @@ export function AddAppointmentDialog({
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (!newOpen) {
-      form.reset();
+      // Reset form with default date when closing
+      form.reset({
+        patientId: '',
+        date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
+        time: '',
+        duration: '30 min',
+        type: '',
+        phone: '',
+        notes: '',
+        status: 'confirmed',
+      });
       setPhoneAutoFilled(false);
+    } else {
+      // Reset form with current default date when opening
+      form.reset({
+        patientId: '',
+        date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
+        time: '',
+        duration: '30 min',
+        type: '',
+        phone: '',
+        notes: '',
+        status: 'confirmed',
+      });
     }
   };
 
@@ -196,7 +221,7 @@ export function AddAppointmentDialog({
   // Memoize the onChange function to prevent infinite loops
   const handleAvailabilityChange = useCallback(
     ({ date, time }: { date?: Date; time?: string }) => {
-      form.setValue('date', date ? date.toISOString().slice(0, 10) : '');
+      form.setValue('date', date ? format(date, 'yyyy-MM-dd') : '');
       form.setValue('time', time || '');
     },
     [form],
@@ -284,10 +309,11 @@ export function AddAppointmentDialog({
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-3">
                 <AppointmentAvailabilityPicker
+                  key={defaultDate?.toISOString()} // Force re-render when defaultDate changes
                   value={{
                     date: form.watch('date')
-                      ? new Date(form.watch('date'))
-                      : undefined,
+                      ? parse(form.watch('date'), 'yyyy-MM-dd', new Date())
+                      : defaultDate,
                     time: form.watch('time'),
                   }}
                   onChange={handleAvailabilityChange}

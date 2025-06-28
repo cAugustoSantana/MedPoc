@@ -1,8 +1,8 @@
-"use client";
-import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+'use client';
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 
 export function AppointmentAvailabilityPicker({
   value,
@@ -18,12 +18,22 @@ export function AppointmentAvailabilityPicker({
   const [bookedTimes, setBookedTimes] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(false);
 
+  // Update local state when value prop changes (for default date)
+  React.useEffect(() => {
+    if (value?.date) {
+      setDate(value.date);
+    }
+    if (value?.time !== undefined) {
+      setSelectedTime(value.time || null);
+    }
+  }, [value?.date, value?.time]);
+
   // Generate time slots (09:00 to 18:00, every 15 min)
   const timeSlots = Array.from({ length: 37 }, (_, i) => {
     const totalMinutes = i * 15;
     const hour = Math.floor(totalMinutes / 60) + 9;
     const minute = totalMinutes % 60;
-    return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
   });
 
   // Fetch booked times when date changes
@@ -68,6 +78,7 @@ export function AppointmentAvailabilityPicker({
             onSelect={handleDateSelect}
             showOutsideDays={false}
             className="bg-transparent p-0"
+            defaultMonth={date} // This sets the initial month but allows navigation
           />
         </div>
         <div className="inset-y-0 right-0 flex max-h-72 w-full flex-col gap-4 overflow-y-auto border-t p-6 md:absolute md:max-h-none md:w-48 md:border-t-0 md:border-l">
@@ -75,7 +86,7 @@ export function AppointmentAvailabilityPicker({
             {timeSlots.map((time) => (
               <Button
                 key={time}
-                variant={selectedTime === time ? "default" : "outline"}
+                variant={selectedTime === time ? 'default' : 'outline'}
                 onClick={() => handleTimeSelect(time)}
                 className="w-full shadow-none"
                 disabled={bookedTimes.includes(time) || loading || !date}
@@ -90,15 +101,15 @@ export function AppointmentAvailabilityPicker({
         <div className="text-sm">
           {date && selectedTime ? (
             <>
-              Your meeting is booked for{" "}
+              Your meeting is booked for{' '}
               <span className="font-medium">
-                {date?.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
+                {date?.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
                 })}
               </span>
-              {" at "}
+              {' at '}
               <span className="font-medium">{selectedTime}</span>.
             </>
           ) : (
