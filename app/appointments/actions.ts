@@ -7,16 +7,17 @@ import {
   getAppointmentsWithDetails,
   convertFormDataToAppointment
 } from "@/db/queries/appointments";
-import { NewAppointment } from "@/types/appointment";
 
 export async function createAppointmentAction(formData: any) {
   try {
-    // TODO: In a real app, you'd need to:
-    // 1. Find or create the patient by name/phone
-    // 2. Get the current doctor's ID from auth context
-    // For now, we'll use placeholder IDs
-    const patientId = 1; // This should come from patient lookup
+    // Get the patient ID from the form data
+    const patientId = parseInt(formData.patientId);
     const doctorId = 1; // This should come from auth context
+
+    // Strip phone formatting if present (store only digits)
+    if (formData.phone) {
+      formData.phone = formData.phone.replace(/\D/g, '');
+    }
 
     // Convert form data to database format
     const newAppointment = convertFormDataToAppointment(formData, patientId, doctorId);
@@ -54,4 +55,4 @@ export async function getAllAppointmentsAction() {
     console.error("Error fetching all appointments:", error);
     return { success: false, error: "Failed to fetch appointments" };
   }
-} 
+}

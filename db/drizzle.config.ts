@@ -7,7 +7,7 @@ import { drizzle } from "drizzle-orm/singlestore/driver";
 config({ path: join(__dirname, "../.env") });
 export default defineConfig({
   out: "./migrations",
-  schema: "./schema",
+  schema: "./migrations/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
     url: process.env.DATABASE_URL!,

@@ -7,7 +7,7 @@ export type NewAppointment = InferInsertModel<typeof appointment>;
 
 // Appointment form data type for the dialog
 export interface AppointmentFormData {
-  patientName: string;
+  patientId: string;
   date: string;
   time: string;
   duration: string;

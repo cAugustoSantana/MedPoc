@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { format, isSameDay } from 'date-fns';
-import { Calendar, Clock, Plus, User, Phone, FileText } from 'lucide-react';
+import { Calendar, Clock, User, Phone, FileText } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,

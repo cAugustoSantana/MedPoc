@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -40,13 +40,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Combobox } from '@/components/ui/combobox';
+import { cn, formatPhoneNumber } from '@/lib/utils';
 import { createAppointmentAction } from '@/app/appointments/actions';
+import { getAllPatientsAction } from '@/app/patient/actions';
 import { toast } from 'sonner';
+import { Patient } from '@/types/patient';
 
 // Appointment form schema
 const appointmentFormSchema = z.object({
-  patientName: z.string().min(1, 'Patient name is required'),
+  patientId: z.string().min(1, 'Patient is required'),
   date: z.string().min(1, 'Date is required'),
   time: z.string().min(1, 'Time is required'),
   duration: z.string().min(1, 'Duration is required'),
@@ -67,11 +70,14 @@ export function AddAppointmentDialog({
 }: AddAppointmentDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [patientsLoading, setPatientsLoading] = useState(false);
+  const [phoneAutoFilled, setPhoneAutoFilled] = useState(false);
 
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
-      patientName: '',
+      patientId: '',
       date: '',
       time: '',
       duration: '30 min',
@@ -82,10 +88,37 @@ export function AddAppointmentDialog({
     },
   });
 
+  // Fetch patients when dialog opens
+  useEffect(() => {
+    if (open && patients.length === 0) {
+      fetchPatients();
+    }
+  }, [open, patients.length]);
+
+  const fetchPatients = async () => {
+    setPatientsLoading(true);
+    try {
+      const result = await getAllPatientsAction();
+      if (result.success && result.data) {
+        setPatients(result.data);
+      } else {
+        setPatients([]);
+        toast.error('Failed to load patients');
+      }
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+      setPatients([]);
+      toast.error('Failed to load patients');
+    } finally {
+      setPatientsLoading(false);
+    }
+  };
+
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (!newOpen) {
       form.reset();
+      setPhoneAutoFilled(false);
     }
   };
 
@@ -120,6 +153,29 @@ export function AddAppointmentDialog({
     }
   };
 
+  // Convert patients to combobox options
+  const patientOptions = patients.map((patient) => ({
+    value: patient.patientId.toString(),
+    label: patient.name,
+  }));
+
+  // Handle patient selection to auto-populate phone
+  const handlePatientChange = (patientId: string) => {
+    const selectedPatient = patients.find(
+      (p) => p.patientId.toString() === patientId,
+    );
+    if (selectedPatient && selectedPatient.phone) {
+      const formattedPhone = formatPhoneNumber(selectedPatient.phone);
+      form.setValue('phone', formattedPhone);
+      setPhoneAutoFilled(true);
+    } else {
+      // Clear phone if patient doesn't have one or if no patient selected
+      form.setValue('phone', '');
+      setPhoneAutoFilled(false);
+    }
+    form.setValue('patientId', patientId);
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
@@ -141,12 +197,20 @@ export function AddAppointmentDialog({
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="patientName"
+                name="patientId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Patient Name *</FormLabel>
+                    <FormLabel>Patient *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter patient name" {...field} />
+                      <Combobox
+                        options={patientOptions}
+                        value={field.value}
+                        onValueChange={handlePatientChange}
+                        placeholder="Select patient..."
+                        searchPlaceholder="Search patients..."
+                        emptyText="No patients found."
+                        disabled={patientsLoading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -159,11 +223,31 @@ export function AddAppointmentDialog({
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <FormControl>
-                      <Input
-                        type="tel"
-                        placeholder="(555) 123-4567"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          type="tel"
+                          placeholder="(555) 123-4567"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            if (phoneAutoFilled) {
+                              setPhoneAutoFilled(false);
+                            }
+                          }}
+                          onBlur={(e) => {
+                            // Format phone number when user finishes typing
+                            const formatted = formatPhoneNumber(e.target.value);
+                            if (formatted !== e.target.value) {
+                              field.onChange(formatted);
+                            }
+                          }}
+                        />
+                        {phoneAutoFilled && field.value && (
+                          <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground bg-muted px-1 py-0.5 rounded">
+                            Auto-filled
+                          </div>
+                        )}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
