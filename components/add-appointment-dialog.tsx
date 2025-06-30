@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { format } from "date-fns";
-import { PlusIcon, CalendarIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
+import { format, parse } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,18 +34,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Combobox } from "@/components/ui/combobox";
-import { cn, formatPhoneNumber } from "@/lib/utils";
+import { formatPhoneNumber } from "@/lib/utils";
 import { createAppointmentAction } from "@/app/appointments/actions";
 import { toast } from "sonner";
 import { Patient } from "@/types/patient";
 import { AppointmentFormData, Appointment } from "@/types/appointment";
+import { AppointmentAvailabilityPicker } from "./appointment-availability-picker";
 
 // Appointment form schema
 const appointmentFormSchema = z.object({
@@ -61,22 +56,25 @@ const appointmentFormSchema = z.object({
 
 interface AddAppointmentDialogProps {
   onAppointmentAdded?: (appointment: Appointment) => void;
+  defaultDate?: Date;
 }
 
 export function AddAppointmentDialog({
   onAppointmentAdded,
+  defaultDate,
 }: AddAppointmentDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patientsLoading, setPatientsLoading] = useState(false);
   const [phoneAutoFilled, setPhoneAutoFilled] = useState(false);
+  const patientsLoadedRef = useRef(false);
 
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
       patientId: "",
-      date: "",
+      date: defaultDate ? format(defaultDate, "yyyy-MM-dd") : "",
       time: "",
       duration: "30 min",
       type: "",
@@ -88,10 +86,10 @@ export function AddAppointmentDialog({
 
   // Fetch patients when dialog opens
   useEffect(() => {
-    if (open && patients.length === 0) {
+    if (open && !patientsLoadedRef.current) {
       fetchPatients();
     }
-  }, [open, patients.length]);
+  }, [open]);
 
   const fetchPatients = async () => {
     setPatientsLoading(true);
@@ -101,6 +99,7 @@ export function AddAppointmentDialog({
 
       if (result.success) {
         setPatients(result.data);
+        patientsLoadedRef.current = true;
       } else {
         setPatients([]);
         toast.error("Failed to load patients", {
@@ -123,8 +122,30 @@ export function AddAppointmentDialog({
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (!newOpen) {
-      form.reset();
+      // Reset form with default date when closing
+      form.reset({
+        patientId: "",
+        date: defaultDate ? format(defaultDate, "yyyy-MM-dd") : "",
+        time: "",
+        duration: "30 min",
+        type: "",
+        phone: "",
+        notes: "",
+        status: "confirmed",
+      });
       setPhoneAutoFilled(false);
+    } else {
+      // Reset form with current default date when opening
+      form.reset({
+        patientId: "",
+        date: defaultDate ? format(defaultDate, "yyyy-MM-dd") : "",
+        time: "",
+        duration: "30 min",
+        type: "",
+        phone: "",
+        notes: "",
+        status: "confirmed",
+      });
     }
   };
 
@@ -196,6 +217,15 @@ export function AddAppointmentDialog({
     }
     form.setValue("patientId", patientId);
   };
+
+  // Memoize the onChange function to prevent infinite loops
+  const handleAvailabilityChange = useCallback(
+    ({ date, time }: { date?: Date; time?: string }) => {
+      form.setValue("date", date ? format(date, "yyyy-MM-dd") : "");
+      form.setValue("time", time || "");
+    },
+    [form],
+  );
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -277,76 +307,18 @@ export function AddAppointmentDialog({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Date *</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value ? (
-                              format(new Date(field.value + "T00:00:00"), "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value
-                              ? new Date(field.value + "T00:00:00")
-                              : undefined
-                          }
-                          onSelect={(date) => {
-                            if (date) {
-                              const year = date.getFullYear();
-                              const month = String(
-                                date.getMonth() + 1,
-                              ).padStart(2, "0");
-                              const day = String(date.getDate()).padStart(
-                                2,
-                                "0",
-                              );
-                              field.onChange(`${year}-${month}-${day}`);
-                            } else {
-                              field.onChange("");
-                            }
-                          }}
-                          disabled={(date) => date < new Date("1900-01-01")}
-                          captionLayout="dropdown"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Time *</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="col-span-3">
+                <AppointmentAvailabilityPicker
+                  key={defaultDate?.toISOString()} // Force re-render when defaultDate changes
+                  value={{
+                    date: form.watch("date")
+                      ? parse(form.watch("date"), "yyyy-MM-dd", new Date())
+                      : defaultDate,
+                    time: form.watch("time"),
+                  }}
+                  onChange={handleAvailabilityChange}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="duration"

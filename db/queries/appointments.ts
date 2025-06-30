@@ -3,9 +3,9 @@ import {
   NewAppointment,
   AppointmentWithDetails,
 } from "@/types/appointment";
-import { db } from "../index";
+import { db } from "@/db";
 import { appointment, patient, appUser } from "../migrations/schema";
-import { eq, and, gte, lte, desc, asc } from "drizzle-orm";
+import { eq, and, gte, lte, desc, asc, not } from "drizzle-orm";
 
 export async function getAllAppointments(): Promise<Appointment[]> {
   const appointments = await db.select().from(appointment);
@@ -33,7 +33,7 @@ export async function getAppointmentsWithDetails(): Promise<
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
-    .orderBy(desc(appointment.scheduledAt));
+    .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
 }
@@ -292,4 +292,37 @@ export async function getAppointmentsByStatus(
     .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
+}
+
+export async function getBookedTimesForDate(date: string): Promise<string[]> {
+  // Build start and end of the day in local time
+  const [year, month, day] = date.split("-").map(Number);
+  const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0);
+  const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999);
+
+  const results = await db
+    .select({
+      scheduledAt: appointment.scheduledAt,
+      status: appointment.status,
+    })
+    .from(appointment)
+    .where(
+      and(
+        gte(appointment.scheduledAt, startOfDay.toISOString()),
+        lte(appointment.scheduledAt, endOfDay.toISOString()),
+        // Only include confirmed and pending appointments, exclude cancelled ones and null status
+        not(eq(appointment.status, "cancelled")),
+      ),
+    );
+
+  console.log("Raw appointment results for", date, ":", results);
+
+  return results
+    .filter((r) => r.status && r.status !== "cancelled") // Additional filter for safety
+    .map((r) => r.scheduledAt)
+    .filter((dt): dt is string => typeof dt === "string")
+    .map((dt) => {
+      const d = new Date(dt);
+      return d.toTimeString().slice(0, 5); // 'HH:mm' in local time
+    });
 }

@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 
 export async function getAllPatients(): Promise<Patient[]> {
   const patients = await db.select().from(patient);
-  console.log("Fetched patients:", patients);
+  // console.log("Fetched patients:", patients);
   return patients;
 }
 

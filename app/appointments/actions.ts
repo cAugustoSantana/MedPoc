@@ -8,6 +8,9 @@ import {
   convertFormDataToAppointment,
 } from "@/db/queries/appointments";
 import { AppointmentFormData } from "@/types/appointment";
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
+import { appointment } from "@/db/migrations/schema";
 
 export async function createAppointmentAction(formData: AppointmentFormData) {
   try {
@@ -26,6 +29,15 @@ export async function createAppointmentAction(formData: AppointmentFormData) {
       patientId,
       doctorId,
     );
+
+    // Backend validation: check for existing appointment at the same scheduledAt
+    const existing = await db
+      .select()
+      .from(appointment)
+      .where(eq(appointment.scheduledAt, newAppointment.scheduledAt ?? ""));
+    if (existing.length > 0) {
+      return { success: false, error: "This time slot is already booked." };
+    }
 
     // Create the appointment in the database
     const createdAppointment = await createAppointment(newAppointment);

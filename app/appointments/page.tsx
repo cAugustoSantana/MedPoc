@@ -22,8 +22,8 @@ export default function AppointmentsPage() {
     [],
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(2024, 11, 15),
-  ); // December 15, 2024
+    new Date(),
+  ); // Today's date
   const [loading, setLoading] = useState(false);
 
   // Load appointments for selected date
@@ -163,16 +163,6 @@ export default function AppointmentsPage() {
           onSelect={handleDateSelect}
           className="rounded-md border"
         />
-
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">
-            Quick Stats
-          </h3>
-          <div className="space-y-1 text-sm text-blue-700">
-            <div>Total Appointments: {appointments.length}</div>
-            <div>Today: {selectedDateAppointments.length}</div>
-          </div>
-        </div>
       </div>
 
       {/* Main Content Area */}
@@ -188,7 +178,10 @@ export default function AppointmentsPage() {
                   : "Select a date to view appointments"}
               </p>
             </div>
-            <AddAppointmentDialog onAppointmentAdded={handleAppointmentAdded} />
+            <AddAppointmentDialog
+              onAppointmentAdded={handleAppointmentAdded}
+              defaultDate={selectedDate}
+            />
           </div>
         </div>
 
@@ -268,6 +261,7 @@ export default function AppointmentsPage() {
                 </p>
                 <AddAppointmentDialog
                   onAppointmentAdded={handleAppointmentAdded}
+                  defaultDate={selectedDate}
                 />
               </div>
             )
