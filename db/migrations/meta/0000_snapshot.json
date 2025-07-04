@@ -1,0 +1,1868 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.doctor_patient": {
+      "name": "doctor_patient",
+      "schema": "",
+      "columns": {
+        "doctor_patient_id": {
+          "name": "doctor_patient_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "doctor_id": {
+          "name": "doctor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "doctor_patient_doctor_id_fkey": {
+          "name": "doctor_patient_doctor_id_fkey",
+          "tableFrom": "doctor_patient",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["doctor_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "doctor_patient_patient_id_fkey": {
+          "name": "doctor_patient_patient_id_fkey",
+          "tableFrom": "doctor_patient",
+          "tableTo": "patient",
+          "schemaTo": "public",
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "doctor_patient_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "doctor_patient_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.dosage_detail": {
+      "name": "dosage_detail",
+      "schema": "",
+      "columns": {
+        "dosage_detail_id": {
+          "name": "dosage_detail_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "dosage_detail_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "dosage_detail_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.doctor_assistant": {
+      "name": "doctor_assistant",
+      "schema": "",
+      "columns": {
+        "doctor_assistant_id": {
+          "name": "doctor_assistant_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "doctor_id": {
+          "name": "doctor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "assistant_id": {
+          "name": "assistant_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "doctor_assistant_assistant_id_fkey": {
+          "name": "doctor_assistant_assistant_id_fkey",
+          "tableFrom": "doctor_assistant",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["assistant_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "doctor_assistant_doctor_id_fkey": {
+          "name": "doctor_assistant_doctor_id_fkey",
+          "tableFrom": "doctor_assistant",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["doctor_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "doctor_assistant_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "doctor_assistant_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.document_type": {
+      "name": "document_type",
+      "schema": "",
+      "columns": {
+        "document_type_id": {
+          "name": "document_type_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "document_type_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "document_type_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.drug": {
+      "name": "drug",
+      "schema": "",
+      "columns": {
+        "drug_id": {
+          "name": "drug_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dosage_form": {
+          "name": "dosage_form",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "strength": {
+          "name": "strength",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "drug_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "drug_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.frequency_detail": {
+      "name": "frequency_detail",
+      "schema": "",
+      "columns": {
+        "frequency_detail_id": {
+          "name": "frequency_detail_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "frequency_detail_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "frequency_detail_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.appointment": {
+      "name": "appointment",
+      "schema": "",
+      "columns": {
+        "appointment_id": {
+          "name": "appointment_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_user_id": {
+          "name": "app_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scheduled_at": {
+          "name": "scheduled_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "appointment_app_user_id_fkey": {
+          "name": "appointment_app_user_id_fkey",
+          "tableFrom": "appointment",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "appointment_patient_id_fkey": {
+          "name": "appointment_patient_id_fkey",
+          "tableFrom": "appointment",
+          "tableTo": "patient",
+          "schemaTo": "public",
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "appointment_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "appointment_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.disease": {
+      "name": "disease",
+      "schema": "",
+      "columns": {
+        "disease_id": {
+          "name": "disease_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "icd_code": {
+          "name": "icd_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "disease_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "disease_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.insurance_company": {
+      "name": "insurance_company",
+      "schema": "",
+      "columns": {
+        "insurance_id": {
+          "name": "insurance_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "insurance_company_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "insurance_company_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.lab_test_result": {
+      "name": "lab_test_result",
+      "schema": "",
+      "columns": {
+        "lab_test_result_id": {
+          "name": "lab_test_result_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lab_test_id": {
+          "name": "lab_test_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parameter": {
+          "name": "parameter",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "result_value": {
+          "name": "result_value",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unit": {
+          "name": "unit",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reference_range": {
+          "name": "reference_range",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lab_test_result_lab_test_id_fkey": {
+          "name": "lab_test_result_lab_test_id_fkey",
+          "tableFrom": "lab_test_result",
+          "tableTo": "lab_test",
+          "schemaTo": "public",
+          "columnsFrom": ["lab_test_id"],
+          "columnsTo": ["lab_test_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "lab_test_result_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "lab_test_result_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.lab_test": {
+      "name": "lab_test",
+      "schema": "",
+      "columns": {
+        "lab_test_id": {
+          "name": "lab_test_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "medical_record_id": {
+          "name": "medical_record_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "test_type": {
+          "name": "test_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_by": {
+          "name": "requested_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_at": {
+          "name": "requested_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "performed_at": {
+          "name": "performed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "file_url": {
+          "name": "file_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lab_test_medical_record_id_fkey": {
+          "name": "lab_test_medical_record_id_fkey",
+          "tableFrom": "lab_test",
+          "tableTo": "medical_record",
+          "schemaTo": "public",
+          "columnsFrom": ["medical_record_id"],
+          "columnsTo": ["record_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "lab_test_requested_by_fkey": {
+          "name": "lab_test_requested_by_fkey",
+          "tableFrom": "lab_test",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["requested_by"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "lab_test_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "lab_test_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.medical_record": {
+      "name": "medical_record",
+      "schema": "",
+      "columns": {
+        "record_id": {
+          "name": "record_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_user_id": {
+          "name": "app_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointment_id": {
+          "name": "appointment_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diagnosis": {
+          "name": "diagnosis",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "medical_record_app_user_id_fkey": {
+          "name": "medical_record_app_user_id_fkey",
+          "tableFrom": "medical_record",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "medical_record_appointment_id_fkey": {
+          "name": "medical_record_appointment_id_fkey",
+          "tableFrom": "medical_record",
+          "tableTo": "appointment",
+          "schemaTo": "public",
+          "columnsFrom": ["appointment_id"],
+          "columnsTo": ["appointment_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "medical_record_patient_id_fkey": {
+          "name": "medical_record_patient_id_fkey",
+          "tableFrom": "medical_record",
+          "tableTo": "patient",
+          "schemaTo": "public",
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "medical_record_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "medical_record_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.imaging_test_image": {
+      "name": "imaging_test_image",
+      "schema": "",
+      "columns": {
+        "imaging_test_image_id": {
+          "name": "imaging_test_image_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imaging_test_id": {
+          "name": "imaging_test_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_file_url": {
+          "name": "image_file_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "imaging_test_image_imaging_test_id_fkey": {
+          "name": "imaging_test_image_imaging_test_id_fkey",
+          "tableFrom": "imaging_test_image",
+          "tableTo": "imaging_test",
+          "schemaTo": "public",
+          "columnsFrom": ["imaging_test_id"],
+          "columnsTo": ["imaging_test_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "imaging_test_image_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "imaging_test_image_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.prescription_item": {
+      "name": "prescription_item",
+      "schema": "",
+      "columns": {
+        "item_id": {
+          "name": "item_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prescription_id": {
+          "name": "prescription_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "drug_id": {
+          "name": "drug_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dosage_detail_id": {
+          "name": "dosage_detail_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "frequency_detail_id": {
+          "name": "frequency_detail_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration": {
+          "name": "duration",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "instructions": {
+          "name": "instructions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "prescription_item_dosage_detail_id_fkey": {
+          "name": "prescription_item_dosage_detail_id_fkey",
+          "tableFrom": "prescription_item",
+          "tableTo": "dosage_detail",
+          "schemaTo": "public",
+          "columnsFrom": ["dosage_detail_id"],
+          "columnsTo": ["dosage_detail_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prescription_item_drug_id_fkey": {
+          "name": "prescription_item_drug_id_fkey",
+          "tableFrom": "prescription_item",
+          "tableTo": "drug",
+          "schemaTo": "public",
+          "columnsFrom": ["drug_id"],
+          "columnsTo": ["drug_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prescription_item_frequency_detail_id_fkey": {
+          "name": "prescription_item_frequency_detail_id_fkey",
+          "tableFrom": "prescription_item",
+          "tableTo": "frequency_detail",
+          "schemaTo": "public",
+          "columnsFrom": ["frequency_detail_id"],
+          "columnsTo": ["frequency_detail_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prescription_item_prescription_id_fkey": {
+          "name": "prescription_item_prescription_id_fkey",
+          "tableFrom": "prescription_item",
+          "tableTo": "prescription",
+          "schemaTo": "public",
+          "columnsFrom": ["prescription_id"],
+          "columnsTo": ["prescription_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "prescription_item_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "prescription_item_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.prescription": {
+      "name": "prescription",
+      "schema": "",
+      "columns": {
+        "prescription_id": {
+          "name": "prescription_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_user_id": {
+          "name": "app_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointment_id": {
+          "name": "appointment_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prescribed_at": {
+          "name": "prescribed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "prescription_app_user_id_fkey": {
+          "name": "prescription_app_user_id_fkey",
+          "tableFrom": "prescription",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prescription_appointment_id_fkey": {
+          "name": "prescription_appointment_id_fkey",
+          "tableFrom": "prescription",
+          "tableTo": "appointment",
+          "schemaTo": "public",
+          "columnsFrom": ["appointment_id"],
+          "columnsTo": ["appointment_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prescription_patient_id_fkey": {
+          "name": "prescription_patient_id_fkey",
+          "tableFrom": "prescription",
+          "tableTo": "patient",
+          "schemaTo": "public",
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "prescription_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "prescription_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.role": {
+      "name": "role",
+      "schema": "",
+      "columns": {
+        "role_id": {
+          "name": "role_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "role_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "role_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.vital_sign": {
+      "name": "vital_sign",
+      "schema": "",
+      "columns": {
+        "vital_sign_id": {
+          "name": "vital_sign_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointment_id": {
+          "name": "appointment_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight_kg": {
+          "name": "weight_kg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "height_cm": {
+          "name": "height_cm",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "temperature_c": {
+          "name": "temperature_c",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "heart_rate_bpm": {
+          "name": "heart_rate_bpm",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "respiratory_rate_bpm": {
+          "name": "respiratory_rate_bpm",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bp_systolic": {
+          "name": "bp_systolic",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bp_diastolic": {
+          "name": "bp_diastolic",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "measured_at": {
+          "name": "measured_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vital_sign_appointment_id_fkey": {
+          "name": "vital_sign_appointment_id_fkey",
+          "tableFrom": "vital_sign",
+          "tableTo": "appointment",
+          "schemaTo": "public",
+          "columnsFrom": ["appointment_id"],
+          "columnsTo": ["appointment_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "vital_sign_patient_id_fkey": {
+          "name": "vital_sign_patient_id_fkey",
+          "tableFrom": "vital_sign",
+          "tableTo": "patient",
+          "schemaTo": "public",
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "vital_sign_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "vital_sign_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.imaging_test": {
+      "name": "imaging_test",
+      "schema": "",
+      "columns": {
+        "imaging_test_id": {
+          "name": "imaging_test_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "medical_record_id": {
+          "name": "medical_record_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imaging_type": {
+          "name": "imaging_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_by": {
+          "name": "requested_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_at": {
+          "name": "requested_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "performed_at": {
+          "name": "performed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "report_file_url": {
+          "name": "report_file_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "imaging_test_medical_record_id_fkey": {
+          "name": "imaging_test_medical_record_id_fkey",
+          "tableFrom": "imaging_test",
+          "tableTo": "medical_record",
+          "schemaTo": "public",
+          "columnsFrom": ["medical_record_id"],
+          "columnsTo": ["record_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "imaging_test_requested_by_fkey": {
+          "name": "imaging_test_requested_by_fkey",
+          "tableFrom": "imaging_test",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["requested_by"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "imaging_test_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "imaging_test_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.app_user": {
+      "name": "app_user",
+      "schema": "",
+      "columns": {
+        "app_user_id": {
+          "name": "app_user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "specialty": {
+          "name": "specialty",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "document_type_id": {
+          "name": "document_type_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "document_number": {
+          "name": "document_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "app_user_document_type_id_fkey": {
+          "name": "app_user_document_type_id_fkey",
+          "tableFrom": "app_user",
+          "tableTo": "document_type",
+          "schemaTo": "public",
+          "columnsFrom": ["document_type_id"],
+          "columnsTo": ["document_type_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "app_user_role_id_fkey": {
+          "name": "app_user_role_id_fkey",
+          "tableFrom": "app_user",
+          "tableTo": "role",
+          "schemaTo": "public",
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["role_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "app_user_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "app_user_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.medical_record_disease": {
+      "name": "medical_record_disease",
+      "schema": "",
+      "columns": {
+        "record_disease_id": {
+          "name": "record_disease_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "record_id": {
+          "name": "record_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "disease_id": {
+          "name": "disease_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "medical_record_disease_disease_id_fkey": {
+          "name": "medical_record_disease_disease_id_fkey",
+          "tableFrom": "medical_record_disease",
+          "tableTo": "disease",
+          "schemaTo": "public",
+          "columnsFrom": ["disease_id"],
+          "columnsTo": ["disease_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "medical_record_disease_record_id_fkey": {
+          "name": "medical_record_disease_record_id_fkey",
+          "tableFrom": "medical_record_disease",
+          "tableTo": "medical_record",
+          "schemaTo": "public",
+          "columnsFrom": ["record_id"],
+          "columnsTo": ["record_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "medical_record_disease_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "medical_record_disease_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.patient": {
+      "name": "patient",
+      "schema": "",
+      "columns": {
+        "patient_id": {
+          "name": "patient_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dob": {
+          "name": "dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "patient_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "patient_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.patient_insurance": {
+      "name": "patient_insurance",
+      "schema": "",
+      "columns": {
+        "patient_insurance_id": {
+          "name": "patient_insurance_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patient_id": {
+          "name": "patient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "insurance_id": {
+          "name": "insurance_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "policy_number": {
+          "name": "policy_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "valid_from": {
+          "name": "valid_from",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "valid_to": {
+          "name": "valid_to",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "patient_insurance_insurance_id_fkey": {
+          "name": "patient_insurance_insurance_id_fkey",
+          "tableFrom": "patient_insurance",
+          "tableTo": "insurance_company",
+          "schemaTo": "public",
+          "columnsFrom": ["insurance_id"],
+          "columnsTo": ["insurance_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "patient_insurance_patient_id_fkey": {
+          "name": "patient_insurance_patient_id_fkey",
+          "tableFrom": "patient_insurance",
+          "tableTo": "patient",
+          "schemaTo": "public",
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "patient_insurance_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "patient_insurance_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.user_insurance_affiliate_code": {
+      "name": "user_insurance_affiliate_code",
+      "schema": "",
+      "columns": {
+        "user_insurance_affiliate_code_id": {
+          "name": "user_insurance_affiliate_code_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_user_id": {
+          "name": "app_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "insurance_id": {
+          "name": "insurance_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affiliate_code": {
+          "name": "affiliate_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_insurance_affiliate_code_app_user_id_fkey": {
+          "name": "user_insurance_affiliate_code_app_user_id_fkey",
+          "tableFrom": "user_insurance_affiliate_code",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_insurance_affiliate_code_insurance_id_fkey": {
+          "name": "user_insurance_affiliate_code_insurance_id_fkey",
+          "tableFrom": "user_insurance_affiliate_code",
+          "tableTo": "insurance_company",
+          "schemaTo": "public",
+          "columnsFrom": ["insurance_id"],
+          "columnsTo": ["insurance_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_insurance_affiliate_code_uuid_key": {
+          "columns": ["uuid"],
+          "nullsNotDistinct": false,
+          "name": "user_insurance_affiliate_code_uuid_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {}
+  }
+}
