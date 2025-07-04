@@ -82,12 +82,8 @@
           "name": "app_user_document_type_id_fkey",
           "tableFrom": "app_user",
           "tableTo": "document_type",
-          "columnsFrom": [
-            "document_type_id"
-          ],
-          "columnsTo": [
-            "document_type_id"
-          ],
+          "columnsFrom": ["document_type_id"],
+          "columnsTo": ["document_type_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -95,12 +91,8 @@
           "name": "app_user_role_id_fkey",
           "tableFrom": "app_user",
           "tableTo": "role",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "role_id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["role_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -110,9 +102,7 @@
         "app_user_uuid_key": {
           "name": "app_user_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -216,12 +206,8 @@
           "name": "appointment_app_user_id_fkey",
           "tableFrom": "appointment",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "app_user_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -229,12 +215,8 @@
           "name": "appointment_patient_id_fkey",
           "tableFrom": "appointment",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "patient_id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -244,9 +226,7 @@
         "appointment_uuid_key": {
           "name": "appointment_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -308,9 +288,7 @@
         "disease_uuid_key": {
           "name": "disease_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -359,12 +337,8 @@
           "name": "doctor_assistant_assistant_id_fkey",
           "tableFrom": "doctor_assistant",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "assistant_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["assistant_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -372,12 +346,8 @@
           "name": "doctor_assistant_doctor_id_fkey",
           "tableFrom": "doctor_assistant",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "doctor_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["doctor_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -387,9 +357,7 @@
         "doctor_assistant_uuid_key": {
           "name": "doctor_assistant_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -438,12 +406,8 @@
           "name": "doctor_patient_doctor_id_fkey",
           "tableFrom": "doctor_patient",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "doctor_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["doctor_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -451,12 +415,8 @@
           "name": "doctor_patient_patient_id_fkey",
           "tableFrom": "doctor_patient",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "patient_id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -466,9 +426,7 @@
         "doctor_patient_uuid_key": {
           "name": "doctor_patient_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -512,9 +470,7 @@
         "document_type_uuid_key": {
           "name": "document_type_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -558,9 +514,7 @@
         "dosage_detail_uuid_key": {
           "name": "dosage_detail_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -622,9 +576,7 @@
         "drug_uuid_key": {
           "name": "drug_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -668,9 +620,7 @@
         "frequency_detail_uuid_key": {
           "name": "frequency_detail_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -755,12 +705,8 @@
           "name": "imaging_test_medical_record_id_fkey",
           "tableFrom": "imaging_test",
           "tableTo": "medical_record",
-          "columnsFrom": [
-            "medical_record_id"
-          ],
-          "columnsTo": [
-            "record_id"
-          ],
+          "columnsFrom": ["medical_record_id"],
+          "columnsTo": ["record_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -768,12 +714,8 @@
           "name": "imaging_test_requested_by_fkey",
           "tableFrom": "imaging_test",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "requested_by"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["requested_by"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -783,9 +725,7 @@
         "imaging_test_uuid_key": {
           "name": "imaging_test_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -840,12 +780,8 @@
           "name": "imaging_test_image_imaging_test_id_fkey",
           "tableFrom": "imaging_test_image",
           "tableTo": "imaging_test",
-          "columnsFrom": [
-            "imaging_test_id"
-          ],
-          "columnsTo": [
-            "imaging_test_id"
-          ],
+          "columnsFrom": ["imaging_test_id"],
+          "columnsTo": ["imaging_test_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -855,9 +791,7 @@
         "imaging_test_image_uuid_key": {
           "name": "imaging_test_image_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -925,9 +859,7 @@
         "insurance_company_uuid_key": {
           "name": "insurance_company_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1012,12 +944,8 @@
           "name": "lab_test_medical_record_id_fkey",
           "tableFrom": "lab_test",
           "tableTo": "medical_record",
-          "columnsFrom": [
-            "medical_record_id"
-          ],
-          "columnsTo": [
-            "record_id"
-          ],
+          "columnsFrom": ["medical_record_id"],
+          "columnsTo": ["record_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1025,12 +953,8 @@
           "name": "lab_test_requested_by_fkey",
           "tableFrom": "lab_test",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "requested_by"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["requested_by"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1040,9 +964,7 @@
         "lab_test_uuid_key": {
           "name": "lab_test_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1109,12 +1031,8 @@
           "name": "lab_test_result_lab_test_id_fkey",
           "tableFrom": "lab_test_result",
           "tableTo": "lab_test",
-          "columnsFrom": [
-            "lab_test_id"
-          ],
-          "columnsTo": [
-            "lab_test_id"
-          ],
+          "columnsFrom": ["lab_test_id"],
+          "columnsTo": ["lab_test_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1124,9 +1042,7 @@
         "lab_test_result_uuid_key": {
           "name": "lab_test_result_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1199,12 +1115,8 @@
           "name": "medical_record_app_user_id_fkey",
           "tableFrom": "medical_record",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "app_user_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1212,12 +1124,8 @@
           "name": "medical_record_appointment_id_fkey",
           "tableFrom": "medical_record",
           "tableTo": "appointment",
-          "columnsFrom": [
-            "appointment_id"
-          ],
-          "columnsTo": [
-            "appointment_id"
-          ],
+          "columnsFrom": ["appointment_id"],
+          "columnsTo": ["appointment_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1225,12 +1133,8 @@
           "name": "medical_record_patient_id_fkey",
           "tableFrom": "medical_record",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "patient_id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1240,9 +1144,7 @@
         "medical_record_uuid_key": {
           "name": "medical_record_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1291,12 +1193,8 @@
           "name": "medical_record_disease_disease_id_fkey",
           "tableFrom": "medical_record_disease",
           "tableTo": "disease",
-          "columnsFrom": [
-            "disease_id"
-          ],
-          "columnsTo": [
-            "disease_id"
-          ],
+          "columnsFrom": ["disease_id"],
+          "columnsTo": ["disease_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1304,12 +1202,8 @@
           "name": "medical_record_disease_record_id_fkey",
           "tableFrom": "medical_record_disease",
           "tableTo": "medical_record",
-          "columnsFrom": [
-            "record_id"
-          ],
-          "columnsTo": [
-            "record_id"
-          ],
+          "columnsFrom": ["record_id"],
+          "columnsTo": ["record_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1319,9 +1213,7 @@
         "medical_record_disease_uuid_key": {
           "name": "medical_record_disease_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1402,9 +1294,7 @@
         "patient_uuid_key": {
           "name": "patient_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1477,12 +1367,8 @@
           "name": "patient_insurance_insurance_id_fkey",
           "tableFrom": "patient_insurance",
           "tableTo": "insurance_company",
-          "columnsFrom": [
-            "insurance_id"
-          ],
-          "columnsTo": [
-            "insurance_id"
-          ],
+          "columnsFrom": ["insurance_id"],
+          "columnsTo": ["insurance_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1490,12 +1376,8 @@
           "name": "patient_insurance_patient_id_fkey",
           "tableFrom": "patient_insurance",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "patient_id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1505,9 +1387,7 @@
         "patient_insurance_uuid_key": {
           "name": "patient_insurance_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1580,12 +1460,8 @@
           "name": "prescription_app_user_id_fkey",
           "tableFrom": "prescription",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "app_user_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1593,12 +1469,8 @@
           "name": "prescription_appointment_id_fkey",
           "tableFrom": "prescription",
           "tableTo": "appointment",
-          "columnsFrom": [
-            "appointment_id"
-          ],
-          "columnsTo": [
-            "appointment_id"
-          ],
+          "columnsFrom": ["appointment_id"],
+          "columnsTo": ["appointment_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1606,12 +1478,8 @@
           "name": "prescription_patient_id_fkey",
           "tableFrom": "prescription",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "patient_id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1621,9 +1489,7 @@
         "prescription_uuid_key": {
           "name": "prescription_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1696,12 +1562,8 @@
           "name": "prescription_item_dosage_detail_id_fkey",
           "tableFrom": "prescription_item",
           "tableTo": "dosage_detail",
-          "columnsFrom": [
-            "dosage_detail_id"
-          ],
-          "columnsTo": [
-            "dosage_detail_id"
-          ],
+          "columnsFrom": ["dosage_detail_id"],
+          "columnsTo": ["dosage_detail_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1709,12 +1571,8 @@
           "name": "prescription_item_drug_id_fkey",
           "tableFrom": "prescription_item",
           "tableTo": "drug",
-          "columnsFrom": [
-            "drug_id"
-          ],
-          "columnsTo": [
-            "drug_id"
-          ],
+          "columnsFrom": ["drug_id"],
+          "columnsTo": ["drug_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1722,12 +1580,8 @@
           "name": "prescription_item_frequency_detail_id_fkey",
           "tableFrom": "prescription_item",
           "tableTo": "frequency_detail",
-          "columnsFrom": [
-            "frequency_detail_id"
-          ],
-          "columnsTo": [
-            "frequency_detail_id"
-          ],
+          "columnsFrom": ["frequency_detail_id"],
+          "columnsTo": ["frequency_detail_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1735,12 +1589,8 @@
           "name": "prescription_item_prescription_id_fkey",
           "tableFrom": "prescription_item",
           "tableTo": "prescription",
-          "columnsFrom": [
-            "prescription_id"
-          ],
-          "columnsTo": [
-            "prescription_id"
-          ],
+          "columnsFrom": ["prescription_id"],
+          "columnsTo": ["prescription_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1750,9 +1600,7 @@
         "prescription_item_uuid_key": {
           "name": "prescription_item_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1796,9 +1644,7 @@
         "role_uuid_key": {
           "name": "role_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1859,12 +1705,8 @@
           "name": "user_insurance_affiliate_code_app_user_id_fkey",
           "tableFrom": "user_insurance_affiliate_code",
           "tableTo": "app_user",
-          "columnsFrom": [
-            "app_user_id"
-          ],
-          "columnsTo": [
-            "app_user_id"
-          ],
+          "columnsFrom": ["app_user_id"],
+          "columnsTo": ["app_user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1872,12 +1714,8 @@
           "name": "user_insurance_affiliate_code_insurance_id_fkey",
           "tableFrom": "user_insurance_affiliate_code",
           "tableTo": "insurance_company",
-          "columnsFrom": [
-            "insurance_id"
-          ],
-          "columnsTo": [
-            "insurance_id"
-          ],
+          "columnsFrom": ["insurance_id"],
+          "columnsTo": ["insurance_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1887,9 +1725,7 @@
         "user_insurance_affiliate_code_uuid_key": {
           "name": "user_insurance_affiliate_code_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
@@ -1986,12 +1822,8 @@
           "name": "vital_sign_appointment_id_fkey",
           "tableFrom": "vital_sign",
           "tableTo": "appointment",
-          "columnsFrom": [
-            "appointment_id"
-          ],
-          "columnsTo": [
-            "appointment_id"
-          ],
+          "columnsFrom": ["appointment_id"],
+          "columnsTo": ["appointment_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1999,12 +1831,8 @@
           "name": "vital_sign_patient_id_fkey",
           "tableFrom": "vital_sign",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "patient_id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["patient_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2014,9 +1842,7 @@
         "vital_sign_uuid_key": {
           "name": "vital_sign_uuid_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         }
       },
       "policies": {},
