@@ -1,0 +1,490 @@
+import type React from 'react';
+
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
+import { format } from 'date-fns';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+interface Medication {
+  id: string;
+  name: string;
+  dosage: string;
+  frequency: string;
+  duration: string;
+  instructions: string;
+}
+
+interface Prescription {
+  patientName: string;
+  patientId: string;
+  medications: Medication[];
+  prescribedDate: string;
+  status: 'active' | 'completed' | 'cancelled';
+  doctorName: string;
+  refills: number;
+  diagnosis: string;
+  generalInstructions: string;
+}
+
+interface PrescriptionFormProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (prescription: Prescription) => void;
+  initialData?: Prescription | null;
+  mode: 'create' | 'edit';
+}
+
+export function PrescriptionForm({
+  open,
+  onOpenChange,
+  onSubmit,
+  initialData,
+  mode,
+}: PrescriptionFormProps) {
+  const [formData, setFormData] = useState<Prescription>({
+    patientName: '',
+    patientId: '',
+    medications: [
+      {
+        id: '1',
+        name: '',
+        dosage: '',
+        frequency: '',
+        duration: '',
+        instructions: '',
+      },
+    ],
+    prescribedDate: new Date().toISOString().split('T')[0],
+    status: 'active',
+    doctorName: '',
+    refills: 0,
+    diagnosis: '',
+    generalInstructions: '',
+  });
+  const [date, setDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    if (initialData && mode === 'edit') {
+      setFormData(initialData);
+      setDate(new Date(initialData.prescribedDate));
+    } else {
+      setFormData({
+        patientName: '',
+        patientId: '',
+        medications: [
+          {
+            id: '1',
+            name: '',
+            dosage: '',
+            frequency: '',
+            duration: '',
+            instructions: '',
+          },
+        ],
+        prescribedDate: new Date().toISOString().split('T')[0],
+        status: 'active',
+        doctorName: '',
+        refills: 0,
+        diagnosis: '',
+        generalInstructions: '',
+      });
+      setDate(new Date());
+    }
+  }, [initialData, mode, open]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      ...formData,
+      prescribedDate: date.toISOString().split('T')[0],
+    });
+  };
+
+  const handleInputChange = (
+    field: keyof Omit<Prescription, 'medications'>,
+    value: string | number,
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleMedicationChange = (
+    index: number,
+    field: keyof Medication,
+    value: string,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      medications: prev.medications.map((med, i) =>
+        i === index ? { ...med, [field]: value } : med,
+      ),
+    }));
+  };
+
+  const addMedication = () => {
+    const newMedication: Medication = {
+      id: Date.now().toString(),
+      name: '',
+      dosage: '',
+      frequency: '',
+      duration: '',
+      instructions: '',
+    };
+    setFormData((prev) => ({
+      ...prev,
+      medications: [...prev.medications, newMedication],
+    }));
+  };
+
+  const removeMedication = (index: number) => {
+    if (formData.medications.length > 1) {
+      setFormData((prev) => ({
+        ...prev,
+        medications: prev.medications.filter((_, i) => i !== index),
+      }));
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>
+            {mode === 'edit' ? 'Edit Prescription' : 'New Prescription'}
+          </DialogTitle>
+          <DialogDescription>
+            {mode === 'edit'
+              ? 'Update the prescription details below.'
+              : 'Fill in the details to create a new prescription.'}
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Patient Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Patient Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="patientName">Patient Name *</Label>
+                  <Input
+                    id="patientName"
+                    value={formData.patientName}
+                    onChange={(e) =>
+                      handleInputChange('patientName', e.target.value)
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="patientId">Patient ID *</Label>
+                  <Input
+                    id="patientId"
+                    value={formData.patientId}
+                    onChange={(e) =>
+                      handleInputChange('patientId', e.target.value)
+                    }
+                    required
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Medications */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">Medications</CardTitle>
+                <Button type="button" onClick={addMedication} size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Medication
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {formData.medications.map((medication, index) => (
+                <div
+                  key={medication.id}
+                  className="border rounded-lg p-4 space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">Medication {index + 1}</h4>
+                    {formData.medications.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeMedication(index)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`medication-${index}`}>
+                        Medication Name *
+                      </Label>
+                      <Input
+                        id={`medication-${index}`}
+                        value={medication.name}
+                        onChange={(e) =>
+                          handleMedicationChange(index, 'name', e.target.value)
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`dosage-${index}`}>Dosage *</Label>
+                      <Input
+                        id={`dosage-${index}`}
+                        placeholder="e.g., 500mg"
+                        value={medication.dosage}
+                        onChange={(e) =>
+                          handleMedicationChange(
+                            index,
+                            'dosage',
+                            e.target.value,
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`frequency-${index}`}>Frequency *</Label>
+                      <Select
+                        value={medication.frequency}
+                        onValueChange={(value) =>
+                          handleMedicationChange(index, 'frequency', value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select frequency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Once daily">Once daily</SelectItem>
+                          <SelectItem value="Twice daily">
+                            Twice daily
+                          </SelectItem>
+                          <SelectItem value="3 times daily">
+                            3 times daily
+                          </SelectItem>
+                          <SelectItem value="4 times daily">
+                            4 times daily
+                          </SelectItem>
+                          <SelectItem value="Every 4 hours">
+                            Every 4 hours
+                          </SelectItem>
+                          <SelectItem value="Every 6 hours">
+                            Every 6 hours
+                          </SelectItem>
+                          <SelectItem value="Every 8 hours">
+                            Every 8 hours
+                          </SelectItem>
+                          <SelectItem value="As needed">As needed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`duration-${index}`}>Duration *</Label>
+                      <Input
+                        id={`duration-${index}`}
+                        placeholder="e.g., 7 days, 30 days"
+                        value={medication.duration}
+                        onChange={(e) =>
+                          handleMedicationChange(
+                            index,
+                            'duration',
+                            e.target.value,
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor={`instructions-${index}`}>
+                      Specific Instructions
+                    </Label>
+                    <Textarea
+                      id={`instructions-${index}`}
+                      placeholder="Specific instructions for this medication..."
+                      value={medication.instructions}
+                      onChange={(e) =>
+                        handleMedicationChange(
+                          index,
+                          'instructions',
+                          e.target.value,
+                        )
+                      }
+                      rows={2}
+                    />
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Clinical Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Clinical Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="diagnosis">Diagnosis *</Label>
+                <Input
+                  id="diagnosis"
+                  value={formData.diagnosis}
+                  onChange={(e) =>
+                    handleInputChange('diagnosis', e.target.value)
+                  }
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="generalInstructions">
+                  General Instructions
+                </Label>
+                <Textarea
+                  id="generalInstructions"
+                  placeholder="General instructions for the patient..."
+                  value={formData.generalInstructions}
+                  onChange={(e) =>
+                    handleInputChange('generalInstructions', e.target.value)
+                  }
+                  rows={3}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Prescription Details */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Prescription Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>Prescribed Date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left font-normal bg-transparent"
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {format(date, 'PPP')}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={(date) => date && setDate(date)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="refills">Refills</Label>
+                  <Input
+                    id="refills"
+                    type="number"
+                    min="0"
+                    max="10"
+                    value={formData.refills}
+                    onChange={(e) =>
+                      handleInputChange(
+                        'refills',
+                        Number.parseInt(e.target.value) || 0,
+                      )
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="status">Status</Label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(
+                      value: 'active' | 'completed' | 'cancelled',
+                    ) => handleInputChange('status', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2 mt-4">
+                <Label htmlFor="doctorName">Prescribing Doctor *</Label>
+                <Input
+                  id="doctorName"
+                  value={formData.doctorName}
+                  onChange={(e) =>
+                    handleInputChange('doctorName', e.target.value)
+                  }
+                  required
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              {mode === 'edit' ? 'Update Prescription' : 'Create Prescription'}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

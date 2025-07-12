@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   Calendar,
   Home,
@@ -8,52 +8,52 @@ import {
   Settings,
   SquareLibrary,
   UsersRound,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { NavMain } from "@/components/nav-main";
-import { Sidebar, SidebarContent, SidebarRail } from "@/components/ui/sidebar";
+import { NavMain } from '@/components/nav-main';
+import { Sidebar, SidebarContent, SidebarRail } from '@/components/ui/sidebar';
 
 const data = {
   navMain: [
     {
-      title: "Home",
-      url: "/",
+      title: 'Home',
+      url: '/',
       icon: Home,
       isActive: true,
     },
     {
-      title: "Patients",
-      url: "/patient",
+      title: 'Patients',
+      url: '/patient',
       icon: UsersRound,
       isActive: true,
     },
     {
-      title: "Appointments",
-      url: "/appointments",
+      title: 'Appointments',
+      url: '/appointments',
       icon: Calendar,
       isActive: true,
     },
     {
-      title: "Records",
-      url: "/records",
+      title: 'Records',
+      url: '/records',
       icon: SquareLibrary,
       isActive: true,
     },
     {
-      title: "Prescriptions",
-      url: "#",
+      title: 'Prescriptions',
+      url: '/prescriptions',
       icon: Pill,
       isActive: true,
     },
     {
-      title: "Tests",
-      url: "#",
+      title: 'Tests',
+      url: '#',
       icon: Home,
       isActive: true,
     },
     {
-      title: "Settings",
-      url: "#",
+      title: 'Settings',
+      url: '#',
       icon: Settings,
       isActive: true,
     },
