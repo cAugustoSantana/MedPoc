@@ -26,9 +26,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Combobox } from '@/components/ui/combobox';
 import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Patient } from '@/types/patient';
 
 interface Medication {
   id: string;
@@ -40,7 +42,6 @@ interface Medication {
 }
 
 interface Prescription {
-  patientName: string;
   patientId: string;
   medications: Medication[];
   prescribedDate: string;
@@ -67,7 +68,6 @@ export function PrescriptionForm({
   mode,
 }: PrescriptionFormProps) {
   const [formData, setFormData] = useState<Prescription>({
-    patientName: '',
     patientId: '',
     medications: [
       {
@@ -87,6 +87,40 @@ export function PrescriptionForm({
     generalInstructions: '',
   });
   const [date, setDate] = useState<Date>(new Date());
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [patientsLoading, setPatientsLoading] = useState(false);
+
+  // Fetch patients when dialog opens
+  useEffect(() => {
+    if (open) {
+      fetchPatients();
+    }
+  }, [open]);
+
+  const fetchPatients = async () => {
+    setPatientsLoading(true);
+    try {
+      const response = await fetch('/api/patients');
+      const result = await response.json();
+
+      if (result.success) {
+        setPatients(result.data);
+      } else {
+        setPatients([]);
+      }
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+      setPatients([]);
+    } finally {
+      setPatientsLoading(false);
+    }
+  };
+
+  // Convert patients to combobox options
+  const patientOptions = patients.map((patient) => ({
+    value: patient.patientId.toString(),
+    label: patient.name,
+  }));
 
   useEffect(() => {
     if (initialData && mode === 'edit') {
@@ -94,7 +128,6 @@ export function PrescriptionForm({
       setDate(new Date(initialData.prescribedDate));
     } else {
       setFormData({
-        patientName: '',
         patientId: '',
         medications: [
           {
@@ -126,10 +159,14 @@ export function PrescriptionForm({
   };
 
   const handleInputChange = (
-    field: keyof Omit<Prescription, 'medications'>,
+    field: keyof Omit<Prescription, 'medications' | 'patientId'>,
     value: string | number,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePatientChange = (patientId: string) => {
+    setFormData((prev) => ({ ...prev, patientId }));
   };
 
   const handleMedicationChange = (
@@ -190,29 +227,17 @@ export function PrescriptionForm({
               <CardTitle className="text-lg">Patient Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="patientName">Patient Name *</Label>
-                  <Input
-                    id="patientName"
-                    value={formData.patientName}
-                    onChange={(e) =>
-                      handleInputChange('patientName', e.target.value)
-                    }
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="patientId">Patient ID *</Label>
-                  <Input
-                    id="patientId"
-                    value={formData.patientId}
-                    onChange={(e) =>
-                      handleInputChange('patientId', e.target.value)
-                    }
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="patient">Patient *</Label>
+                <Combobox
+                  options={patientOptions}
+                  value={formData.patientId}
+                  onValueChange={handlePatientChange}
+                  placeholder="Select patient..."
+                  searchPlaceholder="Search patients..."
+                  emptyText="No patients found."
+                  disabled={patientsLoading}
+                />
               </div>
             </CardContent>
           </Card>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -17,6 +18,7 @@ import {
   Stethoscope,
   RotateCcw,
 } from 'lucide-react';
+import { Patient } from '@/types/patient';
 
 interface Medication {
   id: string;
@@ -29,7 +31,6 @@ interface Medication {
 
 interface Prescription {
   id: string;
-  patientName: string;
   patientId: string;
   medications: Medication[];
   prescribedDate: string;
@@ -51,6 +52,35 @@ export function PrescriptionDetails({
   onOpenChange,
   prescription,
 }: PrescriptionDetailsProps) {
+  const [patients, setPatients] = useState<Patient[]>([]);
+
+  // Fetch patients on component mount
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
+  const fetchPatients = async () => {
+    try {
+      const response = await fetch('/api/patients');
+      const result = await response.json();
+
+      if (result.success) {
+        setPatients(result.data);
+      } else {
+        setPatients([]);
+      }
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+      setPatients([]);
+    }
+  };
+
+  // Helper function to get patient name by ID
+  const getPatientName = (patientId: string) => {
+    const patient = patients.find((p) => p.patientId.toString() === patientId);
+    return patient?.name || 'Unknown Patient';
+  };
+
   if (!prescription) return null;
 
   const getStatusBadge = (status: string) => {
@@ -75,7 +105,8 @@ export function PrescriptionDetails({
             Prescription Details
           </DialogTitle>
           <DialogDescription>
-            Complete prescription information for {prescription.patientName}
+            Complete prescription information for{' '}
+            {getPatientName(prescription.patientId)}
           </DialogDescription>
         </DialogHeader>
 
@@ -101,14 +132,12 @@ export function PrescriptionDetails({
               <User className="h-4 w-4" />
               Patient Information
             </h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 gap-4 text-sm">
               <div>
                 <span className="text-muted-foreground">Name:</span>
-                <div className="font-medium">{prescription.patientName}</div>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Patient ID:</span>
-                <div className="font-medium">{prescription.patientId}</div>
+                <div className="font-medium">
+                  {getPatientName(prescription.patientId)}
+                </div>
               </div>
             </div>
           </div>

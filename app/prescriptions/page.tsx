@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash2, Eye, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,6 +30,7 @@ import {
 import { PrescriptionForm } from './components/prescription-form';
 import { PrescriptionDetails } from './components/prescription-details';
 import { DeleteConfirmDialog } from './components/delete-confirm-dialog';
+import { Patient } from '@/types/patient';
 
 interface Medication {
   id: string;
@@ -42,7 +43,6 @@ interface Medication {
 
 interface Prescription {
   id: string;
-  patientName: string;
   patientId: string;
   medications: Medication[];
   prescribedDate: string;
@@ -57,8 +57,7 @@ interface Prescription {
 const mockPrescriptions: Prescription[] = [
   {
     id: '1',
-    patientName: 'John Smith',
-    patientId: 'P001',
+    patientId: '1',
     medications: [
       {
         id: 'm1',
@@ -78,8 +77,7 @@ const mockPrescriptions: Prescription[] = [
   },
   {
     id: '2',
-    patientName: 'Emily Davis',
-    patientId: 'P002',
+    patientId: '2',
     medications: [
       {
         id: 'm2',
@@ -107,8 +105,7 @@ const mockPrescriptions: Prescription[] = [
   },
   {
     id: '3',
-    patientName: 'Robert Wilson',
-    patientId: 'P003',
+    patientId: '3',
     medications: [
       {
         id: 'm4',
@@ -139,6 +136,7 @@ const mockPrescriptions: Prescription[] = [
 export default function PrescriptionsPage() {
   const [prescriptions, setPrescriptions] =
     useState<Prescription[]>(mockPrescriptions);
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -149,11 +147,37 @@ export default function PrescriptionsPage() {
   const [editingPrescription, setEditingPrescription] =
     useState<Prescription | null>(null);
 
+  // Fetch patients on component mount
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
+  const fetchPatients = async () => {
+    try {
+      const response = await fetch('/api/patients');
+      const result = await response.json();
+
+      if (result.success) {
+        setPatients(result.data);
+      } else {
+        setPatients([]);
+      }
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+      setPatients([]);
+    }
+  };
+
+  // Helper function to get patient name by ID
+  const getPatientName = (patientId: string) => {
+    const patient = patients.find((p) => p.patientId.toString() === patientId);
+    return patient?.name || 'Unknown Patient';
+  };
+
   const filteredPrescriptions = prescriptions.filter((prescription) => {
+    const patientName = getPatientName(prescription.patientId);
     const matchesSearch =
-      prescription.patientName
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
+      patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       prescription.patientId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       prescription.medications.some((med) =>
         med.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -280,7 +304,7 @@ export default function PrescriptionsPage() {
                     <TableCell>
                       <div>
                         <div className="font-medium">
-                          {prescription.patientName}
+                          {getPatientName(prescription.patientId)}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           ID: {prescription.patientId}
