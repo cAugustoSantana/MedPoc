@@ -430,7 +430,7 @@ export function PrescriptionForm({
                         className="w-full justify-start text-left font-normal bg-transparent"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {format(date, 'PPP')}
+                        {format(date, 'MMM d, yyyy')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
