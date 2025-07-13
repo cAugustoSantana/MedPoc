@@ -35,7 +35,6 @@ interface Prescription {
   medications: Medication[];
   prescribedDate: string;
   status: 'active' | 'completed' | 'cancelled';
-  doctorName: string;
   refills: number;
   diagnosis: string;
   generalInstructions: string;
@@ -98,7 +97,7 @@ export function PrescriptionDetails({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Pill className="h-5 w-5" />
@@ -228,12 +227,6 @@ export function PrescriptionDetails({
                   <Calendar className="h-3 w-3" />
                   {new Date(prescription.prescribedDate).toLocaleDateString()}
                 </div>
-              </div>
-              <div>
-                <span className="text-muted-foreground">
-                  Prescribing Doctor:
-                </span>
-                <div className="font-medium">{prescription.doctorName}</div>
               </div>
               <div>
                 <span className="text-muted-foreground">

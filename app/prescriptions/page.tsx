@@ -47,7 +47,6 @@ interface Prescription {
   medications: Medication[];
   prescribedDate: string;
   status: 'active' | 'completed' | 'cancelled';
-  doctorName: string;
   refills: number;
   diagnosis: string;
   generalInstructions: string;
@@ -70,7 +69,6 @@ const mockPrescriptions: Prescription[] = [
     ],
     prescribedDate: '2024-01-15',
     status: 'active',
-    doctorName: 'Dr. Sarah Johnson',
     refills: 0,
     diagnosis: 'Bacterial infection',
     generalInstructions: 'Complete the full course even if feeling better',
@@ -98,7 +96,6 @@ const mockPrescriptions: Prescription[] = [
     ],
     prescribedDate: '2024-01-14',
     status: 'active',
-    doctorName: 'Dr. Michael Chen',
     refills: 2,
     diagnosis: 'Hypertension',
     generalInstructions: 'Monitor blood pressure daily',
@@ -126,7 +123,6 @@ const mockPrescriptions: Prescription[] = [
     ],
     prescribedDate: '2024-01-10',
     status: 'completed',
-    doctorName: 'Dr. Sarah Johnson',
     refills: 1,
     diagnosis: 'Type 2 Diabetes',
     generalInstructions: 'Monitor blood glucose levels regularly',
@@ -294,7 +290,6 @@ export default function PrescriptionsPage() {
                   <TableHead>Frequency</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Prescribed Date</TableHead>
-                  <TableHead>Doctor</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -347,7 +342,6 @@ export default function PrescriptionsPage() {
                         prescription.prescribedDate,
                       ).toLocaleDateString()}
                     </TableCell>
-                    <TableCell>{prescription.doctorName}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <Button

@@ -46,7 +46,6 @@ interface Prescription {
   medications: Medication[];
   prescribedDate: string;
   status: 'active' | 'completed' | 'cancelled';
-  doctorName: string;
   refills: number;
   diagnosis: string;
   generalInstructions: string;
@@ -81,7 +80,6 @@ export function PrescriptionForm({
     ],
     prescribedDate: new Date().toISOString().split('T')[0],
     status: 'active',
-    doctorName: '',
     refills: 0,
     diagnosis: '',
     generalInstructions: '',
@@ -141,7 +139,6 @@ export function PrescriptionForm({
         ],
         prescribedDate: new Date().toISOString().split('T')[0],
         status: 'active',
-        doctorName: '',
         refills: 0,
         diagnosis: '',
         generalInstructions: '',
@@ -480,18 +477,6 @@ export function PrescriptionForm({
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-
-              <div className="space-y-2 mt-4">
-                <Label htmlFor="doctorName">Prescribing Doctor *</Label>
-                <Input
-                  id="doctorName"
-                  value={formData.doctorName}
-                  onChange={(e) =>
-                    handleInputChange('doctorName', e.target.value)
-                  }
-                  required
-                />
               </div>
             </CardContent>
           </Card>
