@@ -38,16 +38,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    if (!body.patientId || !body.appUserId) {
+    if (!body.patientId) {
       return NextResponse.json(
-        { success: false, error: "Patient ID and Doctor ID are required" },
+        { success: false, error: "Patient ID is required" },
         { status: 400 },
       );
     }
 
     const prescriptionData: NewPrescription = {
       patientId: parseInt(body.patientId),
-      appUserId: parseInt(body.appUserId),
+      appUserId: body.appUserId ? parseInt(body.appUserId) : null, // Optional, can be set by system
       appointmentId: body.appointmentId ? parseInt(body.appointmentId) : null,
       prescribedAt: body.prescribedAt || new Date().toISOString(),
       notes: body.notes || null,

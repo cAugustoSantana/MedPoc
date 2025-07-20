@@ -31,6 +31,7 @@ import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Patient } from '@/types/patient';
+import { Prescription } from '@/types/prescription';
 
 interface Medication {
   id: string;
@@ -41,20 +42,17 @@ interface Medication {
   instructions: string;
 }
 
-interface Prescription {
+interface PrescriptionFormData {
   patientId: string;
+  prescribedAt?: string;
+  notes?: string;
   medications: Medication[];
-  prescribedDate: string;
-  status: 'active' | 'completed' | 'cancelled';
-  refills: number;
-  diagnosis: string;
-  generalInstructions: string;
 }
 
 interface PrescriptionFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (prescription: Prescription) => void;
+  onSubmit: (prescription: PrescriptionFormData) => void;
   initialData?: Prescription | null;
   mode: 'create' | 'edit';
 }
@@ -66,8 +64,10 @@ export function PrescriptionForm({
   initialData,
   mode,
 }: PrescriptionFormProps) {
-  const [formData, setFormData] = useState<Prescription>({
+  const [formData, setFormData] = useState<PrescriptionFormData>({
     patientId: '',
+    prescribedAt: new Date().toISOString().split('T')[0],
+    notes: '',
     medications: [
       {
         id: '1',
@@ -78,11 +78,6 @@ export function PrescriptionForm({
         instructions: '',
       },
     ],
-    prescribedDate: new Date().toISOString().split('T')[0],
-    status: 'active',
-    refills: 0,
-    diagnosis: '',
-    generalInstructions: '',
   });
   const [date, setDate] = useState<Date>(new Date());
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -122,11 +117,11 @@ export function PrescriptionForm({
 
   useEffect(() => {
     if (initialData && mode === 'edit') {
-      setFormData(initialData);
-      setDate(new Date(initialData.prescribedDate));
-    } else {
       setFormData({
-        patientId: '',
+        patientId: initialData.patientId?.toString() || '',
+        prescribedAt:
+          initialData.prescribedAt || new Date().toISOString().split('T')[0],
+        notes: initialData.notes || '',
         medications: [
           {
             id: '1',
@@ -137,11 +132,27 @@ export function PrescriptionForm({
             instructions: '',
           },
         ],
-        prescribedDate: new Date().toISOString().split('T')[0],
-        status: 'active',
-        refills: 0,
-        diagnosis: '',
-        generalInstructions: '',
+      });
+      setDate(
+        initialData.prescribedAt
+          ? new Date(initialData.prescribedAt)
+          : new Date(),
+      );
+    } else {
+      setFormData({
+        patientId: '',
+        prescribedAt: new Date().toISOString().split('T')[0],
+        notes: '',
+        medications: [
+          {
+            id: '1',
+            name: '',
+            dosage: '',
+            frequency: '',
+            duration: '',
+            instructions: '',
+          },
+        ],
       });
       setDate(new Date());
     }
@@ -151,13 +162,13 @@ export function PrescriptionForm({
     e.preventDefault();
     onSubmit({
       ...formData,
-      prescribedDate: date.toISOString().split('T')[0],
+      prescribedAt: date.toISOString().split('T')[0],
     });
   };
 
   const handleInputChange = (
-    field: keyof Omit<Prescription, 'medications' | 'patientId'>,
-    value: string | number,
+    field: keyof Omit<PrescriptionFormData, 'medications' | 'patientId'>,
+    value: string,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -379,104 +390,44 @@ export function PrescriptionForm({
             </CardContent>
           </Card>
 
-          {/* Clinical Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Clinical Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="diagnosis">Diagnosis *</Label>
-                <Input
-                  id="diagnosis"
-                  value={formData.diagnosis}
-                  onChange={(e) =>
-                    handleInputChange('diagnosis', e.target.value)
-                  }
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="generalInstructions">
-                  General Instructions
-                </Label>
-                <Textarea
-                  id="generalInstructions"
-                  placeholder="General instructions for the patient..."
-                  value={formData.generalInstructions}
-                  onChange={(e) =>
-                    handleInputChange('generalInstructions', e.target.value)
-                  }
-                  rows={3}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Prescription Details */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Prescription Details</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label>Prescribed Date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-normal bg-transparent"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {format(date, 'MMM d, yyyy')}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={(date) => date && setDate(date)}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="refills">Refills</Label>
-                  <Input
-                    id="refills"
-                    type="number"
-                    min="0"
-                    max="10"
-                    value={formData.refills}
-                    onChange={(e) =>
-                      handleInputChange(
-                        'refills',
-                        Number.parseInt(e.target.value) || 0,
-                      )
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
-                  <Select
-                    value={formData.status}
-                    onValueChange={(
-                      value: 'active' | 'completed' | 'cancelled',
-                    ) => handleInputChange('status', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="cancelled">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Prescribed Date *</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal bg-transparent"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {format(date, 'MMM d, yyyy')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={(date) => date && setDate(date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="notes">General Notes</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="Enter general prescription notes..."
+                  value={formData.notes}
+                  onChange={(e) => handleInputChange('notes', e.target.value)}
+                  rows={3}
+                />
               </div>
             </CardContent>
           </Card>
