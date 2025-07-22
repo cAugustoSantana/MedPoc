@@ -8,19 +8,20 @@ import { NewPrescription } from "@/types/prescription";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const prescriptionId = parseInt(id);
 
-    if (isNaN(id)) {
+    if (isNaN(prescriptionId)) {
       return NextResponse.json(
         { success: false, error: "Invalid prescription ID" },
         { status: 400 },
       );
     }
 
-    const prescription = await getPrescriptionById(id);
+    const prescription = await getPrescriptionById(prescriptionId);
 
     if (!prescription) {
       return NextResponse.json(
@@ -31,7 +32,7 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: prescription });
   } catch (error) {
-    console.error(`Error fetching prescription ${params.id}:`, error);
+    console.error(`Error fetching prescription:`, error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch prescription" },
       { status: 500 },
@@ -41,12 +42,13 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const prescriptionId = parseInt(id);
 
-    if (isNaN(id)) {
+    if (isNaN(prescriptionId)) {
       return NextResponse.json(
         { success: false, error: "Invalid prescription ID" },
         { status: 400 },
@@ -74,11 +76,11 @@ export async function PUT(
       updateData.notes = body.notes;
     }
 
-    const updatedPrescription = await updatePrescription(id, updateData);
+    const updatedPrescription = await updatePrescription(prescriptionId, updateData);
 
     return NextResponse.json({ success: true, data: updatedPrescription });
   } catch (error) {
-    console.error(`Error updating prescription ${params.id}:`, error);
+    console.error(`Error updating prescription:`, error);
     return NextResponse.json(
       { success: false, error: "Failed to update prescription" },
       { status: 500 },
@@ -88,26 +90,27 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const prescriptionId = parseInt(id);
 
-    if (isNaN(id)) {
+    if (isNaN(prescriptionId)) {
       return NextResponse.json(
         { success: false, error: "Invalid prescription ID" },
         { status: 400 },
       );
     }
 
-    await deletePrescription(id);
+    await deletePrescription(prescriptionId);
 
     return NextResponse.json(
       { success: true, message: "Prescription deleted successfully" },
       { status: 200 },
     );
   } catch (error) {
-    console.error(`Error deleting prescription ${params.id}:`, error);
+    console.error(`Error deleting prescription:`, error);
     return NextResponse.json(
       { success: false, error: "Failed to delete prescription" },
       { status: 500 },

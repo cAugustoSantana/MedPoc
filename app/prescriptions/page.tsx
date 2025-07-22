@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Plus, Search, Edit, Trash2, Eye, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,6 +35,22 @@ import { Prescription } from '@/types/prescription';
 import { PrescriptionItem } from '@/types/prescription-item';
 import { toast } from 'sonner';
 
+interface Medication {
+  id: string;
+  name: string;
+  dosage: string;
+  frequency: string;
+  duration: string;
+  instructions: string;
+}
+
+interface PrescriptionFormData {
+  patientId: string;
+  prescribedAt?: string;
+  notes?: string;
+  medications: Medication[];
+}
+
 export default function PrescriptionsPage() {
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -52,13 +68,7 @@ export default function PrescriptionsPage() {
     useState<Prescription | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch prescriptions and patients on component mount
-  useEffect(() => {
-    fetchPrescriptions();
-    fetchPatients();
-  }, []);
-
-  const fetchPrescriptions = async () => {
+  const fetchPrescriptions = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/prescriptions');
@@ -79,7 +89,7 @@ export default function PrescriptionsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const fetchPrescriptionItems = async (prescriptions: Prescription[]) => {
     try {
@@ -122,6 +132,12 @@ export default function PrescriptionsPage() {
     }
   };
 
+  // Fetch prescriptions and patients on component mount
+  useEffect(() => {
+    fetchPrescriptions();
+    fetchPatients();
+  }, [fetchPrescriptions]);
+
   // Helper function to get patient name by ID
   const getPatientName = (patientId: number | null) => {
     if (!patientId) return 'Unknown Patient';
@@ -141,7 +157,11 @@ export default function PrescriptionsPage() {
     const patientName = getPatientName(prescription.patientId);
     const items = getPrescriptionItems(prescription);
     const medicationNames = items
-      .map((item) => (item as any).drugName || 'Unknown Medication')
+      .map(
+        (item) =>
+          (item as PrescriptionItem & { drugName?: string }).drugName ||
+          'Unknown Medication',
+      )
       .join(' ');
 
     const matchesSearch =
@@ -154,14 +174,23 @@ export default function PrescriptionsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  const handleAddPrescription = async (prescriptionData: any) => {
+  const handleAddPrescription = async (
+    prescriptionData: PrescriptionFormData,
+  ) => {
     try {
+      const prescriptionPayload = {
+        ...prescriptionData,
+        patientId: prescriptionData.patientId
+          ? parseInt(prescriptionData.patientId, 10)
+          : null,
+      };
+
       const response = await fetch('/api/prescriptions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(prescriptionData),
+        body: JSON.stringify(prescriptionPayload),
       });
 
       const result = await response.json();
@@ -181,10 +210,19 @@ export default function PrescriptionsPage() {
     }
   };
 
-  const handleEditPrescription = async (prescriptionData: any) => {
+  const handleEditPrescription = async (
+    prescriptionData: PrescriptionFormData,
+  ) => {
     if (!editingPrescription) return;
 
     try {
+      const prescriptionPayload = {
+        ...prescriptionData,
+        patientId: prescriptionData.patientId
+          ? parseInt(prescriptionData.patientId, 10)
+          : null,
+      };
+
       const response = await fetch(
         `/api/prescriptions/${editingPrescription.prescriptionId}`,
         {
@@ -192,7 +230,7 @@ export default function PrescriptionsPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(prescriptionData),
+          body: JSON.stringify(prescriptionPayload),
         },
       );
 
@@ -253,7 +291,7 @@ export default function PrescriptionsPage() {
     }
   };
 
-  const getStatusBadge = (prescription: Prescription) => {
+  const getStatusBadge = () => {
     // For now, we'll show a default status since the schema doesn't have a status field
     return <Badge className="bg-green-100 text-green-800">Active</Badge>;
   };
@@ -351,8 +389,11 @@ export default function PrescriptionsPage() {
                             items.map((item, index) => (
                               <div key={item.itemId} className="text-sm">
                                 <span className="font-medium">
-                                  {(item as any).drugName ||
-                                    'Unknown Medication'}
+                                  {(
+                                    item as PrescriptionItem & {
+                                      drugName?: string;
+                                    }
+                                  ).drugName || 'Unknown Medication'}
                                 </span>
                                 {index < items.length - 1 && (
                                   <span className="text-muted-foreground">
@@ -373,7 +414,11 @@ export default function PrescriptionsPage() {
                           {items.length > 0 ? (
                             items.map((item) => (
                               <div key={item.itemId} className="text-sm">
-                                {(item as any).drugStrength || 'N/A'}
+                                {(
+                                  item as PrescriptionItem & {
+                                    drugStrength?: string;
+                                  }
+                                ).drugStrength || 'N/A'}
                               </div>
                             ))
                           ) : (
@@ -388,7 +433,11 @@ export default function PrescriptionsPage() {
                           {items.length > 0 ? (
                             items.map((item) => (
                               <div key={item.itemId} className="text-sm">
-                                {(item as any).frequencyDescription || 'N/A'}
+                                {(
+                                  item as PrescriptionItem & {
+                                    frequencyDescription?: string;
+                                  }
+                                ).frequencyDescription || 'N/A'}
                               </div>
                             ))
                           ) : (
@@ -398,7 +447,7 @@ export default function PrescriptionsPage() {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>{getStatusBadge(prescription)}</TableCell>
+                      <TableCell>{getStatusBadge()}</TableCell>
                       <TableCell>
                         {prescription.prescribedAt
                           ? new Date(
