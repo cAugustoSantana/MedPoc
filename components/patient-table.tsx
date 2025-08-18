@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -34,7 +35,6 @@ import {
 } from "lucide-react";
 
 import { cn, formatPhoneNumber } from "@/lib/utils";
-import Link from "next/link";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -132,6 +132,7 @@ export default function PatientTable({
   });
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
 
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -158,6 +159,7 @@ export default function PatientTable({
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
+          onClick={(e) => e.stopPropagation()}
         />
       ),
       size: 28,
@@ -169,12 +171,9 @@ export default function PatientTable({
       header: "Name",
       accessorKey: "name",
       cell: ({ row }) => (
-        <Link
-          href={`/patient/${row.original.uuid}`}
-          className="font-medium text-left block hover:underline"
-        >
+        <span className="font-medium text-left block">
           {row.getValue("name")}
-        </Link>
+        </span>
       ),
       size: 180,
       filterFn: multiColumnFilterFn,
@@ -585,6 +584,8 @@ export default function PatientTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/patient/${row.original.uuid}`)}
                 >
                   {row.getVisibleCells().map((cell) => {
                     const align = cell.column.columnDef.meta?.align || "left";
@@ -762,100 +763,101 @@ function RowActions({ patient }: { patient: Patient }) {
       setIsDeleting(false);
     }
   };
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex justify-end">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="shadow-none"
-            aria-label="Edit item"
-          >
-            <EllipsisIcon size={16} aria-hidden="true" />
-          </Button>
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Edit</span>
-            <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>Duplicate</span>
-            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Archive</span>
-            <DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Move to project</DropdownMenuItem>
-                <DropdownMenuItem>Move to folder</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Advanced options</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Share</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>Add to favorites</span>
-            <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem
-              className="text-destructive focus:text-destructive"
-              disabled={isDeleting}
-              onSelect={(e) => e.preventDefault()}
+    <div onClick={(e) => e.stopPropagation()}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="flex justify-end">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="shadow-none"
+              aria-label="Edit item"
             >
-              <span>{isDeleting ? "Deleting..." : "Delete"}</span>
-              <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+              <EllipsisIcon size={16} aria-hidden="true" />
+            </Button>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <span>Edit</span>
+              <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
             </DropdownMenuItem>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
-              <div
-                className="flex size-9 shrink-0 items-center justify-center rounded-full border"
-                aria-hidden="true"
+            <DropdownMenuItem>
+              <span>Duplicate</span>
+              <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <span>Archive</span>
+              <DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>Move to project</DropdownMenuItem>
+                  <DropdownMenuItem>Move to folder</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Advanced options</DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <span>Share</span>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <span>Add to favorites</span>
+              <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                disabled={isDeleting}
+                onSelect={(e) => e.preventDefault()}
               >
-                <CircleAlertIcon className="opacity-80" size={16} />
+                <span>{isDeleting ? "Deleting..." : "Delete"}</span>
+                <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+                <div
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full border"
+                  aria-hidden="true"
+                >
+                  <CircleAlertIcon className="opacity-80" size={16} />
+                </div>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the
+                    patient <strong>{patient.name}</strong>.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
               </div>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  patient <strong>{patient.name}</strong>.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
-                {isDeleting ? "Deleting..." : "Delete"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </DropdownMenuContent>
-    </DropdownMenu>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isDeleting}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
+                  {isDeleting ? "Deleting..." : "Delete"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
