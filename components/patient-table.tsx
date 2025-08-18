@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 
 import { cn, formatPhoneNumber } from "@/lib/utils";
+import Link from "next/link";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -168,7 +169,12 @@ export default function PatientTable({
       header: "Name",
       accessorKey: "name",
       cell: ({ row }) => (
-        <div className="font-medium text-left">{row.getValue("name")}</div>
+        <Link
+          href={`/patient/${row.original.uuid}`}
+          className="font-medium text-left block hover:underline"
+        >
+          {row.getValue("name")}
+        </Link>
       ),
       size: 180,
       filterFn: multiColumnFilterFn,
