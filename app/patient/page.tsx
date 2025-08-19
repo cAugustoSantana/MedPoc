@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import PatientTable from "@/components/patient-table";
+import { PatientTable } from "@/components/patient-table"
 import { PatientActions } from "@/components/patient-actions";
 import { Patient } from "@/types/patient";
 import { toast } from "sonner";
