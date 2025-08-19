@@ -1,5 +1,5 @@
-import { prescription } from "@/db/migrations/schema";
-import { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { prescription } from '@/db/migrations/schema';
+import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 
 export type Prescription = InferSelectModel<typeof prescription>;
 export type NewPrescription = InferInsertModel<typeof prescription>;
@@ -13,4 +13,3 @@ export interface PrescriptionFormData {
   startDate: string;
   endDate: string;
 }
-

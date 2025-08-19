@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { GalleryVerticalEnd, type LucideIcon } from "lucide-react";
+import { GalleryVerticalEnd, type LucideIcon } from 'lucide-react';
 
-import { Collapsible } from "@/components/ui/collapsible";
+import { Collapsible } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
 export function NavMain({
   items,

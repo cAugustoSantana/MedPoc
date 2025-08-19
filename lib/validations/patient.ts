@@ -1,32 +1,32 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Base patient schema for validation
 export const patientSchema = z.object({
   name: z
     .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be less than 100 characters"),
-  email: z.string().email("Invalid email address").optional().or(z.literal("")),
-  dob: z.string().optional().or(z.literal("")),
-  gender: z.enum(["male", "female", "other"]).optional().or(z.literal("")),
+    .min(1, 'Name is required')
+    .max(100, 'Name must be less than 100 characters'),
+  email: z.string().email('Invalid email address').optional().or(z.literal('')),
+  dob: z.string().optional().or(z.literal('')),
+  gender: z.enum(['male', 'female', 'other']).optional().or(z.literal('')),
   phone: z
     .string()
     .optional()
-    .or(z.literal(""))
+    .or(z.literal(''))
     .refine((val) => {
       if (!val) return true; // Allow empty
-      const digitsOnly = val.replace(/\D/g, ""); // Remove non-digits
+      const digitsOnly = val.replace(/\D/g, ''); // Remove non-digits
       return digitsOnly.length === 10;
-    }, "Phone number must be exactly 10 digits"),
-  address: z.string().optional().or(z.literal("")),
+    }, 'Phone number must be exactly 10 digits'),
+  address: z.string().optional().or(z.literal('')),
 });
 
 // Schema for creating a new patient (all fields optional except name)
 export const createPatientSchema = patientSchema.extend({
   name: z
     .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be less than 100 characters"),
+    .min(1, 'Name is required')
+    .max(100, 'Name must be less than 100 characters'),
 });
 
 // Schema for updating a patient (all fields optional)
@@ -39,7 +39,7 @@ export type UpdatePatientData = z.infer<typeof updatePatientSchema>;
 
 // Validation functions
 export function validateCreatePatient(
-  data: unknown,
+  data: unknown
 ):
   | { success: true; data: CreatePatientData }
   | { success: false; errors: string[] } {
@@ -56,7 +56,7 @@ export function validateCreatePatient(
 }
 
 export function validateUpdatePatient(
-  data: unknown,
+  data: unknown
 ):
   | { success: true; data: UpdatePatientData }
   | { success: false; errors: string[] } {

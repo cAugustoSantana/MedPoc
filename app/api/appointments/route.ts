@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import {
   getAppointmentsByDate,
   getAppointmentsWithDetails,
-} from "@/db/queries/appointments";
+} from '@/db/queries/appointments';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,13 +12,13 @@ export async function GET(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
     const { searchParams } = new URL(request.url);
-    const date = searchParams.get("date");
+    const date = searchParams.get('date');
 
     let appointments;
 
@@ -32,10 +32,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: appointments });
   } catch (error) {
-    console.error("Error fetching appointments:", error);
+    console.error('Error fetching appointments:', error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch appointments" },
-      { status: 500 },
+      { success: false, error: 'Failed to fetch appointments' },
+      { status: 500 }
     );
   }
 }

@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import {
   getAllPrescriptions,
   createPrescription,
   getPrescriptionsByPatientId,
-  getPrescriptionsByDoctorId
-} from "@/db/queries/prescriptions";
-import { NewPrescription } from "@/types/prescription";
+  getPrescriptionsByDoctorId,
+} from '@/db/queries/prescriptions';
+import { NewPrescription } from '@/types/prescription';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -36,10 +36,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: prescriptions });
   } catch (error) {
-    console.error("Error fetching prescriptions:", error);
+    console.error('Error fetching prescriptions:', error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch prescriptions" },
-      { status: 500 },
+      { success: false, error: 'Failed to fetch prescriptions' },
+      { status: 500 }
     );
   }
 }
@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!body.patientId) {
       return NextResponse.json(
-        { success: false, error: "Patient ID is required" },
-        { status: 400 },
+        { success: false, error: 'Patient ID is required' },
+        { status: 400 }
       );
     }
 
@@ -78,13 +78,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { success: true, data: newPrescription },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating prescription:", error);
+    console.error('Error creating prescription:', error);
     return NextResponse.json(
-      { success: false, error: "Failed to create prescription" },
-      { status: 500 },
+      { success: false, error: 'Failed to create prescription' },
+      { status: 500 }
     );
   }
 }

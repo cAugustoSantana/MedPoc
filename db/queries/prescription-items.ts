@@ -1,9 +1,19 @@
-import { db } from "../index";
-import { PrescriptionItem, NewPrescriptionItem } from "@/types/prescription-item";
-import { prescriptionItem, drug, dosageDetail, frequencyDetail } from "../migrations/schema";
-import { eq } from "drizzle-orm";
+import { db } from '../index';
+import {
+  PrescriptionItem,
+  NewPrescriptionItem,
+} from '@/types/prescription-item';
+import {
+  prescriptionItem,
+  drug,
+  dosageDetail,
+  frequencyDetail,
+} from '../migrations/schema';
+import { eq } from 'drizzle-orm';
 
-export async function getPrescriptionItemsByPrescriptionId(prescriptionId: number): Promise<PrescriptionItem[]> {
+export async function getPrescriptionItemsByPrescriptionId(
+  prescriptionId: number
+): Promise<PrescriptionItem[]> {
   try {
     const items = await db
       .select({
@@ -24,28 +34,50 @@ export async function getPrescriptionItemsByPrescriptionId(prescriptionId: numbe
       })
       .from(prescriptionItem)
       .leftJoin(drug, eq(prescriptionItem.drugId, drug.drugId))
-      .leftJoin(dosageDetail, eq(prescriptionItem.dosageDetailId, dosageDetail.dosageDetailId))
-      .leftJoin(frequencyDetail, eq(prescriptionItem.frequencyDetailId, frequencyDetail.frequencyDetailId))
+      .leftJoin(
+        dosageDetail,
+        eq(prescriptionItem.dosageDetailId, dosageDetail.dosageDetailId)
+      )
+      .leftJoin(
+        frequencyDetail,
+        eq(
+          prescriptionItem.frequencyDetailId,
+          frequencyDetail.frequencyDetailId
+        )
+      )
       .where(eq(prescriptionItem.prescriptionId, prescriptionId));
 
     return items;
   } catch (error) {
-    console.error(`Error fetching prescription items for prescription ${prescriptionId}:`, error);
-    throw new Error(`Failed to fetch prescription items for prescription ${prescriptionId}`);
+    console.error(
+      `Error fetching prescription items for prescription ${prescriptionId}:`,
+      error
+    );
+    throw new Error(
+      `Failed to fetch prescription items for prescription ${prescriptionId}`
+    );
   }
 }
 
-export async function createPrescriptionItem(itemData: NewPrescriptionItem): Promise<PrescriptionItem> {
+export async function createPrescriptionItem(
+  itemData: NewPrescriptionItem
+): Promise<PrescriptionItem> {
   try {
-    const [newItem] = await db.insert(prescriptionItem).values(itemData).returning();
+    const [newItem] = await db
+      .insert(prescriptionItem)
+      .values(itemData)
+      .returning();
     return newItem;
   } catch (error) {
-    console.error("Error creating prescription item:", error);
-    throw new Error("Failed to create prescription item");
+    console.error('Error creating prescription item:', error);
+    throw new Error('Failed to create prescription item');
   }
 }
 
-export async function updatePrescriptionItem(id: number, itemData: Partial<NewPrescriptionItem>): Promise<PrescriptionItem> {
+export async function updatePrescriptionItem(
+  id: number,
+  itemData: Partial<NewPrescriptionItem>
+): Promise<PrescriptionItem> {
   try {
     const [updatedItem] = await db
       .update(prescriptionItem)
@@ -80,13 +112,20 @@ export async function deletePrescriptionItem(id: number): Promise<void> {
   }
 }
 
-export async function deletePrescriptionItemsByPrescriptionId(prescriptionId: number): Promise<void> {
+export async function deletePrescriptionItemsByPrescriptionId(
+  prescriptionId: number
+): Promise<void> {
   try {
     await db
       .delete(prescriptionItem)
       .where(eq(prescriptionItem.prescriptionId, prescriptionId));
   } catch (error) {
-    console.error(`Error deleting prescription items for prescription ${prescriptionId}:`, error);
-    throw new Error(`Failed to delete prescription items for prescription ${prescriptionId}`);
+    console.error(
+      `Error deleting prescription items for prescription ${prescriptionId}:`,
+      error
+    );
+    throw new Error(
+      `Failed to delete prescription items for prescription ${prescriptionId}`
+    );
   }
-} 
+}

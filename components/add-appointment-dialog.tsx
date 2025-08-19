@@ -160,7 +160,7 @@ export function AddAppointmentDialog({
 
         // Get the selected patient name for the notification
         const selectedPatient = patients.find(
-          (p) => p.patientId.toString() === data.patientId,
+          (p) => p.patientId.toString() === data.patientId
         );
         const patientName = selectedPatient?.name || 'Unknown Patient';
 
@@ -204,7 +204,7 @@ export function AddAppointmentDialog({
   // Handle patient selection to auto-populate phone
   const handlePatientChange = (patientId: string) => {
     const selectedPatient = patients.find(
-      (p) => p.patientId.toString() === patientId,
+      (p) => p.patientId.toString() === patientId
     );
     if (selectedPatient && selectedPatient.phone) {
       const formattedPhone = formatPhoneNumber(selectedPatient.phone);
@@ -224,7 +224,7 @@ export function AddAppointmentDialog({
       form.setValue('date', date ? format(date, 'yyyy-MM-dd') : '');
       form.setValue('time', time || '');
     },
-    [form],
+    [form]
   );
 
   return (

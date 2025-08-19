@@ -107,7 +107,7 @@ const multiColumnFilterFn: FilterFn<Patient> = (row, columnId, filterValue) => {
 const statusFilterFn: FilterFn<Patient> = (
   row,
   columnId,
-  filterValue: string[],
+  filterValue: string[]
 ) => {
   if (!filterValue?.length) return true;
   const status = row.getValue(columnId) as string;
@@ -328,7 +328,7 @@ export default function PatientTable({
               ref={inputRef}
               className={cn(
                 'peer min-w-60 ps-9',
-                Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9',
+                Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9'
               )}
               value={
                 (table.getColumn('name')?.getFilterValue() ?? '') as string
@@ -525,7 +525,7 @@ export default function PatientTable({
                         <div
                           className={cn(
                             header.column.getCanSort() &&
-                              'flex h-full cursor-pointer items-center justify-between gap-2 select-none',
+                              'flex h-full cursor-pointer items-center justify-between gap-2 select-none'
                           )}
                           onClick={header.column.getToggleSortingHandler()}
                           onKeyDown={(e) => {
@@ -542,7 +542,7 @@ export default function PatientTable({
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                           {{
                             asc: (
@@ -564,7 +564,7 @@ export default function PatientTable({
                       ) : (
                         flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )
                       )}
                     </TableHead>
@@ -589,7 +589,7 @@ export default function PatientTable({
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     );
@@ -651,9 +651,9 @@ export default function PatientTable({
                   table.getState().pagination.pageIndex *
                     table.getState().pagination.pageSize +
                     table.getState().pagination.pageSize,
-                  0,
+                  0
                 ),
-                table.getRowCount(),
+                table.getRowCount()
               )}
             </span>{' '}
             of{' '}

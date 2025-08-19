@@ -136,7 +136,7 @@ export function PrescriptionForm({
       setDate(
         initialData.prescribedAt
           ? new Date(initialData.prescribedAt)
-          : new Date(),
+          : new Date()
       );
     } else {
       setFormData({
@@ -168,7 +168,7 @@ export function PrescriptionForm({
 
   const handleInputChange = (
     field: keyof Omit<PrescriptionFormData, 'medications' | 'patientId'>,
-    value: string,
+    value: string
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -180,12 +180,12 @@ export function PrescriptionForm({
   const handleMedicationChange = (
     index: number,
     field: keyof Medication,
-    value: string,
+    value: string
   ) => {
     setFormData((prev) => ({
       ...prev,
       medications: prev.medications.map((med, i) =>
-        i === index ? { ...med, [field]: value } : med,
+        i === index ? { ...med, [field]: value } : med
       ),
     }));
   };
@@ -305,7 +305,7 @@ export function PrescriptionForm({
                           handleMedicationChange(
                             index,
                             'dosage',
-                            e.target.value,
+                            e.target.value
                           )
                         }
                         required
@@ -359,7 +359,7 @@ export function PrescriptionForm({
                           handleMedicationChange(
                             index,
                             'duration',
-                            e.target.value,
+                            e.target.value
                           )
                         }
                         required
@@ -379,7 +379,7 @@ export function PrescriptionForm({
                         handleMedicationChange(
                           index,
                           'instructions',
-                          e.target.value,
+                          e.target.value
                         )
                       }
                       rows={2}
