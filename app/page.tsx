@@ -1,118 +1,83 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
-import { Calendar } from "@/components/ui/calendar-rac";
-import { getAllPatients } from "@/db/queries/patients";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Patient } from "@/types/patient";
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function Home() {
-  let patientsData: Patient[] = [];
+  const { userId } = await auth();
 
-  try {
-    patientsData = await getAllPatients();
-  } catch (error) {
-    console.error("Failed to fetch patients:", error);
-    // Continue with empty data instead of crashing
+  // If user is authenticated, redirect to dashboard
+  if (userId) {
+    redirect('/dashboard');
   }
 
   return (
-    <div className="min-h-screen bg-white-100 p-6 flex flex-col space-y-6">
-      {/* Horizontal stack of cards */}
-      <div className="flex flex-row gap-6">
-        {/* Card 1: Calendar */}
-        <div className="w-fit">
-          <Card className="rounded-2xl shadow-md bg-white inline-block">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
+      <div className="max-w-4xl w-full">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Welcome to MedPoc
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            A comprehensive medical practice management system
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <Card className="rounded-2xl shadow-lg bg-white">
             <CardHeader>
-              <h2 className="text-xl font-semibold text-center  ">Schedule</h2>
+              <h3 className="text-xl font-semibold text-center">
+                Patient Management
+              </h3>
             </CardHeader>
             <CardContent>
-              <Calendar />
+              <p className="text-gray-600 text-center">
+                Efficiently manage patient records, appointments, and medical
+                history.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl shadow-lg bg-white">
+            <CardHeader>
+              <h3 className="text-xl font-semibold text-center">
+                Appointment Scheduling
+              </h3>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 text-center">
+                Streamlined appointment booking and calendar management.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl shadow-lg bg-white">
+            <CardHeader>
+              <h3 className="text-xl font-semibold text-center">
+                Prescription Tracking
+              </h3>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 text-center">
+                Complete prescription management and medication tracking.
+              </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Card 2: Patients Table */}
-        <div className="flex-1">
-          <Card className="rounded-2xl shadow-md bg-white w-full">
-            <CardHeader>
-              <h2 className="text-xl font-semibold text-center">Patients</h2>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-center">Name</TableHead>
-                    <TableHead className="text-center">Gender</TableHead>
-                    <TableHead className="text-center">Email</TableHead>
-                    <TableHead className="text-center">Date of Birth</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {patientsData.length > 0 ? (
-                    patientsData.map((patient) => (
-                      <TableRow key={patient.name}>
-                        <TableCell className="text-center">
-                          {patient.name}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {patient.gender}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {patient.email}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {patient.dob}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={4}
-                        className="text-center text-gray-500"
-                      >
-                        No patients found or database connection failed
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+        <div className="text-center space-x-4">
+          <Link href="/sign-in">
+            <Button size="lg" className="px-8">
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/sign-up">
+            <Button size="lg" variant="outline" className="px-8">
+              Sign Up
+            </Button>
+          </Link>
         </div>
-
-        {/* Card 3: Placeholder */}
-        <div className="w-64">
-          <Card className="rounded-2xl shadow-md bg-white h-full">
-            <CardHeader>
-              <h2 className="text-xl font-semibold">Placeholder</h2>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-500">This space is reserved.</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Bottom full-width stacked card */}
-      <div className="w-full">
-        <Card className="rounded-2xl shadow-md bg-white w-full">
-          <CardHeader>
-            <h2 className="text-xl font-semibold">Extra Info</h2>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-500">
-              This card is vertically stacked and full width.
-            </p>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 import { Plus, Search, Edit, Trash2, Eye, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,6 +54,8 @@ interface PrescriptionFormData {
 }
 
 export default function PrescriptionsPage() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [prescriptionItems, setPrescriptionItems] = useState<{
@@ -67,6 +71,13 @@ export default function PrescriptionsPage() {
   const [editingPrescription, setEditingPrescription] =
     useState<Prescription | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Check authentication
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in');
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   const fetchPrescriptions = useCallback(async () => {
     try {
@@ -134,9 +145,20 @@ export default function PrescriptionsPage() {
 
   // Fetch prescriptions and patients on component mount
   useEffect(() => {
-    fetchPrescriptions();
-    fetchPatients();
-  }, [fetchPrescriptions]);
+    if (isSignedIn) {
+      fetchPrescriptions();
+      fetchPatients();
+    }
+  }, [fetchPrescriptions, isSignedIn]);
+
+  // Don't render anything while checking authentication
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
 
   // Helper function to get patient name by ID
   const getPatientName = (patientId: number | null) => {
