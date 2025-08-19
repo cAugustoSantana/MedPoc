@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import {
   getAllPrescriptions,
   createPrescription,
@@ -9,6 +10,16 @@ import { NewPrescription } from "@/types/prescription";
 
 export async function GET(request: NextRequest) {
   try {
+    // Check authentication
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const patientId = searchParams.get('patientId');
     const doctorId = searchParams.get('doctorId');
@@ -35,6 +46,16 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const body = await request.json();
 
     // Validate required fields
