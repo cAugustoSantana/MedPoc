@@ -162,7 +162,6 @@ export default function PatientTable({
       size: 28,
       enableSorting: false,
       enableHiding: false,
-      meta: { align: 'center' },
     },
     {
       header: 'Name',
@@ -173,7 +172,6 @@ export default function PatientTable({
       size: 180,
       filterFn: multiColumnFilterFn,
       enableHiding: false,
-      meta: { align: 'left' },
     },
     {
       header: 'Email',
@@ -182,7 +180,6 @@ export default function PatientTable({
         <div className="text-left">{row.getValue('email')}</div>
       ),
       size: 220,
-      meta: { align: 'left' },
     },
     {
       header: 'Address',
@@ -191,7 +188,6 @@ export default function PatientTable({
         <div className="text-left"> {row.getValue('address')}</div>
       ),
       size: 180,
-      meta: { align: 'left' },
     },
     {
       header: 'Phone',
@@ -207,7 +203,6 @@ export default function PatientTable({
       },
       size: 100,
       filterFn: statusFilterFn,
-      meta: { align: 'right' },
     },
     {
       id: 'actions',
@@ -215,7 +210,6 @@ export default function PatientTable({
       cell: ({ row }) => <RowActions patient={row.original} />,
       size: 60,
       enableHiding: false,
-      meta: { align: 'center' },
     },
   ];
 
@@ -514,7 +508,14 @@ export default function PatientTable({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
-                  const align = header.column.columnDef.meta?.align || 'left';
+                  // Determine alignment based on column ID
+                  let align = 'left';
+                  if (header.id === 'select' || header.id === 'actions') {
+                    align = 'center';
+                  } else if (header.id === 'phone') {
+                    align = 'right';
+                  }
+
                   return (
                     <TableHead
                       key={header.id}
@@ -581,7 +582,17 @@ export default function PatientTable({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const align = cell.column.columnDef.meta?.align || 'left';
+                    // Determine alignment based on column ID
+                    let align = 'left';
+                    if (
+                      cell.column.id === 'select' ||
+                      cell.column.id === 'actions'
+                    ) {
+                      align = 'center';
+                    } else if (cell.column.id === 'phone') {
+                      align = 'right';
+                    }
+
                     return (
                       <TableCell
                         key={cell.id}

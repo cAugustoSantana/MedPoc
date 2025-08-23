@@ -2,6 +2,7 @@ import {
   Appointment,
   NewAppointment,
   AppointmentWithDetails,
+  AppointmentFormData,
 } from '@/types/appointment';
 import { db } from '@/db';
 import { appointment, patient, appUser } from '../migrations/schema';
@@ -254,7 +255,7 @@ export async function getAppointmentByUuid(
 
 // Utility function to convert form data to database format
 export function convertFormDataToAppointment(
-  formData: Record<string, unknown>,
+  formData: AppointmentFormData,
   patientId: number,
   doctorId: number
 ): NewAppointment {
