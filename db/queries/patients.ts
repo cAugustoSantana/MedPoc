@@ -1,7 +1,7 @@
-import { Patient, NewPatient } from "@/types/patient";
-import { db } from "../index";
-import { patient } from "../migrations/schema";
-import { eq } from "drizzle-orm";
+import { Patient, NewPatient } from '@/types/patient';
+import { db } from '../index';
+import { patient } from '../migrations/schema';
+import { eq } from 'drizzle-orm';
 
 export async function getAllPatients(): Promise<Patient[]> {
   const patients = await db.select().from(patient);
@@ -14,7 +14,7 @@ export async function getPatientById(uuid: string): Promise<Patient> {
     .select()
     .from(patient)
     .where(eq(patient.uuid, uuid));
-  console.log("Fetched patient by UUID:", patients);
+  console.log('Fetched patient by UUID:', patients);
 
   if (!patients[0]) {
     throw new Error(`Patient with UUID ${uuid} not found`);
@@ -28,20 +28,20 @@ export async function createPatient(newPatient: NewPatient): Promise<Patient> {
     .insert(patient)
     .values(newPatient)
     .returning();
-  console.log("Created patient:", createdPatient);
+  console.log('Created patient:', createdPatient);
   return createdPatient[0];
 }
 
 export async function updatePatient(
   id: number,
-  updatedPatient: Partial<NewPatient>,
+  updatedPatient: Partial<NewPatient>
 ): Promise<Patient> {
   const updatedPatientResult = await db
     .update(patient)
     .set(updatedPatient)
     .where(eq(patient.patientId, id))
     .returning();
-  console.log("Updated patient:", updatedPatientResult);
+  console.log('Updated patient:', updatedPatientResult);
   return updatedPatientResult[0];
 }
 
@@ -50,6 +50,6 @@ export async function deletePatient(id: number): Promise<Patient> {
     .delete(patient)
     .where(eq(patient.patientId, id))
     .returning();
-  console.log("Deleted patient:", deletedPatient);
+  console.log('Deleted patient:', deletedPatient);
   return deletedPatient[0];
 }

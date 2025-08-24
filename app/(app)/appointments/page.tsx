@@ -23,10 +23,10 @@ export default function AppointmentsPage() {
   const { isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
   const [appointments, setAppointments] = useState<AppointmentWithDetails[]>(
-    [],
+    []
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
+    new Date()
   ); // Today's date
   const [loading, setLoading] = useState(false);
 
@@ -74,7 +74,7 @@ export default function AppointmentsPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/appointments?date=${date.toISOString()}`,
+        `/api/appointments?date=${date.toISOString()}`
       );
       const result = await response.json();
 
@@ -110,7 +110,7 @@ export default function AppointmentsPage() {
     ? appointments.filter(
         (appointment) =>
           appointment.scheduledAt &&
-          isSameDay(new Date(appointment.scheduledAt), selectedDate),
+          isSameDay(new Date(appointment.scheduledAt), selectedDate)
       )
     : [];
 
@@ -237,7 +237,7 @@ export default function AppointmentsPage() {
                               <span className="flex items-center gap-1">
                                 <Clock className="h-4 w-4" />
                                 {formatAppointmentTime(
-                                  appointment.scheduledAt,
+                                  appointment.scheduledAt
                                 )}{' '}
                                 ({formatAppointmentDuration()})
                               </span>

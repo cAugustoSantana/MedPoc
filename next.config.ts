@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["pg", "postgres"],
+  serverExternalPackages: ['pg', 'postgres'],
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
   },

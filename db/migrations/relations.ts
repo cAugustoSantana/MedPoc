@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm/relations";
+import { relations } from 'drizzle-orm/relations';
 import {
   appUser,
   doctorPatient,
@@ -23,7 +23,7 @@ import {
   insuranceCompany,
   patientInsurance,
   userInsuranceAffiliateCode,
-} from "./schema";
+} from './schema';
 
 export const doctorPatientRelations = relations(doctorPatient, ({ one }) => ({
   appUser: one(appUser, {
@@ -39,10 +39,10 @@ export const doctorPatientRelations = relations(doctorPatient, ({ one }) => ({
 export const appUserRelations = relations(appUser, ({ one, many }) => ({
   doctorPatients: many(doctorPatient),
   doctorAssistants_assistantId: many(doctorAssistant, {
-    relationName: "doctorAssistant_assistantId_appUser_appUserId",
+    relationName: 'doctorAssistant_assistantId_appUser_appUserId',
   }),
   doctorAssistants_doctorId: many(doctorAssistant, {
-    relationName: "doctorAssistant_doctorId_appUser_appUserId",
+    relationName: 'doctorAssistant_doctorId_appUser_appUserId',
   }),
   appointments: many(appointment),
   labTests: many(labTest),
@@ -75,14 +75,14 @@ export const doctorAssistantRelations = relations(
     appUser_assistantId: one(appUser, {
       fields: [doctorAssistant.assistantId],
       references: [appUser.appUserId],
-      relationName: "doctorAssistant_assistantId_appUser_appUserId",
+      relationName: 'doctorAssistant_assistantId_appUser_appUserId',
     }),
     appUser_doctorId: one(appUser, {
       fields: [doctorAssistant.doctorId],
       references: [appUser.appUserId],
-      relationName: "doctorAssistant_doctorId_appUser_appUserId",
+      relationName: 'doctorAssistant_doctorId_appUser_appUserId',
     }),
-  }),
+  })
 );
 
 export const appointmentRelations = relations(appointment, ({ one, many }) => ({
@@ -136,7 +136,7 @@ export const medicalRecordRelations = relations(
     }),
     imagingTests: many(imagingTest),
     medicalRecordDiseases: many(medicalRecordDisease),
-  }),
+  })
 );
 
 export const imagingTestImageRelations = relations(
@@ -146,7 +146,7 @@ export const imagingTestImageRelations = relations(
       fields: [imagingTestImage.imagingTestId],
       references: [imagingTest.imagingTestId],
     }),
-  }),
+  })
 );
 
 export const imagingTestRelations = relations(imagingTest, ({ one, many }) => ({
@@ -180,7 +180,7 @@ export const prescriptionItemRelations = relations(
       fields: [prescriptionItem.prescriptionId],
       references: [prescription.prescriptionId],
     }),
-  }),
+  })
 );
 
 export const dosageDetailRelations = relations(dosageDetail, ({ many }) => ({
@@ -195,7 +195,7 @@ export const frequencyDetailRelations = relations(
   frequencyDetail,
   ({ many }) => ({
     prescriptionItems: many(prescriptionItem),
-  }),
+  })
 );
 
 export const prescriptionRelations = relations(
@@ -214,7 +214,7 @@ export const prescriptionRelations = relations(
       fields: [prescription.patientId],
       references: [patient.patientId],
     }),
-  }),
+  })
 );
 
 export const vitalSignRelations = relations(vitalSign, ({ one }) => ({
@@ -247,7 +247,7 @@ export const medicalRecordDiseaseRelations = relations(
       fields: [medicalRecordDisease.recordId],
       references: [medicalRecord.recordId],
     }),
-  }),
+  })
 );
 
 export const diseaseRelations = relations(disease, ({ many }) => ({
@@ -265,7 +265,7 @@ export const patientInsuranceRelations = relations(
       fields: [patientInsurance.patientId],
       references: [patient.patientId],
     }),
-  }),
+  })
 );
 
 export const insuranceCompanyRelations = relations(
@@ -273,7 +273,7 @@ export const insuranceCompanyRelations = relations(
   ({ many }) => ({
     patientInsurances: many(patientInsurance),
     userInsuranceAffiliateCodes: many(userInsuranceAffiliateCode),
-  }),
+  })
 );
 
 export const userInsuranceAffiliateCodeRelations = relations(
@@ -287,5 +287,5 @@ export const userInsuranceAffiliateCodeRelations = relations(
       fields: [userInsuranceAffiliateCode.insuranceId],
       references: [insuranceCompany.insuranceId],
     }),
-  }),
+  })
 );

@@ -109,7 +109,7 @@ export default function PrescriptionsPage() {
       for (const prescription of prescriptions) {
         if (prescription.prescriptionId) {
           const response = await fetch(
-            `/api/prescriptions/${prescription.prescriptionId}/items`,
+            `/api/prescriptions/${prescription.prescriptionId}/items`
           );
           const result = await response.json();
 
@@ -169,7 +169,7 @@ export default function PrescriptionsPage() {
 
   // Get prescription items for a prescription
   const getPrescriptionItems = (
-    prescription: Prescription,
+    prescription: Prescription
   ): PrescriptionItem[] => {
     if (!prescription.prescriptionId) return [];
     return prescriptionItems[prescription.prescriptionId] || [];
@@ -182,7 +182,7 @@ export default function PrescriptionsPage() {
       .map(
         (item) =>
           (item as PrescriptionItem & { drugName?: string }).drugName ||
-          'Unknown Medication',
+          'Unknown Medication'
       )
       .join(' ');
 
@@ -190,14 +190,14 @@ export default function PrescriptionsPage() {
       patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       medicationNames.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (prescription.notes?.toLowerCase() || '').includes(
-        searchTerm.toLowerCase(),
+        searchTerm.toLowerCase()
       );
     const matchesStatus = statusFilter === 'all';
     return matchesSearch && matchesStatus;
   });
 
   const handleAddPrescription = async (
-    prescriptionData: PrescriptionFormData,
+    prescriptionData: PrescriptionFormData
   ) => {
     try {
       const prescriptionPayload = {
@@ -233,7 +233,7 @@ export default function PrescriptionsPage() {
   };
 
   const handleEditPrescription = async (
-    prescriptionData: PrescriptionFormData,
+    prescriptionData: PrescriptionFormData
   ) => {
     if (!editingPrescription) return;
 
@@ -253,7 +253,7 @@ export default function PrescriptionsPage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(prescriptionPayload),
-        },
+        }
       );
 
       const result = await response.json();
@@ -262,7 +262,7 @@ export default function PrescriptionsPage() {
         const updatedPrescriptions = prescriptions.map((p) =>
           p.prescriptionId === editingPrescription.prescriptionId
             ? result.data
-            : p,
+            : p
         );
         setPrescriptions(updatedPrescriptions);
         setEditingPrescription(null);
@@ -287,14 +287,14 @@ export default function PrescriptionsPage() {
         `/api/prescriptions/${selectedPrescription.prescriptionId}`,
         {
           method: 'DELETE',
-        },
+        }
       );
 
       const result = await response.json();
 
       if (result.success) {
         const updatedPrescriptions = prescriptions.filter(
-          (p) => p.prescriptionId !== selectedPrescription.prescriptionId,
+          (p) => p.prescriptionId !== selectedPrescription.prescriptionId
         );
         setPrescriptions(updatedPrescriptions);
         setSelectedPrescription(null);
@@ -473,7 +473,7 @@ export default function PrescriptionsPage() {
                       <TableCell>
                         {prescription.prescribedAt
                           ? new Date(
-                              prescription.prescribedAt,
+                              prescription.prescribedAt
                             ).toLocaleDateString()
                           : 'Not specified'}
                       </TableCell>

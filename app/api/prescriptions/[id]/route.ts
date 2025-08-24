@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import {
   getPrescriptionById,
   updatePrescription,
-  deletePrescription
-} from "@/db/queries/prescriptions";
-import { NewPrescription } from "@/types/prescription";
+  deletePrescription,
+} from '@/db/queries/prescriptions';
+import { NewPrescription } from '@/types/prescription';
 
 export async function GET(
   request: NextRequest,
@@ -17,8 +17,8 @@ export async function GET(
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -27,8 +27,8 @@ export async function GET(
 
     if (isNaN(prescriptionId)) {
       return NextResponse.json(
-        { success: false, error: "Invalid prescription ID" },
-        { status: 400 },
+        { success: false, error: 'Invalid prescription ID' },
+        { status: 400 }
       );
     }
 
@@ -36,8 +36,8 @@ export async function GET(
 
     if (!prescription) {
       return NextResponse.json(
-        { success: false, error: "Prescription not found" },
-        { status: 404 },
+        { success: false, error: 'Prescription not found' },
+        { status: 404 }
       );
     }
 
@@ -45,8 +45,8 @@ export async function GET(
   } catch (error) {
     console.error(`Error fetching prescription:`, error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch prescription" },
-      { status: 500 },
+      { success: false, error: 'Failed to fetch prescription' },
+      { status: 500 }
     );
   }
 }
@@ -61,8 +61,8 @@ export async function PUT(
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -71,8 +71,8 @@ export async function PUT(
 
     if (isNaN(prescriptionId)) {
       return NextResponse.json(
-        { success: false, error: "Invalid prescription ID" },
-        { status: 400 },
+        { success: false, error: 'Invalid prescription ID' },
+        { status: 400 }
       );
     }
 
@@ -88,7 +88,9 @@ export async function PUT(
       updateData.appUserId = parseInt(body.appUserId);
     }
     if (body.appointmentId !== undefined) {
-      updateData.appointmentId = body.appointmentId ? parseInt(body.appointmentId) : null;
+      updateData.appointmentId = body.appointmentId
+        ? parseInt(body.appointmentId)
+        : null;
     }
     if (body.prescribedAt !== undefined) {
       updateData.prescribedAt = body.prescribedAt;
@@ -97,14 +99,17 @@ export async function PUT(
       updateData.notes = body.notes;
     }
 
-    const updatedPrescription = await updatePrescription(prescriptionId, updateData);
+    const updatedPrescription = await updatePrescription(
+      prescriptionId,
+      updateData
+    );
 
     return NextResponse.json({ success: true, data: updatedPrescription });
   } catch (error) {
     console.error(`Error updating prescription:`, error);
     return NextResponse.json(
-      { success: false, error: "Failed to update prescription" },
-      { status: 500 },
+      { success: false, error: 'Failed to update prescription' },
+      { status: 500 }
     );
   }
 }
@@ -119,8 +124,8 @@ export async function DELETE(
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 },
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -129,22 +134,22 @@ export async function DELETE(
 
     if (isNaN(prescriptionId)) {
       return NextResponse.json(
-        { success: false, error: "Invalid prescription ID" },
-        { status: 400 },
+        { success: false, error: 'Invalid prescription ID' },
+        { status: 400 }
       );
     }
 
     await deletePrescription(prescriptionId);
 
     return NextResponse.json(
-      { success: true, message: "Prescription deleted successfully" },
-      { status: 200 },
+      { success: true, message: 'Prescription deleted successfully' },
+      { status: 200 }
     );
   } catch (error) {
     console.error(`Error deleting prescription:`, error);
     return NextResponse.json(
-      { success: false, error: "Failed to delete prescription" },
-      { status: 500 },
+      { success: false, error: 'Failed to delete prescription' },
+      { status: 500 }
     );
   }
-} 
+}

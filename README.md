@@ -219,3 +219,5 @@ pnpm db:studio        # Open Drizzle Studio
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+Dummy change.

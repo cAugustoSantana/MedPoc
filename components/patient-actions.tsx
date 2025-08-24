@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { AddPatientDialog } from "@/components/add-patient-dialog";
+import { AddPatientDialog } from '@/components/add-patient-dialog';
 
 interface PatientActionsProps {
   onPatientAdded?: () => void;

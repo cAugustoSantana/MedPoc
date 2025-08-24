@@ -1,5 +1,5 @@
-import { appointment } from "@/db/migrations/schema";
-import { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { appointment } from '@/db/migrations/schema';
+import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 
 // Use Drizzle's inferred types - this is the recommended approach
 export type Appointment = InferSelectModel<typeof appointment>;
@@ -22,9 +22,3 @@ export type AppointmentWithDetails = Appointment & {
   patientName: string | null;
   doctorName: string | null;
 };
-
-declare module "@tanstack/react-table" {
-  interface ColumnMeta<TData extends unknown, TValue> {
-    align?: "left" | "center" | "right";
-  }
-}
