@@ -8,15 +8,21 @@ import { db } from '@/db';
 import { appointment, patient, appUser } from '../migrations/schema';
 import { eq, and, gte, lte, desc, asc, not } from 'drizzle-orm';
 
-export async function getAllAppointments(): Promise<Appointment[]> {
-  const appointments = await db.select().from(appointment);
+export async function getAllAppointments(
+  doctorId: number
+): Promise<Appointment[]> {
+  const appointments = await db
+    .select()
+    .from(appointment)
+    .where(eq(appointment.appUserId, doctorId));
+
   console.log('Fetched appointments:', appointments);
   return appointments;
 }
 
-export async function getAppointmentsWithDetails(): Promise<
-  AppointmentWithDetails[]
-> {
+export async function getAppointmentsWithDetails(
+  doctorId: number
+): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
       appointmentId: appointment.appointmentId,
@@ -39,6 +45,7 @@ export async function getAppointmentsWithDetails(): Promise<
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
+    .where(eq(appointment.appUserId, doctorId))
     .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
@@ -46,7 +53,8 @@ export async function getAppointmentsWithDetails(): Promise<
 
 export async function getAppointmentsByDateRange(
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  doctorId: number
 ): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
@@ -73,7 +81,8 @@ export async function getAppointmentsByDateRange(
     .where(
       and(
         gte(appointment.scheduledAt, startDate.toISOString()),
-        lte(appointment.scheduledAt, endDate.toISOString())
+        lte(appointment.scheduledAt, endDate.toISOString()),
+        eq(appointment.appUserId, doctorId)
       )
     )
     .orderBy(asc(appointment.scheduledAt));
@@ -82,7 +91,8 @@ export async function getAppointmentsByDateRange(
 }
 
 export async function getAppointmentsByDate(
-  date: Date
+  date: Date,
+  doctorId: number
 ): Promise<AppointmentWithDetails[]> {
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
@@ -90,11 +100,12 @@ export async function getAppointmentsByDate(
   const endOfDay = new Date(date);
   endOfDay.setHours(23, 59, 59, 999);
 
-  return getAppointmentsByDateRange(startOfDay, endOfDay);
+  return getAppointmentsByDateRange(startOfDay, endOfDay, doctorId);
 }
 
 export async function getAppointmentsByPatient(
-  patientId: number
+  patientId: number,
+  doctorId: number
 ): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
@@ -118,7 +129,12 @@ export async function getAppointmentsByPatient(
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
-    .where(eq(appointment.patientId, patientId))
+    .where(
+      and(
+        eq(appointment.patientId, patientId),
+        eq(appointment.appUserId, doctorId)
+      )
+    )
     .orderBy(desc(appointment.scheduledAt));
 
   return appointments;
@@ -192,7 +208,8 @@ export async function deleteAppointment(id: number): Promise<Appointment> {
 }
 
 export async function getAppointmentById(
-  id: number
+  id: number,
+  doctorId: number
 ): Promise<AppointmentWithDetails | null> {
   const result = await db
     .select({
@@ -216,14 +233,20 @@ export async function getAppointmentById(
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
-    .where(eq(appointment.appointmentId, id));
+    .where(
+      and(
+        eq(appointment.appointmentId, id),
+        eq(appointment.appUserId, doctorId)
+      )
+    );
 
   if (!result.length) return null;
   return result[0];
 }
 
 export async function getAppointmentByUuid(
-  uuid: string
+  uuid: string,
+  doctorId: number
 ): Promise<AppointmentWithDetails | null> {
   const result = await db
     .select({
@@ -247,7 +270,9 @@ export async function getAppointmentByUuid(
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
-    .where(eq(appointment.uuid, uuid));
+    .where(
+      and(eq(appointment.uuid, uuid), eq(appointment.appUserId, doctorId))
+    );
 
   if (!result.length) return null;
   return result[0];
@@ -281,26 +306,27 @@ export function convertFormDataToAppointment(
 }
 
 // Get upcoming appointments (next 7 days)
-export async function getUpcomingAppointments(): Promise<
-  AppointmentWithDetails[]
-> {
+export async function getUpcomingAppointments(
+  doctorId: number
+): Promise<AppointmentWithDetails[]> {
   const today = new Date();
   const nextWeek = new Date();
   nextWeek.setDate(today.getDate() + 7);
 
-  return getAppointmentsByDateRange(today, nextWeek);
+  return getAppointmentsByDateRange(today, nextWeek, doctorId);
 }
 
 // Get today's appointments
-export async function getTodayAppointments(): Promise<
-  AppointmentWithDetails[]
-> {
-  return getAppointmentsByDate(new Date());
+export async function getTodayAppointments(
+  doctorId: number
+): Promise<AppointmentWithDetails[]> {
+  return getAppointmentsByDate(new Date(), doctorId);
 }
 
 // Get appointments by status
 export async function getAppointmentsByStatus(
-  status: string
+  status: string,
+  doctorId: number
 ): Promise<AppointmentWithDetails[]> {
   const appointments = await db
     .select({
@@ -324,13 +350,18 @@ export async function getAppointmentsByStatus(
     .from(appointment)
     .leftJoin(patient, eq(appointment.patientId, patient.patientId))
     .leftJoin(appUser, eq(appointment.appUserId, appUser.appUserId))
-    .where(eq(appointment.status, status))
+    .where(
+      and(eq(appointment.status, status), eq(appointment.appUserId, doctorId))
+    )
     .orderBy(asc(appointment.scheduledAt));
 
   return appointments;
 }
 
-export async function getBookedTimesForDate(date: string): Promise<string[]> {
+export async function getBookedTimesForDate(
+  date: string,
+  doctorId: number
+): Promise<string[]> {
   // Build start and end of the day in local time
   const [year, month, day] = date.split('-').map(Number);
   const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0);
@@ -346,6 +377,7 @@ export async function getBookedTimesForDate(date: string): Promise<string[]> {
       and(
         gte(appointment.scheduledAt, startOfDay.toISOString()),
         lte(appointment.scheduledAt, endOfDay.toISOString()),
+        eq(appointment.appUserId, doctorId),
         // Only include confirmed and pending appointments, exclude cancelled ones and null status
         not(eq(appointment.status, 'cancelled'))
       )

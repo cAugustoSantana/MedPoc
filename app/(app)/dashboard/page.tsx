@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar-rac';
 import { getAllPatients } from '@/db/queries/patients';
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 import {
   Table,
   TableBody,
@@ -34,7 +35,10 @@ export default async function DashboardPage() {
   let patientsData: Patient[] = [];
 
   try {
-    patientsData = await getAllPatients();
+    const doctorId = await getCurrentDoctorId();
+    if (doctorId) {
+      patientsData = await getAllPatients(doctorId);
+    }
   } catch (error) {
     console.error('Failed to fetch patients:', error);
   }

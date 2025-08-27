@@ -425,6 +425,7 @@ export const appUser = pgTable(
   {
     appUserId: serial('app_user_id').primaryKey().notNull(),
     uuid: uuid(),
+    clerkUserId: varchar('clerk_user_id'),
     name: varchar().notNull(),
     email: varchar(),
     phone: varchar(),
@@ -447,6 +448,7 @@ export const appUser = pgTable(
       name: 'app_user_role_id_fkey',
     }),
     unique('app_user_uuid_key').on(table.uuid),
+    unique('app_user_clerk_user_id_key').on(table.clerkUserId),
   ]
 );
 
