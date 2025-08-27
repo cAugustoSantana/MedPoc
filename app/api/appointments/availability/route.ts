@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { getBookedTimesForDate } from '@/db/queries/appointments';
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,7 +23,15 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const times = await getBookedTimesForDate(date);
+    const doctorId = await getCurrentDoctorId();
+    if (!doctorId) {
+      return NextResponse.json(
+        { success: false, error: 'Doctor not found' },
+        { status: 404 }
+      );
+    }
+
+    const times = await getBookedTimesForDate(date, doctorId);
     console.log('Booked times for', date, ':', times);
     return NextResponse.json({ success: true, data: times });
   } catch (error) {
