@@ -2,6 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { appUser } from '@/db/migrations/schema';
 import { eq } from 'drizzle-orm';
+import { randomUUID } from 'crypto';
 
 export async function getCurrentUserId(): Promise<number | null> {
   try {
@@ -24,6 +25,7 @@ export async function getCurrentUserId(): Promise<number | null> {
       const newUser = await db
         .insert(appUser)
         .values({
+          uuid: randomUUID(),
           clerkUserId: userId,
           name:
             `${user.firstName || ''} ${user.lastName || ''}`.trim() ||

@@ -424,7 +424,7 @@ export const appUser = pgTable(
   'app_user',
   {
     appUserId: serial('app_user_id').primaryKey().notNull(),
-    uuid: uuid(),
+    uuid: uuid().defaultRandom(),
     clerkUserId: varchar('clerk_user_id'),
     name: varchar().notNull(),
     email: varchar(),
