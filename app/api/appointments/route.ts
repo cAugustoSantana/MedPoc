@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 import {
   getAppointmentsByDate,
   getAppointmentsWithDetails,
@@ -17,6 +18,16 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Get current doctor ID
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return NextResponse.json(
+        { success: false, error: 'Doctor not found' },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
 
@@ -24,10 +35,10 @@ export async function GET(request: NextRequest) {
 
     if (date) {
       // Get appointments for specific date
-      appointments = await getAppointmentsByDate(new Date(date));
+      appointments = await getAppointmentsByDate(new Date(date), doctorId);
     } else {
       // Get all appointments
-      appointments = await getAppointmentsWithDetails();
+      appointments = await getAppointmentsWithDetails(doctorId);
     }
 
     return NextResponse.json({ success: true, data: appointments });
