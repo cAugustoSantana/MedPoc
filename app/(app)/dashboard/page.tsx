@@ -1,4 +1,4 @@
-import { auth, currentUser } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import {
   Breadcrumb,
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar-rac';
 import { getAllPatients } from '@/db/queries/patients';
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 import {
   Table,
   TableBody,
@@ -21,11 +22,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Patient } from '@/types/patient';
-import { UserButton } from '@clerk/nextjs';
 
 export default async function DashboardPage() {
   const { userId } = await auth();
-  const user = await currentUser();
 
   if (!userId) {
     redirect('/sign-in');
@@ -34,7 +33,10 @@ export default async function DashboardPage() {
   let patientsData: Patient[] = [];
 
   try {
-    patientsData = await getAllPatients();
+    const doctorId = await getCurrentDoctorId();
+    if (doctorId) {
+      patientsData = await getAllPatients(doctorId);
+    }
   } catch (error) {
     console.error('Failed to fetch patients:', error);
   }
@@ -55,12 +57,6 @@ export default async function DashboardPage() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-        </div>
-        <div className="flex items-center gap-2 px-4">
-          <span className="text-sm text-gray-600">
-            Welcome, {user?.firstName || user?.emailAddresses[0]?.emailAddress}
-          </span>
-          <UserButton afterSignOutUrl="/" />
         </div>
       </header>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

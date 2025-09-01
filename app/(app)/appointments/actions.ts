@@ -1,22 +1,22 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { AppointmentFormData } from '@/types/appointment';
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 import {
-  createAppointment,
   getAppointmentsByDate,
   getAppointmentsWithDetails,
+  createAppointment,
   convertFormDataToAppointment,
 } from '@/db/queries/appointments';
-import { AppointmentFormData } from '@/types/appointment';
-import { eq } from 'drizzle-orm';
-import { db } from '@/db';
-import { appointment } from '@/db/migrations/schema';
 
 export async function createAppointmentAction(formData: AppointmentFormData) {
   try {
-    // Get the patient ID from the form data
-    const patientId = parseInt(formData.patientId);
-    const doctorId = 1; // This should come from auth context
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
 
     // Strip phone formatting if present (store only digits)
     if (formData.phone) {
@@ -24,20 +24,12 @@ export async function createAppointmentAction(formData: AppointmentFormData) {
     }
 
     // Convert form data to database format
+    const patientId = parseInt(formData.patientId);
     const newAppointment = convertFormDataToAppointment(
       formData,
       patientId,
       doctorId
     );
-
-    // Backend validation: check for existing appointment at the same scheduledAt
-    const existing = await db
-      .select()
-      .from(appointment)
-      .where(eq(appointment.scheduledAt, newAppointment.scheduledAt ?? ''));
-    if (existing.length > 0) {
-      return { success: false, error: 'This time slot is already booked.' };
-    }
 
     // Create the appointment in the database
     const createdAppointment = await createAppointment(newAppointment);
@@ -56,7 +48,13 @@ export async function createAppointmentAction(formData: AppointmentFormData) {
 
 export async function getAppointmentsByDateAction(date: string) {
   try {
-    const appointments = await getAppointmentsByDate(new Date(date));
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
+    const appointments = await getAppointmentsByDate(new Date(date), doctorId);
     return { success: true, data: appointments };
   } catch (error) {
     console.error('Error fetching appointments by date:', error);
@@ -66,7 +64,13 @@ export async function getAppointmentsByDateAction(date: string) {
 
 export async function getAllAppointmentsAction() {
   try {
-    const appointments = await getAppointmentsWithDetails();
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
+    const appointments = await getAppointmentsWithDetails(doctorId);
     return { success: true, data: appointments };
   } catch (error) {
     console.error('Error fetching all appointments:', error);

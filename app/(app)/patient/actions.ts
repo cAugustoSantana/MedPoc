@@ -7,6 +7,7 @@ import {
   getAllPatients,
 } from '@/db/queries/patients';
 import { revalidatePath } from 'next/cache';
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 import {
   validateCreatePatient,
   validateUpdatePatient,
@@ -16,6 +17,12 @@ import {
 
 export async function createPatientAction(patientData: CreatePatientData) {
   try {
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
     // Validate the input data
     const validation = validateCreatePatient(patientData);
 
@@ -27,7 +34,7 @@ export async function createPatientAction(patientData: CreatePatientData) {
       };
     }
 
-    const patient = await createPatient(validation.data);
+    const patient = await createPatient(validation.data, doctorId);
     revalidatePath('/patient');
     return { success: true, data: patient };
   } catch (error) {
@@ -41,6 +48,12 @@ export async function updatePatientAction(
   patientData: UpdatePatientData
 ) {
   try {
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
     // Validate the input data
     const validation = validateUpdatePatient(patientData);
 
@@ -52,7 +65,7 @@ export async function updatePatientAction(
       };
     }
 
-    const patient = await updatePatient(id, validation.data);
+    const patient = await updatePatient(id, validation.data, doctorId);
     revalidatePath('/patient');
     return { success: true, data: patient };
   } catch (error) {
@@ -63,7 +76,13 @@ export async function updatePatientAction(
 
 export async function deletePatientAction(patientId: number) {
   try {
-    await deletePatient(patientId);
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
+    await deletePatient(patientId, doctorId);
     revalidatePath('/patient');
     revalidatePath('/appointment');
     return { success: true };
@@ -75,7 +94,13 @@ export async function deletePatientAction(patientId: number) {
 
 export async function deleteMultiplePatientsAction(patientIds: number[]) {
   try {
-    const deletePromises = patientIds.map((id) => deletePatient(id));
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
+    const deletePromises = patientIds.map((id) => deletePatient(id, doctorId));
     await Promise.all(deletePromises);
     revalidatePath('/patient');
     revalidatePath('/appointment');
@@ -88,7 +113,13 @@ export async function deleteMultiplePatientsAction(patientIds: number[]) {
 
 export async function getAllPatientsAction() {
   try {
-    const patients = await getAllPatients();
+    const doctorId = await getCurrentDoctorId();
+
+    if (!doctorId) {
+      return { success: false, error: 'Doctor not authenticated' };
+    }
+
+    const patients = await getAllPatients(doctorId);
     return { success: true, data: patients };
   } catch (error) {
     console.error('Error fetching patients:', error);

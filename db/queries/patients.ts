@@ -1,41 +1,101 @@
 import { Patient, NewPatient } from '@/types/patient';
 import { db } from '../index';
-import { patient } from '../migrations/schema';
-import { eq } from 'drizzle-orm';
+import { patient, doctorPatient } from '../migrations/schema';
+import { eq, and } from 'drizzle-orm';
 
-export async function getAllPatients(): Promise<Patient[]> {
-  const patients = await db.select().from(patient);
+export async function getAllPatients(doctorId: number): Promise<Patient[]> {
+  const patients = await db
+    .select({
+      patientId: patient.patientId,
+      uuid: patient.uuid,
+      name: patient.name,
+      dob: patient.dob,
+      gender: patient.gender,
+      email: patient.email,
+      phone: patient.phone,
+      address: patient.address,
+      createdAt: patient.createdAt,
+      updatedAt: patient.updatedAt,
+    })
+    .from(patient)
+    .innerJoin(doctorPatient, eq(patient.patientId, doctorPatient.patientId))
+    .where(eq(doctorPatient.doctorId, doctorId));
+
   // console.log("Fetched patients:", patients);
   return patients;
 }
 
-export async function getPatientById(uuid: string): Promise<Patient> {
+export async function getPatientById(
+  uuid: string,
+  doctorId: number
+): Promise<Patient> {
   const patients = await db
-    .select()
+    .select({
+      patientId: patient.patientId,
+      uuid: patient.uuid,
+      name: patient.name,
+      dob: patient.dob,
+      gender: patient.gender,
+      email: patient.email,
+      phone: patient.phone,
+      address: patient.address,
+      createdAt: patient.createdAt,
+      updatedAt: patient.updatedAt,
+    })
     .from(patient)
-    .where(eq(patient.uuid, uuid));
+    .innerJoin(doctorPatient, eq(patient.patientId, doctorPatient.patientId))
+    .where(and(eq(patient.uuid, uuid), eq(doctorPatient.doctorId, doctorId)));
   console.log('Fetched patient by UUID:', patients);
 
   if (!patients[0]) {
-    throw new Error(`Patient with UUID ${uuid} not found`);
+    throw new Error(`Patient with UUID ${uuid} not found or access denied`);
   }
 
   return patients[0];
 }
 
-export async function createPatient(newPatient: NewPatient): Promise<Patient> {
-  const createdPatient = await db
-    .insert(patient)
-    .values(newPatient)
-    .returning();
-  console.log('Created patient:', createdPatient);
-  return createdPatient[0];
+export async function createPatient(
+  newPatient: NewPatient,
+  doctorId: number
+): Promise<Patient> {
+  // Use a transaction to create patient and doctor-patient relationship
+  const result = await db.transaction(async (tx) => {
+    // Create the patient
+    const createdPatient = await tx
+      .insert(patient)
+      .values(newPatient)
+      .returning();
+
+    // Create the doctor-patient relationship
+    await tx.insert(doctorPatient).values({
+      doctorId: doctorId,
+      patientId: createdPatient[0].patientId,
+    });
+
+    return createdPatient[0];
+  });
+
+  console.log('Created patient:', result);
+  return result;
 }
 
 export async function updatePatient(
   id: number,
-  updatedPatient: Partial<NewPatient>
+  updatedPatient: Partial<NewPatient>,
+  doctorId: number
 ): Promise<Patient> {
+  // First verify the patient belongs to this doctor
+  const patientCheck = await db
+    .select({ patientId: patient.patientId })
+    .from(patient)
+    .innerJoin(doctorPatient, eq(patient.patientId, doctorPatient.patientId))
+    .where(and(eq(patient.patientId, id), eq(doctorPatient.doctorId, doctorId)))
+    .limit(1);
+
+  if (!patientCheck.length) {
+    throw new Error('Patient not found or access denied');
+  }
+
   const updatedPatientResult = await db
     .update(patient)
     .set(updatedPatient)
@@ -45,11 +105,36 @@ export async function updatePatient(
   return updatedPatientResult[0];
 }
 
-export async function deletePatient(id: number): Promise<Patient> {
-  const deletedPatient = await db
-    .delete(patient)
-    .where(eq(patient.patientId, id))
-    .returning();
-  console.log('Deleted patient:', deletedPatient);
-  return deletedPatient[0];
+export async function deletePatient(
+  id: number,
+  doctorId: number
+): Promise<Patient> {
+  // First verify the patient belongs to this doctor
+  const patientCheck = await db
+    .select({ patientId: patient.patientId })
+    .from(patient)
+    .innerJoin(doctorPatient, eq(patient.patientId, doctorPatient.patientId))
+    .where(and(eq(patient.patientId, id), eq(doctorPatient.doctorId, doctorId)))
+    .limit(1);
+
+  if (!patientCheck.length) {
+    throw new Error('Patient not found or access denied');
+  }
+
+  // Use a transaction to delete patient and doctor-patient relationship
+  const result = await db.transaction(async (tx) => {
+    // Delete the doctor-patient relationship first
+    await tx.delete(doctorPatient).where(eq(doctorPatient.patientId, id));
+
+    // Delete the patient
+    const deletedPatient = await tx
+      .delete(patient)
+      .where(eq(patient.patientId, id))
+      .returning();
+
+    return deletedPatient[0];
+  });
+
+  console.log('Deleted patient:', result);
+  return result;
 }

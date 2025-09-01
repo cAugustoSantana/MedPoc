@@ -4,8 +4,21 @@ import {
   SidebarInset,
 } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
+import { needsOnboarding } from '@/lib/auth-utils';
+import { redirect } from 'next/navigation';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Check if user needs onboarding
+  const onboardingRequired = await needsOnboarding();
+
+  if (onboardingRequired) {
+    redirect('/onboarding');
+  }
+
   return (
     <SidebarProvider>
       <AppSidebar />
