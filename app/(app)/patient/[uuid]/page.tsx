@@ -10,16 +10,15 @@ interface PageProps {
 
 export default async function PatientPage({ params }: PageProps) {
   const { uuid } = await params;
-  const doctorId = await getCurrentDoctorId();
-
-  if (!doctorId) {
-    return NextResponse.json(
-      { success: false, error: 'Doctor not found' },
-      { status: 403 }
-    );
-  }
 
   try {
+    const doctorId = await getCurrentDoctorId();
+    if (!doctorId) {
+      return NextResponse.json(
+        { success: false, error: 'Doctor not found' },
+        { status: 403 }
+      );
+    }
     const patient = await getPatientById(uuid, doctorId);
     return <PatientDetail patient={patient} />;
   } catch (error) {
