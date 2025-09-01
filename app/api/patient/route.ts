@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-
+import { getCurrentDoctorId } from '@/lib/auth-utils';
 import { getPatientById } from '@/db/queries/patients';
 
 export async function GET(
@@ -9,7 +9,15 @@ export async function GET(
   try {
     const { uuid } = await params;
 
-    const patient = await getPatientById(uuid);
+    const doctorId = await getCurrentDoctorId();
+    if (!doctorId) {
+      return NextResponse.json(
+        { success: false, error: 'Doctor not found' },
+        { status: 403 }
+      );
+    }
+
+    const patient = await getPatientById(uuid, doctorId);
 
     return NextResponse.json(patient);
   } catch (error) {
