@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
 import { Phone, Mail, MapPin, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,8 +13,6 @@ interface PatientDetailProps {
 }
 
 export default function PatientDetail({ patientId }: PatientDetailProps) {
-  const { isSignedIn, isLoaded } = useAuth();
-  const router = useRouter();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,28 +50,10 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
   };
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/sign-in');
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  useEffect(() => {
-    if (isSignedIn && patientId) {
+    if (patientId) {
       loadPatient();
     }
-  }, [isSignedIn, patientId]);
-
-  if (!isLoaded || !isSignedIn) {
-    return (
-      <main className="min-h-screen bg-gray-100 p-4">
-        <div className="w-full max-w-4xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading...</div>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  }, [patientId]);
 
   if (loading) {
     return (
@@ -101,21 +79,6 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
           </h1>
           <div className="flex items-center justify-center h-64">
             <div className="text-red-500">{error || 'Patient not found'}</div>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  if (!patient || !patient.name) {
-    return (
-      <main className="min-h-screen bg-gray-100 p-4">
-        <div className="w-full max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            Patient Details
-          </h1>
-          <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading patient data...</div>
           </div>
         </div>
       </main>
