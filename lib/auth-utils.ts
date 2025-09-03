@@ -13,32 +13,19 @@ export async function getCurrentUserId(): Promise<number | null> {
       return null;
     }
 
-    // Find the app_user record that matches the Clerk user ID
-    let userRecord = await db
+    // Check if user already exists in our database
+    const existingUser = await db
       .select({ appUserId: appUser.appUserId })
       .from(appUser)
       .where(eq(appUser.clerkUserId, userId))
       .limit(1);
 
-    // If user doesn't exist in our database, create them automatically
-    if (userRecord.length === 0) {
-      const newUser = await db
-        .insert(appUser)
-        .values({
-          uuid: randomUUID(),
-          clerkUserId: userId,
-          name:
-            `${user.firstName || ''} ${user.lastName || ''}`.trim() ||
-            'Unknown User',
-          email: user.emailAddresses[0]?.emailAddress,
-          roleId: 1, // Default to doctor role, will be updated during onboarding
-        })
-        .returning({ appUserId: appUser.appUserId });
-
-      userRecord = newUser;
+    if (existingUser.length > 0) {
+      return existingUser[0].appUserId;
     }
 
-    return userRecord[0].appUserId;
+    // User doesn't exist yet - they need to complete onboarding first
+    return null;
   } catch (error) {
     console.error('Error getting current user ID:', error);
     return null;
@@ -78,29 +65,65 @@ export async function getCurrentUserInfo() {
 
 export async function needsOnboarding(): Promise<boolean> {
   try {
-    const userId = await getCurrentUserId();
+    const { userId } = await auth();
 
     if (!userId) {
       return false;
     }
 
-    // Check if user has completed onboarding (has specialty)
-    const userRecord = await db
-      .select({ specialty: appUser.specialty })
+    // Check if user exists in our database
+    const existingUser = await db
+      .select({
+        appUserId: appUser.appUserId,
+        name: appUser.name,
+        specialty: appUser.specialty,
+        roleId: appUser.roleId,
+        documentTypeId: appUser.documentTypeId,
+        documentNumber: appUser.documentNumber,
+      })
       .from(appUser)
-      .where(eq(appUser.appUserId, userId))
+      .where(eq(appUser.clerkUserId, userId))
       .limit(1);
 
-    return !userRecord[0]?.specialty;
+    // If no user exists, they need onboarding
+    if (!existingUser[0]) {
+      return true;
+    }
+
+    const user = existingUser[0];
+
+    // Check if user has a proper name (not "Unknown User")
+    if (!user.name || user.name === 'Unknown User') {
+      return true;
+    }
+
+    // Check if user has selected a role
+    if (!user.roleId) {
+      return true;
+    }
+
+    // Check if user has a specialty (required for medical staff)
+    if (!user.specialty) {
+      return true;
+    }
+
+    // Check if user has provided document information
+    if (!user.documentTypeId || !user.documentNumber) {
+      return true;
+    }
+
+    // If all checks pass, onboarding is complete
+    return false;
   } catch (error) {
     console.error('Error checking onboarding status:', error);
-    return false;
+    // If there's an error checking, assume onboarding is needed for safety
+    return true;
   }
 }
 
 export async function getCurrentUserRole(): Promise<number | null> {
   try {
-    const userId = await getCurrentUserId();
+    const { userId } = await auth();
 
     if (!userId) {
       return null;
@@ -109,12 +132,49 @@ export async function getCurrentUserRole(): Promise<number | null> {
     const userRecord = await db
       .select({ roleId: appUser.roleId })
       .from(appUser)
-      .where(eq(appUser.appUserId, userId))
+      .where(eq(appUser.clerkUserId, userId))
       .limit(1);
 
     return userRecord[0]?.roleId || null;
   } catch (error) {
     console.error('Error getting current user role:', error);
+    return null;
+  }
+}
+
+export async function createUserFromOnboarding(
+  clerkUserId: string,
+  email: string,
+  onboardingData: {
+    name: string;
+    phone?: string;
+    roleId: number;
+    specialty: string;
+    documentTypeId?: number;
+    documentNumber?: string;
+  }
+): Promise<number | null> {
+  try {
+    const userRecord = await db
+      .insert(appUser)
+      .values({
+        uuid: randomUUID(),
+        clerkUserId,
+        name: onboardingData.name,
+        email,
+        phone: onboardingData.phone || null,
+        roleId: onboardingData.roleId,
+        specialty: onboardingData.specialty,
+        documentTypeId: onboardingData.documentTypeId || null,
+        documentNumber: onboardingData.documentNumber || null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      .returning({ appUserId: appUser.appUserId });
+
+    return userRecord[0].appUserId;
+  } catch (error) {
+    console.error('Error creating user from onboarding:', error);
     return null;
   }
 }
