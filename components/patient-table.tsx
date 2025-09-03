@@ -1,20 +1,23 @@
 'use client';
 
+import type React from 'react';
+
 import { useId, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  FilterFn,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type FilterFn,
   flexRender,
   getCoreRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  PaginationState,
-  SortingState,
+  type PaginationState,
+  type SortingState,
   useReactTable,
-  VisibilityState,
+  type VisibilityState,
 } from '@tanstack/react-table';
 import {
   ChevronDownIcon,
@@ -89,7 +92,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Patient } from '@/types/patient';
+import type { Patient } from '@/types/patient';
 import {
   deletePatientAction,
   deleteMultiplePatientsAction,
@@ -123,6 +126,7 @@ export default function PatientTable({
   addPatientComponent?: React.ReactNode;
 }>) {
   const id = useId();
+  const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -247,6 +251,18 @@ export default function PatientTable({
       });
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleRowClick = (patient: Patient, event: React.MouseEvent) => {
+    // Prevent navigation if clicking on interactive elements
+    const target = event.target as HTMLElement;
+    const isInteractiveElement = target.closest(
+      'button, input, [role="checkbox"], [role="menuitem"]'
+    );
+
+    if (!isInteractiveElement) {
+      router.push(`/patient/${patient.uuid}`);
     }
   };
 
@@ -439,7 +455,7 @@ export default function PatientTable({
           {table.getSelectedRowModel().rows.length > 0 && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button className="ml-auto" variant="outline">
+                <Button className="ml-auto bg-transparent" variant="outline">
                   <TrashIcon
                     className="-ms-1 opacity-60"
                     size={16}
@@ -489,7 +505,7 @@ export default function PatientTable({
           )}
           {/* Add user button */}
           {addPatientComponent || (
-            <Button className="ml-auto" variant="outline">
+            <Button className="ml-auto bg-transparent" variant="outline">
               <PlusIcon
                 className="-ms-1 opacity-60"
                 size={16}
@@ -580,6 +596,8 @@ export default function PatientTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onClick={(event) => handleRowClick(row.original, event)}
+                  className="cursor-pointer hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell) => {
                     // Determine alignment based on column ID
@@ -683,7 +701,7 @@ export default function PatientTable({
                 <Button
                   size="icon"
                   variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
+                  className="disabled:pointer-events-none disabled:opacity-50 bg-transparent"
                   onClick={() => table.firstPage()}
                   disabled={!table.getCanPreviousPage()}
                   aria-label="Go to first page"
@@ -696,7 +714,7 @@ export default function PatientTable({
                 <Button
                   size="icon"
                   variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
+                  className="disabled:pointer-events-none disabled:opacity-50 bg-transparent"
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
                   aria-label="Go to previous page"
@@ -709,7 +727,7 @@ export default function PatientTable({
                 <Button
                   size="icon"
                   variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
+                  className="disabled:pointer-events-none disabled:opacity-50 bg-transparent"
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
                   aria-label="Go to next page"
@@ -722,7 +740,7 @@ export default function PatientTable({
                 <Button
                   size="icon"
                   variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
+                  className="disabled:pointer-events-none disabled:opacity-50 bg-transparent"
                   onClick={() => table.lastPage()}
                   disabled={!table.getCanNextPage()}
                   aria-label="Go to last page"
@@ -777,6 +795,7 @@ function RowActions({ patient }: { patient: Patient }) {
             variant="ghost"
             className="shadow-none"
             aria-label="Edit item"
+            onClick={(e) => e.stopPropagation()}
           >
             <EllipsisIcon size={16} aria-hidden="true" />
           </Button>
