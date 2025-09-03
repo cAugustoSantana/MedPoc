@@ -25,7 +25,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/patients/${patientId}`);
+      const response = await fetch(`/api/patient/${patientId}`);
       const result = await response.json();
 
       if (response.ok) {
@@ -101,6 +101,21 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
           </h1>
           <div className="flex items-center justify-center h-64">
             <div className="text-red-500">{error || 'Patient not found'}</div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!patient || !patient.name) {
+    return (
+      <main className="min-h-screen bg-gray-100 p-4">
+        <div className="w-full max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold text-gray-800 mb-6">
+            Patient Details
+          </h1>
+          <div className="flex items-center justify-center h-64">
+            <div className="text-gray-500">Loading patient data...</div>
           </div>
         </div>
       </main>
