@@ -31,14 +31,61 @@ export default async function DashboardPage() {
   }
 
   let patientsData: Patient[] = [];
+  let errorMessage: string | null = null;
 
   try {
     const doctorId = await getCurrentDoctorId();
     if (doctorId) {
       patientsData = await getAllPatients(doctorId);
+    } else {
+      errorMessage =
+        'Unable to load user profile. Please complete your onboarding.';
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Failed to fetch patients:', error);
+    errorMessage = 'Failed to load dashboard data. Please try again.';
+  }
+
+  // If there's an error, show a user-friendly message
+  if (errorMessage) {
+    return (
+      <>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4 flex-1">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <Card>
+            <CardHeader>
+              <CardTitle>Dashboard Error</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">{errorMessage}</p>
+                <Button
+                  onClick={() => (window.location.href = '/onboarding')}
+                  className="mx-auto"
+                >
+                  Complete Profile Setup
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </>
+    );
   }
 
   return (
