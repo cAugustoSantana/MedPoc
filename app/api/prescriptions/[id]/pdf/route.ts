@@ -3,9 +3,8 @@ import { auth } from '@clerk/nextjs/server';
 import { generatePrescriptionPDF } from '@/lib/pdf/prescription-generator';
 import { getPrescriptionById } from '@/db/queries/prescriptions';
 import { getPrescriptionItemsByPrescriptionId } from '@/db/queries/prescription-items';
-import { db } from '@/db/index';
-import { patient, appUser } from '@/db/migrations/schema';
-import { eq } from 'drizzle-orm';
+import { getPatientByPatientId } from '@/db/queries/patients';
+import { getDoctorById } from '@/db/queries/doctors';
 
 export async function GET(
   request: NextRequest,
@@ -44,26 +43,14 @@ export async function GET(
       await getPrescriptionItemsByPrescriptionId(prescriptionId);
 
     // Fetch patient data
-    let patientData = null;
-    if (prescription.patientId) {
-      const patientResult = await db
-        .select()
-        .from(patient)
-        .where(eq(patient.patientId, prescription.patientId))
-        .limit(1);
-      patientData = patientResult[0] || null;
-    }
+    const patientData = prescription.patientId
+      ? await getPatientByPatientId(prescription.patientId)
+      : null;
 
     // Fetch doctor data
-    let doctorData = null;
-    if (prescription.appUserId) {
-      const doctorResult = await db
-        .select()
-        .from(appUser)
-        .where(eq(appUser.appUserId, prescription.appUserId))
-        .limit(1);
-      doctorData = doctorResult[0] || null;
-    }
+    const doctorData = prescription.appUserId
+      ? await getDoctorById(prescription.appUserId)
+      : null;
 
     // Generate PDF
     const pdfBuffer = await generatePrescriptionPDF({
