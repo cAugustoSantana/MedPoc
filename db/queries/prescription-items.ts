@@ -2,6 +2,7 @@ import { db } from '../index';
 import {
   PrescriptionItem,
   NewPrescriptionItem,
+  PrescriptionItemWithDetails,
 } from '@/types/prescription-item';
 import {
   prescriptionItem,
@@ -13,7 +14,7 @@ import { eq } from 'drizzle-orm';
 
 export async function getPrescriptionItemsByPrescriptionId(
   prescriptionId: number
-): Promise<PrescriptionItem[]> {
+): Promise<PrescriptionItemWithDetails[]> {
   try {
     const items = await db
       .select({
