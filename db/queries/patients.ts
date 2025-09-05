@@ -54,6 +54,23 @@ export async function getPatientById(
   return patients[0];
 }
 
+export async function getPatientByPatientId(
+  patientId: number
+): Promise<Patient | null> {
+  try {
+    const patients = await db
+      .select()
+      .from(patient)
+      .where(eq(patient.patientId, patientId))
+      .limit(1);
+
+    return patients[0] || null;
+  } catch (error) {
+    console.error(`Error fetching patient with id ${patientId}:`, error);
+    throw new Error(`Failed to fetch patient with id ${patientId}`);
+  }
+}
+
 export async function createPatient(
   newPatient: NewPatient,
   doctorId: number

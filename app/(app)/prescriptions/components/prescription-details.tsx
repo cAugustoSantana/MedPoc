@@ -10,7 +10,15 @@ import {
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, User, FileText, Stethoscope, Pill } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Calendar,
+  User,
+  FileText,
+  Stethoscope,
+  Pill,
+  Download,
+} from 'lucide-react';
 import { Patient } from '@/types/patient';
 import { Prescription } from '@/types/prescription';
 
@@ -36,6 +44,7 @@ export function PrescriptionDetails({
 }: PrescriptionDetailsProps) {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [medications, setMedications] = useState<Medication[]>([]);
+  const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
 
   // Fetch patients on component mount
   useEffect(() => {
@@ -75,6 +84,36 @@ export function PrescriptionDetails({
     }
   };
 
+  const handleDownloadPDF = async () => {
+    if (!prescription?.prescriptionId) return;
+
+    try {
+      setIsDownloadingPDF(true);
+      const response = await fetch(
+        `/api/prescriptions/${prescription.prescriptionId}/pdf`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prescription-${prescription.prescriptionId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      // You might want to show a toast notification here
+    } finally {
+      setIsDownloadingPDF(false);
+    }
+  };
+
   // Helper function to get patient name by ID
   const getPatientName = (patientId: number | null) => {
     if (!patientId) return 'Unknown Patient';
@@ -93,14 +132,28 @@ export function PrescriptionDetails({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            Prescription Details
-          </DialogTitle>
-          <DialogDescription>
-            Complete prescription information for{' '}
-            {getPatientName(prescription.patientId)}
-          </DialogDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Prescription Details
+              </DialogTitle>
+              <DialogDescription>
+                Complete prescription information for{' '}
+                {getPatientName(prescription.patientId)}
+              </DialogDescription>
+            </div>
+            <Button
+              onClick={handleDownloadPDF}
+              disabled={isDownloadingPDF}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              {isDownloadingPDF ? 'Generating...' : 'Download PDF'}
+            </Button>
+          </div>
         </DialogHeader>
 
         <div className="space-y-6">
