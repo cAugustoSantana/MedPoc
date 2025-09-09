@@ -93,3 +93,64 @@ You can customize the Clerk components by modifying:
 3. Customize the UI to match your brand
 4. Add user roles and permissions if needed
 5. Integrate user data with your existing database schema
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Users redirected to dashboard with incomplete profiles**
+
+   - **Cause**: Clerk is configured to redirect to `/dashboard` after sign-up
+   - **Solution**: Update Clerk redirect URLs to use `/onboarding` after sign-up
+   - **Steps**:
+     1. Go to your Clerk Dashboard
+     2. Navigate to "User & Authentication" → "Paths"
+     3. Change "After sign-up URL" from `/dashboard` to `/onboarding`
+     4. Save changes
+
+2. **Onboarding not redirecting properly**
+
+   - **Cause**: Environment variables not updated
+   - **Solution**: Update your `.env.local` file:
+     ```env
+     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
+     ```
+
+3. **Database errors during onboarding**
+
+   - **Cause**: Missing database migrations or seed data
+   - **Solution**: Run database setup commands:
+     ```bash
+     pnpm db:generate
+     pnpm db:migrate
+     pnpm db:seed
+     ```
+
+4. **Role not found errors**
+   - **Cause**: Roles table not seeded
+   - **Solution**: Run the seed script to populate roles:
+     ```bash
+     pnpm db:seed
+     ```
+
+### Debug Mode
+
+To troubleshoot onboarding issues, you can temporarily enable debug logging by adding this to your `.env.local`:
+
+```env
+DEBUG=onboarding:*
+```
+
+This will show detailed logs about the onboarding flow and help identify where issues occur.
+
+### Testing the Flow
+
+1. **Clear your browser cookies/session**
+2. **Sign up with a new email address**
+3. **Verify you're redirected to `/onboarding`**
+4. **Complete the onboarding form**
+5. **Verify you're redirected to `/dashboard`**
+6. **Sign out and sign back in**
+7. **Verify you go directly to `/dashboard`**
+
+If any step fails, check the browser console and server logs for error messages.
