@@ -3,7 +3,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Edit, Trash2, Eye, Filter } from 'lucide-react';
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Eye,
+  Filter,
+  Download,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -71,6 +79,7 @@ export default function PrescriptionsPage() {
   const [editingPrescription, setEditingPrescription] =
     useState<Prescription | null>(null);
   const [loading, setLoading] = useState(true);
+  const [downloadingPDF, setDownloadingPDF] = useState<number | null>(null);
 
   // Check authentication
   useEffect(() => {
@@ -318,6 +327,33 @@ export default function PrescriptionsPage() {
     return <Badge className="bg-green-100 text-green-800">Active</Badge>;
   };
 
+  const handleDownloadPDF = async (prescriptionId: number) => {
+    try {
+      setDownloadingPDF(prescriptionId);
+      const response = await fetch(`/api/prescriptions/${prescriptionId}/pdf`);
+
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prescription-${prescriptionId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success('PDF downloaded successfully');
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      toast.error('Failed to download PDF');
+    } finally {
+      setDownloadingPDF(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto p-6">
@@ -486,8 +522,22 @@ export default function PrescriptionsPage() {
                               setSelectedPrescription(prescription);
                               setIsDetailsOpen(true);
                             }}
+                            title="View Details"
                           >
                             <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() =>
+                              handleDownloadPDF(prescription.prescriptionId)
+                            }
+                            disabled={
+                              downloadingPDF === prescription.prescriptionId
+                            }
+                            title="Download PDF"
+                          >
+                            <Download className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
@@ -496,6 +546,7 @@ export default function PrescriptionsPage() {
                               setEditingPrescription(prescription);
                               setIsFormOpen(true);
                             }}
+                            title="Edit Prescription"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -506,6 +557,7 @@ export default function PrescriptionsPage() {
                               setSelectedPrescription(prescription);
                               setIsDeleteDialogOpen(true);
                             }}
+                            title="Delete Prescription"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
