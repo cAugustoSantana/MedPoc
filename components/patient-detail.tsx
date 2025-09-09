@@ -1,5 +1,7 @@
 'use client';
-
+import AppointmentWidget from '@/components/patient-detail-widget/appoinmentsWidget';
+import TestsWidget from './patient-detail-widget/testsWidget';
+import MedicalRecordsWidget from './patient-detail-widget/medicalRecordsWidget';
 import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -126,10 +128,6 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                     <User className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <h3 className="text-xl font-semibold">{patient.name}</h3>
-                      <p className="text-muted-foreground">
-                        Patient ID:{' '}
-                        {patient.uuid?.slice(0, 8).toUpperCase() || 'N/A'}
-                      </p>
                     </div>
                   </div>
 
@@ -207,6 +205,14 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
             </CardContent>
           </Card>
         </div>
+
+        <MedicalRecordsWidget />
+        {/* Appointments Section */}
+        <br></br>
+        <AppointmentWidget />
+        <br></br>
+        {/* Tests Section */}
+        <TestsWidget />
       </div>
     </main>
   );
