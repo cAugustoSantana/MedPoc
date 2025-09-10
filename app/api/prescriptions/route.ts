@@ -9,6 +9,8 @@ import {
 import { createPrescriptionItem } from '@/db/queries/prescription-items';
 import { NewPrescription } from '@/types/prescription';
 import { NewPrescriptionItem } from '@/types/prescription-item';
+import { getCurrentUserId } from '@/lib/auth-utils';
+import { randomUUID } from 'crypto';
 
 export async function GET(request: NextRequest) {
   try {
@@ -79,9 +81,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get the current user's ID from authentication
+    const currentUserId = await getCurrentUserId();
+
     const prescriptionData: NewPrescription = {
+      uuid: randomUUID(),
       patientId: parseInt(body.patientId),
-      appUserId: body.appUserId ? parseInt(body.appUserId) : null, // Optional, can be set by system
+      appUserId: currentUserId, // Set to current authenticated user
       appointmentId: body.appointmentId ? parseInt(body.appointmentId) : null,
       prescribedAt: body.prescribedAt || new Date().toISOString(),
       notes: body.notes || null,
