@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import {
-  getAllPrescriptions,
+  getAllPrescriptionsWithItems,
   createPrescription,
   getPrescriptionsByPatientId,
 } from '@/db/queries/prescriptions';
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
         currentUserId
       );
     } else {
-      prescriptions = await getAllPrescriptions(currentUserId);
+      prescriptions = await getAllPrescriptionsWithItems(currentUserId);
     }
 
     return NextResponse.json({ success: true, data: prescriptions });

@@ -11,6 +11,7 @@ import {
   Eye,
   Filter,
   Download,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -70,25 +71,39 @@ interface PrescriptionFormData {
   medications: Medication[];
 }
 
+// Type for prescription data that includes both original prescription and form data
+type PrescriptionWithFormData = Omit<Prescription, 'patientId'> & {
+  items: PrescriptionItem[];
+  patientId: string;
+  medications: Medication[];
+};
+
 export default function PrescriptionsPage() {
   const { isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [prescriptions, setPrescriptions] = useState<
+    (Prescription & { items: PrescriptionItem[] })[]
+  >([]);
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [prescriptionItems, setPrescriptionItems] = useState<{
-    [key: number]: PrescriptionItem[];
-  }>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedPrescription, setSelectedPrescription] =
-    useState<Prescription | null>(null);
+  const [selectedPrescription, setSelectedPrescription] = useState<
+    (Prescription & { items: PrescriptionItem[] }) | null
+  >(null);
   const [editingPrescription, setEditingPrescription] =
-    useState<Prescription | null>(null);
+    useState<PrescriptionWithFormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [downloadingPDF, setDownloadingPDF] = useState<number | null>(null);
+  const [loadingViewDetails, setLoadingViewDetails] = useState<number | null>(
+    null
+  );
+  const [loadingEditDetails, setLoadingEditDetails] = useState<number | null>(
+    null
+  );
+  const [loadingDelete, setLoadingDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
@@ -107,8 +122,6 @@ export default function PrescriptionsPage() {
 
       if (result.success) {
         setPrescriptions(result.data);
-        // Fetch prescription items for each prescription
-        await fetchPrescriptionItems(result.data);
       } else {
         toast.error(result.error || 'Failed to fetch prescriptions');
         setPrescriptions([]);
@@ -121,31 +134,6 @@ export default function PrescriptionsPage() {
       setLoading(false);
     }
   }, []);
-
-  const fetchPrescriptionItems = async (prescriptions: Prescription[]) => {
-    try {
-      const itemsMap: { [key: number]: PrescriptionItem[] } = {};
-
-      for (const prescription of prescriptions) {
-        if (prescription.prescriptionId) {
-          const response = await fetch(
-            `/api/prescriptions/${prescription.prescriptionId}/items`
-          );
-          const result = await response.json();
-
-          if (result.success) {
-            itemsMap[prescription.prescriptionId] = result.data;
-          } else {
-            itemsMap[prescription.prescriptionId] = [];
-          }
-        }
-      }
-
-      setPrescriptionItems(itemsMap);
-    } catch (error) {
-      console.error('Error fetching prescription items:', error);
-    }
-  };
 
   const fetchPatients = async () => {
     try {
@@ -194,10 +182,9 @@ export default function PrescriptionsPage() {
 
   // Get prescription items for a prescription
   const getPrescriptionItems = (
-    prescription: Prescription
+    prescription: Prescription & { items: PrescriptionItem[] }
   ): PrescriptionItem[] => {
-    if (!prescription.prescriptionId) return [];
-    return prescriptionItems[prescription.prescriptionId] || [];
+    return prescription.items || [];
   };
 
   const filteredPrescriptions = prescriptions.filter((prescription) => {
@@ -251,8 +238,6 @@ export default function PrescriptionsPage() {
         setPrescriptions([result.data, ...prescriptions]);
         setIsFormOpen(false);
         toast.success('Prescription created successfully');
-        // Refresh prescription items
-        await fetchPrescriptionItems([result.data, ...prescriptions]);
       } else {
         toast.error(result.error || 'Failed to create prescription');
       }
@@ -298,8 +283,6 @@ export default function PrescriptionsPage() {
         setEditingPrescription(null);
         setIsFormOpen(false);
         toast.success('Prescription updated successfully');
-        // Refresh prescription items
-        await fetchPrescriptionItems(updatedPrescriptions);
       } else {
         toast.error(result.error || 'Failed to update prescription');
       }
@@ -313,6 +296,7 @@ export default function PrescriptionsPage() {
     if (!selectedPrescription) return;
 
     try {
+      setLoadingDelete(selectedPrescription.prescriptionId);
       const response = await fetch(
         `/api/prescriptions/${selectedPrescription.prescriptionId}`,
         {
@@ -330,16 +314,63 @@ export default function PrescriptionsPage() {
         setSelectedPrescription(null);
         setIsDeleteDialogOpen(false);
         toast.success('Prescription deleted successfully');
-        // Remove prescription items from state
-        const updatedItems = { ...prescriptionItems };
-        delete updatedItems[selectedPrescription.prescriptionId];
-        setPrescriptionItems(updatedItems);
       } else {
         toast.error(result.error || 'Failed to delete prescription');
       }
     } catch (error) {
       console.error('Error deleting prescription:', error);
       toast.error('Failed to delete prescription');
+    } finally {
+      setLoadingDelete(null);
+    }
+  };
+
+  const handleViewDetails = async (
+    prescription: Prescription & { items: PrescriptionItem[] }
+  ) => {
+    try {
+      setLoadingViewDetails(prescription.prescriptionId);
+      // Simulate a small delay to show loading state (in real app, this might fetch additional data)
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      setSelectedPrescription(prescription);
+      setIsDetailsOpen(true);
+    } catch (error) {
+      console.error('Error loading prescription details:', error);
+      toast.error('Failed to load prescription details');
+    } finally {
+      setLoadingViewDetails(null);
+    }
+  };
+
+  const handleEditPrescriptionClick = async (
+    prescription: Prescription & { items: PrescriptionItem[] }
+  ) => {
+    try {
+      setLoadingEditDetails(prescription.prescriptionId);
+      // Simulate a small delay to show loading state (in real app, this might fetch additional data)
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Transform prescription data to match the form format
+      const transformedPrescription = {
+        ...prescription,
+        patientId: prescription.patientId?.toString() || '',
+        medications: prescription.items.map((item) => ({
+          id: item.itemId.toString(),
+          name: item.drugName || '',
+          dosage: item.dosage || '',
+          frequency: item.frequency || '',
+          duration: item.duration || '',
+          instructions: item.instructions || '',
+        })),
+      } as PrescriptionWithFormData;
+
+      setEditingPrescription(transformedPrescription);
+      setIsFormOpen(true);
+    } catch (error) {
+      console.error('Error loading prescription for edit:', error);
+      toast.error('Failed to load prescription for editing');
+    } finally {
+      setLoadingEditDetails(null);
     }
   };
 
@@ -527,13 +558,18 @@ export default function PrescriptionsPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => {
-                              setSelectedPrescription(prescription);
-                              setIsDetailsOpen(true);
-                            }}
+                            onClick={() => handleViewDetails(prescription)}
+                            disabled={
+                              loadingViewDetails === prescription.prescriptionId
+                            }
                             title="View Details"
                           >
-                            <Eye className="h-4 w-4" />
+                            {loadingViewDetails ===
+                            prescription.prescriptionId ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
                           </Button>
                           <Button
                             variant="ghost"
@@ -551,13 +587,20 @@ export default function PrescriptionsPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => {
-                              setEditingPrescription(prescription);
-                              setIsFormOpen(true);
-                            }}
+                            onClick={() =>
+                              handleEditPrescriptionClick(prescription)
+                            }
+                            disabled={
+                              loadingEditDetails === prescription.prescriptionId
+                            }
                             title="Edit Prescription"
                           >
-                            <Edit className="h-4 w-4" />
+                            {loadingEditDetails ===
+                            prescription.prescriptionId ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Edit className="h-4 w-4" />
+                            )}
                           </Button>
                           <Button
                             variant="ghost"
@@ -566,9 +609,16 @@ export default function PrescriptionsPage() {
                               setSelectedPrescription(prescription);
                               setIsDeleteDialogOpen(true);
                             }}
+                            disabled={
+                              loadingDelete === prescription.prescriptionId
+                            }
                             title="Delete Prescription"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            {loadingDelete === prescription.prescriptionId ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
                           </Button>
                         </div>
                       </TableCell>
@@ -680,7 +730,7 @@ export default function PrescriptionsPage() {
         onSubmit={
           editingPrescription ? handleEditPrescription : handleAddPrescription
         }
-        initialData={editingPrescription}
+        initialData={editingPrescription as Prescription | null}
         mode={editingPrescription ? 'edit' : 'create'}
       />
 
@@ -698,6 +748,11 @@ export default function PrescriptionsPage() {
           selectedPrescription
             ? getPatientName(selectedPrescription.patientId)
             : 'this prescription'
+        }
+        loading={
+          selectedPrescription
+            ? loadingDelete === selectedPrescription.prescriptionId
+            : false
         }
       />
     </div>

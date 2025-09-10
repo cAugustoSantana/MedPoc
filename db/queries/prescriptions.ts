@@ -1,8 +1,9 @@
 import { db } from '../index';
 import { Prescription, NewPrescription } from '@/types/prescription';
-import { prescription } from '../migrations/schema';
-import { eq } from 'drizzle-orm';
+import { prescription, prescriptionItem } from '../migrations/schema';
+import { eq, inArray } from 'drizzle-orm';
 import { deletePrescriptionItemsByPrescriptionId } from './prescription-items';
+import { PrescriptionItem } from '@/types/prescription-item';
 
 export async function getAllPrescriptions(
   doctorId: number
@@ -160,5 +161,48 @@ export async function getPrescriptionsByDoctorId(
   } catch (error) {
     console.error(`Error fetching prescriptions by doctor ${doctorId}:`, error);
     throw new Error(`Failed to fetch prescriptions by doctor ${doctorId}`);
+  }
+}
+
+// New function to get prescriptions with their items in a single query
+export async function getAllPrescriptionsWithItems(
+  doctorId: number
+): Promise<(Prescription & { items: PrescriptionItem[] })[]> {
+  try {
+    const prescriptions = await db
+      .select()
+      .from(prescription)
+      .where(eq(prescription.appUserId, doctorId));
+
+    // Get all prescription items for all prescriptions in one query
+    const prescriptionIds = prescriptions.map((p) => p.prescriptionId);
+
+    let allItems: PrescriptionItem[] = [];
+    if (prescriptionIds.length > 0) {
+      allItems = await db
+        .select()
+        .from(prescriptionItem)
+        .where(inArray(prescriptionItem.prescriptionId, prescriptionIds));
+    }
+
+    // Group items by prescription ID
+    const itemsByPrescriptionId: { [key: number]: PrescriptionItem[] } = {};
+    allItems.forEach((item) => {
+      if (item.prescriptionId !== null) {
+        if (!itemsByPrescriptionId[item.prescriptionId]) {
+          itemsByPrescriptionId[item.prescriptionId] = [];
+        }
+        itemsByPrescriptionId[item.prescriptionId].push(item);
+      }
+    });
+
+    // Combine prescriptions with their items
+    return prescriptions.map((prescription) => ({
+      ...prescription,
+      items: itemsByPrescriptionId[prescription.prescriptionId] || [],
+    }));
+  } catch (error) {
+    console.error('Error fetching prescriptions with items:', error);
+    throw new Error('Failed to fetch prescriptions with items');
   }
 }
