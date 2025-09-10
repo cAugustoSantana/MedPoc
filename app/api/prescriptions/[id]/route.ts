@@ -5,7 +5,12 @@ import {
   updatePrescription,
   deletePrescription,
 } from '@/db/queries/prescriptions';
+import {
+  createPrescriptionItem,
+  deletePrescriptionItemsByPrescriptionId,
+} from '@/db/queries/prescription-items';
 import { NewPrescription } from '@/types/prescription';
+import { NewPrescriptionItem } from '@/types/prescription-item';
 
 export async function GET(
   request: NextRequest,
@@ -103,6 +108,38 @@ export async function PUT(
       prescriptionId,
       updateData
     );
+
+    // Handle medication updates if provided
+    if (body.medications && Array.isArray(body.medications)) {
+      // Delete existing prescription items
+      await deletePrescriptionItemsByPrescriptionId(prescriptionId);
+
+      // Create new prescription items
+      const prescriptionItems = [];
+      for (const medication of body.medications) {
+        if (medication.name && medication.dosage && medication.frequency) {
+          const itemData: NewPrescriptionItem = {
+            prescriptionId: prescriptionId,
+            drugName: medication.name,
+            dosage: medication.dosage,
+            frequency: medication.frequency,
+            duration: medication.duration || null,
+            instructions: medication.instructions || null,
+          };
+
+          const newItem = await createPrescriptionItem(itemData);
+          prescriptionItems.push(newItem);
+        }
+      }
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          ...updatedPrescription,
+          items: prescriptionItems,
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, data: updatedPrescription });
   } catch (error) {

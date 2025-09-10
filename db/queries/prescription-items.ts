@@ -4,12 +4,7 @@ import {
   NewPrescriptionItem,
   PrescriptionItemWithDetails,
 } from '@/types/prescription-item';
-import {
-  prescriptionItem,
-  drug,
-  dosageDetail,
-  frequencyDetail,
-} from '../migrations/schema';
+import { prescriptionItem } from '../migrations/schema';
 import { eq } from 'drizzle-orm';
 
 export async function getPrescriptionItemsByPrescriptionId(
@@ -17,35 +12,8 @@ export async function getPrescriptionItemsByPrescriptionId(
 ): Promise<PrescriptionItemWithDetails[]> {
   try {
     const items = await db
-      .select({
-        itemId: prescriptionItem.itemId,
-        uuid: prescriptionItem.uuid,
-        prescriptionId: prescriptionItem.prescriptionId,
-        drugId: prescriptionItem.drugId,
-        dosageDetailId: prescriptionItem.dosageDetailId,
-        frequencyDetailId: prescriptionItem.frequencyDetailId,
-        duration: prescriptionItem.duration,
-        instructions: prescriptionItem.instructions,
-        createdAt: prescriptionItem.createdAt,
-        drugName: drug.name,
-        drugDosageForm: drug.dosageForm,
-        drugStrength: drug.strength,
-        dosageDescription: dosageDetail.description,
-        frequencyDescription: frequencyDetail.description,
-      })
+      .select()
       .from(prescriptionItem)
-      .leftJoin(drug, eq(prescriptionItem.drugId, drug.drugId))
-      .leftJoin(
-        dosageDetail,
-        eq(prescriptionItem.dosageDetailId, dosageDetail.dosageDetailId)
-      )
-      .leftJoin(
-        frequencyDetail,
-        eq(
-          prescriptionItem.frequencyDetailId,
-          frequencyDetail.frequencyDetailId
-        )
-      )
       .where(eq(prescriptionItem.prescriptionId, prescriptionId));
 
     return items;

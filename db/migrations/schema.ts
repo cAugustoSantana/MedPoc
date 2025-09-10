@@ -282,29 +282,14 @@ export const prescriptionItem = pgTable(
     itemId: serial('item_id').primaryKey().notNull(),
     uuid: uuid(),
     prescriptionId: integer('prescription_id'),
-    drugId: integer('drug_id'),
-    dosageDetailId: integer('dosage_detail_id'),
-    frequencyDetailId: integer('frequency_detail_id'),
+    drugName: varchar('drug_name'),
+    dosage: varchar(),
+    frequency: varchar(),
     duration: varchar(),
     instructions: text(),
     createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
   },
   (table) => [
-    foreignKey({
-      columns: [table.dosageDetailId],
-      foreignColumns: [dosageDetail.dosageDetailId],
-      name: 'prescription_item_dosage_detail_id_fkey',
-    }),
-    foreignKey({
-      columns: [table.drugId],
-      foreignColumns: [drug.drugId],
-      name: 'prescription_item_drug_id_fkey',
-    }),
-    foreignKey({
-      columns: [table.frequencyDetailId],
-      foreignColumns: [frequencyDetail.frequencyDetailId],
-      name: 'prescription_item_frequency_detail_id_fkey',
-    }),
     foreignKey({
       columns: [table.prescriptionId],
       foreignColumns: [prescription.prescriptionId],

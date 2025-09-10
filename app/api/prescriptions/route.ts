@@ -6,7 +6,9 @@ import {
   getPrescriptionsByPatientId,
   getPrescriptionsByDoctorId,
 } from '@/db/queries/prescriptions';
+import { createPrescriptionItem } from '@/db/queries/prescription-items';
 import { NewPrescription } from '@/types/prescription';
+import { NewPrescriptionItem } from '@/types/prescription-item';
 
 export async function GET(request: NextRequest) {
   try {
@@ -66,6 +68,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (
+      !body.medications ||
+      !Array.isArray(body.medications) ||
+      body.medications.length === 0
+    ) {
+      return NextResponse.json(
+        { success: false, error: 'At least one medication is required' },
+        { status: 400 }
+      );
+    }
+
     const prescriptionData: NewPrescription = {
       patientId: parseInt(body.patientId),
       appUserId: body.appUserId ? parseInt(body.appUserId) : null, // Optional, can be set by system
@@ -74,10 +87,35 @@ export async function POST(request: NextRequest) {
       notes: body.notes || null,
     };
 
+    // Create the prescription
     const newPrescription = await createPrescription(prescriptionData);
 
+    // Create prescription items for each medication
+    const prescriptionItems = [];
+    for (const medication of body.medications) {
+      if (medication.name && medication.dosage && medication.frequency) {
+        const itemData: NewPrescriptionItem = {
+          prescriptionId: newPrescription.prescriptionId,
+          drugName: medication.name,
+          dosage: medication.dosage,
+          frequency: medication.frequency,
+          duration: medication.duration || null,
+          instructions: medication.instructions || null,
+        };
+
+        const newItem = await createPrescriptionItem(itemData);
+        prescriptionItems.push(newItem);
+      }
+    }
+
     return NextResponse.json(
-      { success: true, data: newPrescription },
+      {
+        success: true,
+        data: {
+          ...newPrescription,
+          items: prescriptionItems,
+        },
+      },
       { status: 201 }
     );
   } catch (error) {

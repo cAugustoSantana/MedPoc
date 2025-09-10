@@ -188,11 +188,7 @@ export default function PrescriptionsPage() {
     const patientName = getPatientName(prescription.patientId);
     const items = getPrescriptionItems(prescription);
     const medicationNames = items
-      .map(
-        (item) =>
-          (item as PrescriptionItem & { drugName?: string }).drugName ||
-          'Unknown Medication'
-      )
+      .map((item) => item.drugName || 'Unknown Medication')
       .join(' ');
 
     const matchesSearch =
@@ -447,11 +443,7 @@ export default function PrescriptionsPage() {
                             items.map((item, index) => (
                               <div key={item.itemId} className="text-sm">
                                 <span className="font-medium">
-                                  {(
-                                    item as PrescriptionItem & {
-                                      drugName?: string;
-                                    }
-                                  ).drugName || 'Unknown Medication'}
+                                  {item.drugName || 'Unknown Medication'}
                                 </span>
                                 {index < items.length - 1 && (
                                   <span className="text-muted-foreground">
@@ -472,11 +464,7 @@ export default function PrescriptionsPage() {
                           {items.length > 0 ? (
                             items.map((item) => (
                               <div key={item.itemId} className="text-sm">
-                                {(
-                                  item as PrescriptionItem & {
-                                    drugStrength?: string;
-                                  }
-                                ).drugStrength || 'N/A'}
+                                {item.dosage || 'N/A'}
                               </div>
                             ))
                           ) : (
@@ -491,11 +479,7 @@ export default function PrescriptionsPage() {
                           {items.length > 0 ? (
                             items.map((item) => (
                               <div key={item.itemId} className="text-sm">
-                                {(
-                                  item as PrescriptionItem & {
-                                    frequencyDescription?: string;
-                                  }
-                                ).frequencyDescription || 'N/A'}
+                                {item.frequency || 'N/A'}
                               </div>
                             ))
                           ) : (

@@ -1,7 +1,6 @@
 -- Current sql file was generated after introspecting the database
--- If you want to run this migration please uncomment this code before executing migrations
-/*
-CREATE TABLE "doctor_patient" (
+-- Migration to create initial database schema
+CREATE TABLE IF NOT EXISTS "doctor_patient" (
 	"doctor_patient_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"doctor_id" integer,
@@ -10,7 +9,7 @@ CREATE TABLE "doctor_patient" (
 	CONSTRAINT "doctor_patient_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "dosage_detail" (
+CREATE TABLE IF NOT EXISTS "dosage_detail" (
 	"dosage_detail_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"description" varchar,
@@ -18,7 +17,7 @@ CREATE TABLE "dosage_detail" (
 	CONSTRAINT "dosage_detail_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "doctor_assistant" (
+CREATE TABLE IF NOT EXISTS "doctor_assistant" (
 	"doctor_assistant_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"doctor_id" integer,
@@ -27,7 +26,7 @@ CREATE TABLE "doctor_assistant" (
 	CONSTRAINT "doctor_assistant_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "document_type" (
+CREATE TABLE IF NOT EXISTS "document_type" (
 	"document_type_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"name" varchar NOT NULL,
@@ -35,7 +34,7 @@ CREATE TABLE "document_type" (
 	CONSTRAINT "document_type_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "drug" (
+CREATE TABLE IF NOT EXISTS "drug" (
 	"drug_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"name" varchar,
@@ -46,7 +45,7 @@ CREATE TABLE "drug" (
 	CONSTRAINT "drug_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "frequency_detail" (
+CREATE TABLE IF NOT EXISTS "frequency_detail" (
 	"frequency_detail_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"description" varchar,
@@ -54,7 +53,7 @@ CREATE TABLE "frequency_detail" (
 	CONSTRAINT "frequency_detail_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "appointment" (
+CREATE TABLE IF NOT EXISTS "appointment" (
 	"appointment_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"app_user_id" integer,
@@ -67,7 +66,7 @@ CREATE TABLE "appointment" (
 	CONSTRAINT "appointment_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "disease" (
+CREATE TABLE IF NOT EXISTS "disease" (
 	"disease_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"name" varchar,
@@ -78,7 +77,7 @@ CREATE TABLE "disease" (
 	CONSTRAINT "disease_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "insurance_company" (
+CREATE TABLE IF NOT EXISTS "insurance_company" (
 	"insurance_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"name" varchar NOT NULL,
@@ -90,7 +89,7 @@ CREATE TABLE "insurance_company" (
 	CONSTRAINT "insurance_company_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "lab_test_result" (
+CREATE TABLE IF NOT EXISTS "lab_test_result" (
 	"lab_test_result_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"lab_test_id" integer,
@@ -102,7 +101,7 @@ CREATE TABLE "lab_test_result" (
 	CONSTRAINT "lab_test_result_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "lab_test" (
+CREATE TABLE IF NOT EXISTS "lab_test" (
 	"lab_test_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"medical_record_id" integer,
@@ -117,7 +116,7 @@ CREATE TABLE "lab_test" (
 	CONSTRAINT "lab_test_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "medical_record" (
+CREATE TABLE IF NOT EXISTS "medical_record" (
 	"record_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"patient_id" integer,
@@ -130,7 +129,7 @@ CREATE TABLE "medical_record" (
 	CONSTRAINT "medical_record_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "imaging_test_image" (
+CREATE TABLE IF NOT EXISTS "imaging_test_image" (
 	"imaging_test_image_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"imaging_test_id" integer,
@@ -140,7 +139,7 @@ CREATE TABLE "imaging_test_image" (
 	CONSTRAINT "imaging_test_image_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "prescription_item" (
+CREATE TABLE IF NOT EXISTS "prescription_item" (
 	"item_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"prescription_id" integer,
@@ -153,7 +152,7 @@ CREATE TABLE "prescription_item" (
 	CONSTRAINT "prescription_item_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "prescription" (
+CREATE TABLE IF NOT EXISTS "prescription" (
 	"prescription_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"app_user_id" integer,
@@ -166,7 +165,7 @@ CREATE TABLE "prescription" (
 	CONSTRAINT "prescription_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "role" (
+CREATE TABLE IF NOT EXISTS "role" (
 	"role_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"name" varchar NOT NULL,
@@ -174,7 +173,7 @@ CREATE TABLE "role" (
 	CONSTRAINT "role_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "vital_sign" (
+CREATE TABLE IF NOT EXISTS "vital_sign" (
 	"vital_sign_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"patient_id" integer,
@@ -191,7 +190,7 @@ CREATE TABLE "vital_sign" (
 	CONSTRAINT "vital_sign_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "imaging_test" (
+CREATE TABLE IF NOT EXISTS "imaging_test" (
 	"imaging_test_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"medical_record_id" integer,
@@ -206,7 +205,7 @@ CREATE TABLE "imaging_test" (
 	CONSTRAINT "imaging_test_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "app_user" (
+CREATE TABLE IF NOT EXISTS "app_user" (
 	"app_user_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"name" varchar NOT NULL,
@@ -221,7 +220,7 @@ CREATE TABLE "app_user" (
 	CONSTRAINT "app_user_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "medical_record_disease" (
+CREATE TABLE IF NOT EXISTS "medical_record_disease" (
 	"record_disease_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"record_id" integer,
@@ -230,7 +229,7 @@ CREATE TABLE "medical_record_disease" (
 	CONSTRAINT "medical_record_disease_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "patient" (
+CREATE TABLE IF NOT EXISTS "patient" (
 	"patient_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid DEFAULT gen_random_uuid(),
 	"name" varchar NOT NULL,
@@ -244,7 +243,7 @@ CREATE TABLE "patient" (
 	CONSTRAINT "patient_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "patient_insurance" (
+CREATE TABLE IF NOT EXISTS "patient_insurance" (
 	"patient_insurance_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"patient_id" integer,
@@ -257,7 +256,7 @@ CREATE TABLE "patient_insurance" (
 	CONSTRAINT "patient_insurance_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-CREATE TABLE "user_insurance_affiliate_code" (
+CREATE TABLE IF NOT EXISTS "user_insurance_affiliate_code" (
 	"user_insurance_affiliate_code_id" serial PRIMARY KEY NOT NULL,
 	"uuid" uuid,
 	"app_user_id" integer,
@@ -268,36 +267,32 @@ CREATE TABLE "user_insurance_affiliate_code" (
 	CONSTRAINT "user_insurance_affiliate_code_uuid_key" UNIQUE("uuid")
 );
 --> statement-breakpoint
-ALTER TABLE "doctor_patient" ADD CONSTRAINT "doctor_patient_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "doctor_patient" ADD CONSTRAINT "doctor_patient_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "doctor_assistant" ADD CONSTRAINT "doctor_assistant_assistant_id_fkey" FOREIGN KEY ("assistant_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "doctor_assistant" ADD CONSTRAINT "doctor_assistant_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "appointment" ADD CONSTRAINT "appointment_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "appointment" ADD CONSTRAINT "appointment_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "lab_test_result" ADD CONSTRAINT "lab_test_result_lab_test_id_fkey" FOREIGN KEY ("lab_test_id") REFERENCES "public"."lab_test"("lab_test_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "lab_test" ADD CONSTRAINT "lab_test_medical_record_id_fkey" FOREIGN KEY ("medical_record_id") REFERENCES "public"."medical_record"("record_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "lab_test" ADD CONSTRAINT "lab_test_requested_by_fkey" FOREIGN KEY ("requested_by") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "medical_record" ADD CONSTRAINT "medical_record_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "medical_record" ADD CONSTRAINT "medical_record_appointment_id_fkey" FOREIGN KEY ("appointment_id") REFERENCES "public"."appointment"("appointment_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "medical_record" ADD CONSTRAINT "medical_record_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "imaging_test_image" ADD CONSTRAINT "imaging_test_image_imaging_test_id_fkey" FOREIGN KEY ("imaging_test_id") REFERENCES "public"."imaging_test"("imaging_test_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription_item" ADD CONSTRAINT "prescription_item_dosage_detail_id_fkey" FOREIGN KEY ("dosage_detail_id") REFERENCES "public"."dosage_detail"("dosage_detail_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription_item" ADD CONSTRAINT "prescription_item_drug_id_fkey" FOREIGN KEY ("drug_id") REFERENCES "public"."drug"("drug_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription_item" ADD CONSTRAINT "prescription_item_frequency_detail_id_fkey" FOREIGN KEY ("frequency_detail_id") REFERENCES "public"."frequency_detail"("frequency_detail_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription_item" ADD CONSTRAINT "prescription_item_prescription_id_fkey" FOREIGN KEY ("prescription_id") REFERENCES "public"."prescription"("prescription_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription" ADD CONSTRAINT "prescription_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription" ADD CONSTRAINT "prescription_appointment_id_fkey" FOREIGN KEY ("appointment_id") REFERENCES "public"."appointment"("appointment_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "prescription" ADD CONSTRAINT "prescription_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "vital_sign" ADD CONSTRAINT "vital_sign_appointment_id_fkey" FOREIGN KEY ("appointment_id") REFERENCES "public"."appointment"("appointment_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "vital_sign" ADD CONSTRAINT "vital_sign_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "imaging_test" ADD CONSTRAINT "imaging_test_medical_record_id_fkey" FOREIGN KEY ("medical_record_id") REFERENCES "public"."medical_record"("record_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "imaging_test" ADD CONSTRAINT "imaging_test_requested_by_fkey" FOREIGN KEY ("requested_by") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "app_user" ADD CONSTRAINT "app_user_document_type_id_fkey" FOREIGN KEY ("document_type_id") REFERENCES "public"."document_type"("document_type_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "app_user" ADD CONSTRAINT "app_user_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "public"."role"("role_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "medical_record_disease" ADD CONSTRAINT "medical_record_disease_disease_id_fkey" FOREIGN KEY ("disease_id") REFERENCES "public"."disease"("disease_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "medical_record_disease" ADD CONSTRAINT "medical_record_disease_record_id_fkey" FOREIGN KEY ("record_id") REFERENCES "public"."medical_record"("record_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "patient_insurance" ADD CONSTRAINT "patient_insurance_insurance_id_fkey" FOREIGN KEY ("insurance_id") REFERENCES "public"."insurance_company"("insurance_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "patient_insurance" ADD CONSTRAINT "patient_insurance_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_insurance_affiliate_code" ADD CONSTRAINT "user_insurance_affiliate_code_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_insurance_affiliate_code" ADD CONSTRAINT "user_insurance_affiliate_code_insurance_id_fkey" FOREIGN KEY ("insurance_id") REFERENCES "public"."insurance_company"("insurance_id") ON DELETE no action ON UPDATE no action;
-*/
+-- -- ALTER TABLE "doctor_patient" ADD CONSTRAINT "doctor_patient_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- -- ALTER TABLE "doctor_patient" ADD CONSTRAINT "doctor_patient_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "doctor_assistant" ADD CONSTRAINT "doctor_assistant_assistant_id_fkey" FOREIGN KEY ("assistant_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "doctor_assistant" ADD CONSTRAINT "doctor_assistant_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "appointment" ADD CONSTRAINT "appointment_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "appointment" ADD CONSTRAINT "appointment_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "lab_test_result" ADD CONSTRAINT "lab_test_result_lab_test_id_fkey" FOREIGN KEY ("lab_test_id") REFERENCES "public"."lab_test"("lab_test_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "lab_test" ADD CONSTRAINT "lab_test_medical_record_id_fkey" FOREIGN KEY ("medical_record_id") REFERENCES "public"."medical_record"("record_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "lab_test" ADD CONSTRAINT "lab_test_requested_by_fkey" FOREIGN KEY ("requested_by") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "medical_record" ADD CONSTRAINT "medical_record_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "medical_record" ADD CONSTRAINT "medical_record_appointment_id_fkey" FOREIGN KEY ("appointment_id") REFERENCES "public"."appointment"("appointment_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "medical_record" ADD CONSTRAINT "medical_record_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "imaging_test_image" ADD CONSTRAINT "imaging_test_image_imaging_test_id_fkey" FOREIGN KEY ("imaging_test_id") REFERENCES "public"."imaging_test"("imaging_test_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "prescription_item" ADD CONSTRAINT IF NOT EXISTS "prescription_item_prescription_id_fkey" FOREIGN KEY ("prescription_id") REFERENCES "public"."prescription"("prescription_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "prescription" ADD CONSTRAINT "prescription_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "prescription" ADD CONSTRAINT "prescription_appointment_id_fkey" FOREIGN KEY ("appointment_id") REFERENCES "public"."appointment"("appointment_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "prescription" ADD CONSTRAINT "prescription_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "vital_sign" ADD CONSTRAINT "vital_sign_appointment_id_fkey" FOREIGN KEY ("appointment_id") REFERENCES "public"."appointment"("appointment_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "vital_sign" ADD CONSTRAINT "vital_sign_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "imaging_test" ADD CONSTRAINT "imaging_test_medical_record_id_fkey" FOREIGN KEY ("medical_record_id") REFERENCES "public"."medical_record"("record_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "imaging_test" ADD CONSTRAINT "imaging_test_requested_by_fkey" FOREIGN KEY ("requested_by") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "app_user" ADD CONSTRAINT "app_user_document_type_id_fkey" FOREIGN KEY ("document_type_id") REFERENCES "public"."document_type"("document_type_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "app_user" ADD CONSTRAINT "app_user_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "public"."role"("role_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "medical_record_disease" ADD CONSTRAINT "medical_record_disease_disease_id_fkey" FOREIGN KEY ("disease_id") REFERENCES "public"."disease"("disease_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "medical_record_disease" ADD CONSTRAINT "medical_record_disease_record_id_fkey" FOREIGN KEY ("record_id") REFERENCES "public"."medical_record"("record_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "patient_insurance" ADD CONSTRAINT "patient_insurance_insurance_id_fkey" FOREIGN KEY ("insurance_id") REFERENCES "public"."insurance_company"("insurance_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "patient_insurance" ADD CONSTRAINT "patient_insurance_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient"("patient_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "user_insurance_affiliate_code" ADD CONSTRAINT "user_insurance_affiliate_code_app_user_id_fkey" FOREIGN KEY ("app_user_id") REFERENCES "public"."app_user"("app_user_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "user_insurance_affiliate_code" ADD CONSTRAINT "user_insurance_affiliate_code_insurance_id_fkey" FOREIGN KEY ("insurance_id") REFERENCES "public"."insurance_company"("insurance_id") ON DELETE no action ON UPDATE no action;
