@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { format, isSameDay } from 'date-fns';
-import { Calendar, Clock, User, Phone, FileText } from 'lucide-react';
+import { Calendar, Clock, User, Phone, FileText, Pill } from 'lucide-react';
 
 import {
   Card,
@@ -15,7 +15,9 @@ import {
 } from '@/components/ui/card';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { AddAppointmentDialog } from '@/components/add-appointment-dialog';
+import { PrescriptionForm } from '@/app/(app)/prescriptions/components/prescription-form';
 import { AppointmentWithDetails } from '@/types/appointment';
 import { toast } from 'sonner';
 
@@ -29,6 +31,9 @@ export default function AppointmentsPage() {
     new Date()
   ); // Today's date
   const [loading, setLoading] = useState(false);
+  const [isPrescriptionFormOpen, setIsPrescriptionFormOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<AppointmentWithDetails | null>(null);
 
   // Check authentication
   useEffect(() => {
@@ -144,6 +149,19 @@ export default function AppointmentsPage() {
     } catch (error) {
       console.error('Error refreshing appointments:', error);
     }
+  };
+
+  const handleCreatePrescriptionFromAppointment = (
+    appointment: AppointmentWithDetails
+  ) => {
+    setSelectedAppointment(appointment);
+    setIsPrescriptionFormOpen(true);
+  };
+
+  const handlePrescriptionCreated = () => {
+    setIsPrescriptionFormOpen(false);
+    setSelectedAppointment(null);
+    toast.success('Prescription created successfully');
   };
 
   const formatAppointmentTime = (scheduledAt: string | null) => {
@@ -265,9 +283,22 @@ export default function AppointmentsPage() {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex items-start gap-2 text-sm text-gray-600">
+                      <div className="flex items-start gap-2 text-sm text-gray-600 mb-4">
                         <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
                         <p>{appointment.reason || 'No notes available'}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            handleCreatePrescriptionFromAppointment(appointment)
+                          }
+                          className="flex items-center gap-2"
+                        >
+                          <Pill className="h-4 w-4" />
+                          Create Prescription
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -301,6 +332,46 @@ export default function AppointmentsPage() {
           )}
         </div>
       </div>
+
+      {/* Prescription Form Dialog */}
+      <PrescriptionForm
+        open={isPrescriptionFormOpen}
+        onOpenChange={setIsPrescriptionFormOpen}
+        onSubmit={async (prescriptionData) => {
+          try {
+            const prescriptionPayload = {
+              ...prescriptionData,
+              patientId:
+                selectedAppointment?.patientId?.toString() ||
+                prescriptionData.patientId,
+              appointmentId: selectedAppointment?.appointmentId?.toString(),
+            };
+
+            const response = await fetch('/api/prescriptions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(prescriptionPayload),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              handlePrescriptionCreated();
+            } else {
+              toast.error(result.error || 'Failed to create prescription');
+            }
+          } catch (error) {
+            console.error('Error creating prescription:', error);
+            toast.error('Failed to create prescription');
+          }
+        }}
+        initialData={null}
+        mode="create"
+        appointmentId={selectedAppointment?.appointmentId || null}
+        patientId={selectedAppointment?.patientId || null}
+      />
     </div>
   );
 }

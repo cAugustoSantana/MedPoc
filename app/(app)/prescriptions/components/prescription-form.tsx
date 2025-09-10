@@ -55,6 +55,8 @@ interface PrescriptionFormProps {
   onSubmit: (prescription: PrescriptionFormData) => void;
   initialData?: Prescription | null;
   mode: 'create' | 'edit';
+  appointmentId?: number | null;
+  patientId?: number | null;
 }
 
 export function PrescriptionForm({
@@ -63,6 +65,8 @@ export function PrescriptionForm({
   onSubmit,
   initialData,
   mode,
+  appointmentId,
+  patientId,
 }: PrescriptionFormProps) {
   const [formData, setFormData] = useState<PrescriptionFormData>({
     patientId: '',
@@ -140,7 +144,7 @@ export function PrescriptionForm({
       );
     } else {
       setFormData({
-        patientId: '',
+        patientId: patientId?.toString() || '',
         prescribedAt: new Date().toISOString().split('T')[0],
         notes: '',
         medications: [
@@ -156,7 +160,7 @@ export function PrescriptionForm({
       });
       setDate(new Date());
     }
-  }, [initialData, mode, open]);
+  }, [initialData, mode, open, patientId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,11 +224,18 @@ export function PrescriptionForm({
         <DialogHeader>
           <DialogTitle>
             {mode === 'edit' ? 'Edit Prescription' : 'New Prescription'}
+            {appointmentId && (
+              <span className="text-sm font-normal text-muted-foreground ml-2">
+                (from Appointment #{appointmentId})
+              </span>
+            )}
           </DialogTitle>
           <DialogDescription>
             {mode === 'edit'
               ? 'Update the prescription details below.'
-              : 'Fill in the details to create a new prescription.'}
+              : appointmentId
+                ? 'Create a prescription for this appointment. Patient and appointment are pre-selected.'
+                : 'Fill in the details to create a new prescription.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -244,7 +255,10 @@ export function PrescriptionForm({
                   placeholder="Select patient..."
                   searchPlaceholder="Search patients..."
                   emptyText="No patients found."
-                  disabled={patientsLoading}
+                  disabled={
+                    patientsLoading ||
+                    (appointmentId !== null && appointmentId !== undefined)
+                  }
                 />
               </div>
             </CardContent>
