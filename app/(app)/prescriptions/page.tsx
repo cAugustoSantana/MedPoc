@@ -37,6 +37,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from '@/components/ui/pagination';
 import { PrescriptionForm } from './components/prescription-form';
 import { PrescriptionDetails } from './components/prescription-details';
 import { DeleteConfirmDialog } from './components/delete-confirm-dialog';
@@ -80,6 +89,8 @@ export default function PrescriptionsPage() {
     useState<Prescription | null>(null);
   const [loading, setLoading] = useState(true);
   const [downloadingPDF, setDownloadingPDF] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   // Check authentication
   useEffect(() => {
@@ -160,6 +171,11 @@ export default function PrescriptionsPage() {
     }
   }, [fetchPrescriptions, isSignedIn]);
 
+  // Reset to first page when search or filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
+
   // Don't render anything while checking authentication
   if (!isLoaded || !isSignedIn) {
     return (
@@ -200,6 +216,15 @@ export default function PrescriptionsPage() {
     const matchesStatus = statusFilter === 'all';
     return matchesSearch && matchesStatus;
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredPrescriptions.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPrescriptions = filteredPrescriptions.slice(
+    startIndex,
+    endIndex
+  );
 
   const handleAddPrescription = async (
     prescriptionData: PrescriptionFormData
@@ -428,7 +453,7 @@ export default function PrescriptionsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredPrescriptions.map((prescription) => {
+                {currentPrescriptions.map((prescription) => {
                   const items = getPrescriptionItems(prescription);
                   return (
                     <TableRow key={prescription.prescriptionId}>
@@ -559,6 +584,91 @@ export default function PrescriptionsPage() {
               {searchTerm || statusFilter !== 'all'
                 ? 'No prescriptions found matching your criteria.'
                 : 'No prescriptions found. Create your first prescription to get started.'}
+            </div>
+          )}
+
+          {filteredPrescriptions.length > 0 && totalPages > 1 && (
+            <div className="flex items-center justify-between px-2 py-4">
+              <div className="text-sm text-muted-foreground">
+                Showing {startIndex + 1} to{' '}
+                {Math.min(endIndex, filteredPrescriptions.length)} of{' '}
+                {filteredPrescriptions.length} prescriptions
+              </div>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage > 1) {
+                          setCurrentPage(currentPage - 1);
+                        }
+                      }}
+                      className={
+                        currentPage <= 1 ? 'pointer-events-none opacity-50' : ''
+                      }
+                    />
+                  </PaginationItem>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => {
+                      // Show first page, last page, current page, and pages around current page
+                      const shouldShow =
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1);
+
+                      if (!shouldShow) {
+                        // Show ellipsis for gaps
+                        if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationEllipsis />
+                            </PaginationItem>
+                          );
+                        }
+                        return null;
+                      }
+
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setCurrentPage(page);
+                            }}
+                            isActive={currentPage === page}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    }
+                  )}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage < totalPages) {
+                          setCurrentPage(currentPage + 1);
+                        }
+                      }}
+                      className={
+                        currentPage >= totalPages
+                          ? 'pointer-events-none opacity-50'
+                          : ''
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           )}
         </CardContent>
