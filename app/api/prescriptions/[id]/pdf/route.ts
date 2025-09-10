@@ -5,6 +5,7 @@ import { getPrescriptionById } from '@/db/queries/prescriptions';
 import { getPrescriptionItemsByPrescriptionId } from '@/db/queries/prescription-items';
 import { getPatientByPatientId } from '@/db/queries/patients';
 import { getDoctorById } from '@/db/queries/doctors';
+import { getCurrentUserId } from '@/lib/auth-utils';
 
 export async function GET(
   request: NextRequest,
@@ -18,6 +19,16 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Get the current user's ID from authentication
+    const currentUserId = await getCurrentUserId();
+
+    if (!currentUserId) {
+      return NextResponse.json(
+        { error: 'User not found or onboarding incomplete' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     const prescriptionId = parseInt(id);
 
@@ -28,15 +39,11 @@ export async function GET(
       );
     }
 
-    // Fetch prescription data
-    const prescription = await getPrescriptionById(prescriptionId);
-
-    if (!prescription) {
-      return NextResponse.json(
-        { error: 'Prescription not found' },
-        { status: 404 }
-      );
-    }
+    // Fetch prescription data (this will also verify ownership)
+    const prescription = await getPrescriptionById(
+      prescriptionId,
+      currentUserId
+    );
 
     // Fetch prescription items
     const prescriptionItems =

@@ -4,7 +4,6 @@ import {
   getAllPrescriptions,
   createPrescription,
   getPrescriptionsByPatientId,
-  getPrescriptionsByDoctorId,
 } from '@/db/queries/prescriptions';
 import { createPrescriptionItem } from '@/db/queries/prescription-items';
 import { NewPrescription } from '@/types/prescription';
@@ -24,18 +23,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Get the current user's ID from authentication
+    const currentUserId = await getCurrentUserId();
+
+    if (!currentUserId) {
+      return NextResponse.json(
+        { success: false, error: 'User not found or onboarding incomplete' },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const patientId = searchParams.get('patientId');
-    const doctorId = searchParams.get('doctorId');
 
     let prescriptions;
 
     if (patientId) {
-      prescriptions = await getPrescriptionsByPatientId(parseInt(patientId));
-    } else if (doctorId) {
-      prescriptions = await getPrescriptionsByDoctorId(parseInt(doctorId));
+      prescriptions = await getPrescriptionsByPatientId(
+        parseInt(patientId),
+        currentUserId
+      );
     } else {
-      prescriptions = await getAllPrescriptions();
+      prescriptions = await getAllPrescriptions(currentUserId);
     }
 
     return NextResponse.json({ success: true, data: prescriptions });
@@ -83,6 +92,13 @@ export async function POST(request: NextRequest) {
 
     // Get the current user's ID from authentication
     const currentUserId = await getCurrentUserId();
+
+    if (!currentUserId) {
+      return NextResponse.json(
+        { success: false, error: 'User not found or onboarding incomplete' },
+        { status: 403 }
+      );
+    }
 
     const prescriptionData: NewPrescription = {
       uuid: randomUUID(),
