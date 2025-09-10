@@ -694,7 +694,11 @@ export default function PrescriptionsPage() {
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
         onConfirm={handleDeletePrescription}
-        prescriptionName={selectedPrescription?.notes || 'this prescription'}
+        prescriptionName={
+          selectedPrescription
+            ? getPatientName(selectedPrescription.patientId)
+            : 'this prescription'
+        }
       />
     </div>
   );

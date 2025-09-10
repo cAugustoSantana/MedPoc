@@ -2,6 +2,7 @@ import { db } from '../index';
 import { Prescription, NewPrescription } from '@/types/prescription';
 import { prescription } from '../migrations/schema';
 import { eq } from 'drizzle-orm';
+import { deletePrescriptionItemsByPrescriptionId } from './prescription-items';
 
 export async function getAllPrescriptions(): Promise<Prescription[]> {
   try {
@@ -65,6 +66,10 @@ export async function updatePrescription(
 
 export async function deletePrescription(id: number): Promise<void> {
   try {
+    // First, delete all prescription items associated with this prescription
+    await deletePrescriptionItemsByPrescriptionId(id);
+
+    // Then delete the prescription itself
     const [deletedPrescription] = await db
       .delete(prescription)
       .where(eq(prescription.prescriptionId, id))
