@@ -44,7 +44,7 @@ export async function createPatientAction(patientData: CreatePatientData) {
 }
 
 export async function updatePatientAction(
-  id: number,
+  uuid: string,
   patientData: UpdatePatientData
 ) {
   try {
@@ -65,7 +65,7 @@ export async function updatePatientAction(
       };
     }
 
-    const patient = await updatePatient(id, validation.data, doctorId);
+    const patient = await updatePatient(uuid, validation.data, doctorId);
     revalidatePath('/patient');
     return { success: true, data: patient };
   } catch (error) {

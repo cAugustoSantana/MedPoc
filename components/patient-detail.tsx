@@ -3,7 +3,7 @@ import AppointmentWidget from '@/components/patient-detail-widget/appoinmentsWid
 import TestsWidget from './patient-detail-widget/testsWidget';
 import MedicalRecordsWidget from './patient-detail-widget/medicalRecordsWidget';
 import EditPatientDialog from './edit-patient-dialog';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Phone, Mail, MapPin, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +21,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
   const [error, setError] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const loadPatient = async () => {
+  const loadPatient = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -51,7 +51,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [patientId]);
 
   const handlePatientUpdated = (updatedPatient: Patient) => {
     setPatient(updatedPatient);
@@ -61,7 +61,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     if (patientId) {
       loadPatient();
     }
-  }, [patientId]);
+  }, [patientId, loadPatient]);
 
   if (loading) {
     return (
