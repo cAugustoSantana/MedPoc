@@ -1,10 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,7 +9,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -32,105 +27,92 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { PlusIcon } from 'lucide-react';
-import {
-  createPatientSchema,
-  CreatePatientData,
-} from '@/lib/validations/patient';
-import { createPatientAction } from '@/app/(app)/patient/actions';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import type { Patient } from '@/types/patient';
 
-interface AddPatientDialogProps {
-  onPatientAdded: () => void;
+const patientSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email').optional().or(z.literal('')),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  dob: z.string().optional(),
+  gender: z.enum(['male', 'female', 'other', '']).optional(),
+});
+
+type PatientFormData = z.infer<typeof patientSchema>;
+
+interface EditPatientDialogProps {
+  patient: Patient;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onPatientUpdated: (updatedPatient: Patient) => void;
 }
 
-export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+export default function EditPatientDialog({
+  patient,
+  open,
+  onOpenChange,
+  onPatientUpdated,
+}: EditPatientDialogProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<CreatePatientData>({
-    resolver: zodResolver(createPatientSchema),
+  const form = useForm<PatientFormData>({
+    resolver: zodResolver(patientSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      dob: '',
+      name: patient.name || '',
+      email: patient.email || '',
+      phone: patient.phone || '',
+      address: patient.address || '',
+      dob: patient.dob ? new Date(patient.dob).toISOString().split('T')[0] : '',
       gender: '',
-      phone: '',
-      address: '',
     },
   });
 
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen);
-    if (!newOpen) {
-      // Reset form when dialog closes
-      form.reset();
-    }
-  };
-
-  const onSubmit = async (data: CreatePatientData) => {
-    setLoading(true);
-
+  const onSubmit = async (data: PatientFormData) => {
+    setIsSubmitting(true);
     try {
-      const result = await createPatientAction(data);
-
-      if (!result.success) {
-        if (result.details) {
-          result.details.forEach((error) => {
-            toast.error('Validation Error', {
-              description: error,
-              duration: 5000,
-            });
-          });
-        } else {
-          toast.error('Failed to create patient', {
-            description:
-              result.error || 'Please check your input and try again.',
-            duration: 5000,
-          });
-        }
-        return;
-      }
-
-      toast.success(`Patient created successfully!`, {
-        description: `${data.name} has been added to the system.`,
-        duration: 5000,
+      const response = await fetch(`/api/patient/${patient.uuid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          dob: data.dob ? new Date(data.dob).toISOString() : null,
+        }),
       });
-      form.reset();
-      setOpen(false);
-      onPatientAdded();
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success('Patient updated successfully');
+        onPatientUpdated(result);
+        onOpenChange(false);
+      } else {
+        toast.error('Failed to update patient', {
+          description: result.error || 'Please try again.',
+        });
+      }
     } catch (error) {
-      console.error('Error creating patient:', error);
-      toast.error('Failed to create patient', {
-        description: 'An unexpected error occurred. Please try again.',
-        duration: 5000,
+      console.error('Error updating patient:', error);
+      toast.error('Failed to update patient', {
+        description: 'Please check your connection and try again.',
       });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button className="flex items-center gap-2">
-          <PlusIcon className="h-4 w-4" />
-          Add Patient
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Patient</DialogTitle>
+          <DialogTitle>Edit Patient</DialogTitle>
           <DialogDescription>
-            Fill in the patient information below. Click save when you&apos;re
-            done.
+            Update patient information. Click save when you &apos;re done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -148,6 +130,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="email"
@@ -165,63 +148,35 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
-              name="dob"
+              name="phone"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Date of Birth</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            'w-full pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          {field.value ? (
-                            format(new Date(field.value + 'T00:00:00'), 'PPP')
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={
-                          field.value
-                            ? new Date(field.value + 'T00:00:00')
-                            : undefined
-                        }
-                        onSelect={(date) => {
-                          if (date) {
-                            const year = date.getFullYear();
-                            const month = String(date.getMonth() + 1).padStart(
-                              2,
-                              '0'
-                            );
-                            const day = String(date.getDate()).padStart(2, '0');
-                            field.onChange(`${year}-${month}-${day}`);
-                          } else {
-                            field.onChange('');
-                          }
-                        }}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
-                        captionLayout="dropdown"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter phone number" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date of Birth</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="gender"
@@ -238,6 +193,9 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                      <SelectItem value="not-specified">
+                        Not specified
+                      </SelectItem>
                       <SelectItem value="male">Male</SelectItem>
                       <SelectItem value="female">Female</SelectItem>
                       <SelectItem value="other">Other</SelectItem>
@@ -247,19 +205,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <Input type="tel" placeholder="(123) 456-7890" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <FormField
               control={form.control}
               name="address"
@@ -268,7 +214,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                   <FormLabel>Address</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter full address"
+                      placeholder="Enter address"
                       className="resize-none"
                       {...field}
                     />
@@ -277,19 +223,18 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 </FormItem>
               )}
             />
+
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => {
-                  form.reset();
-                  setOpen(false);
-                }}
+                onClick={() => onOpenChange(false)}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? 'Saving...' : 'Save Patient'}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Saving...' : 'Save Changes'}
               </Button>
             </DialogFooter>
           </form>

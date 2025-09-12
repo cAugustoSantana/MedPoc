@@ -2,6 +2,7 @@
 import AppointmentWidget from '@/components/patient-detail-widget/appoinmentsWidget';
 import TestsWidget from './patient-detail-widget/testsWidget';
 import MedicalRecordsWidget from './patient-detail-widget/medicalRecordsWidget';
+import EditPatientDialog from './edit-patient-dialog';
 import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const loadPatient = async () => {
     setLoading(true);
@@ -49,6 +51,10 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePatientUpdated = (updatedPatient: Patient) => {
+    setPatient(updatedPatient);
   };
 
   useEffect(() => {
@@ -118,7 +124,12 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                 <CardTitle className="text-2xl font-bold">
                   Patient Details
                 </CardTitle>
-                <Button variant="outline">Edit Patient</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditDialogOpen(true)}
+                >
+                  Edit Patient
+                </Button>
               </div>
             </CardHeader>
             <CardContent>
@@ -214,6 +225,13 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
         {/* Tests Section */}
         <TestsWidget />
       </div>
+
+      <EditPatientDialog
+        patient={patient}
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        onPatientUpdated={handlePatientUpdated}
+      />
     </main>
   );
 }
