@@ -82,7 +82,7 @@ export async function PUT(
 
     // Implement this to perform the update in your DB layer.
     // Signature suggestion: updatePatientById(uuid: string, doctorId: string, data: Record<string, unknown>)
-    const updated = await updatePatient(uuid, doctorId, payload);
+    const updated = await updatePatient(uuid, payload, doctorId);
 
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
