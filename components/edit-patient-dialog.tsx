@@ -39,7 +39,7 @@ const patientSchema = z.object({
   phone: z.string().optional(),
   address: z.string().optional(),
   dob: z.string().optional(),
-  gender: z.enum(['male', 'female', 'other', '']).optional(),
+  gender: z.enum(['male', 'female', 'other', 'not-specified']).optional(),
 });
 
 type PatientFormData = z.infer<typeof patientSchema>;
@@ -67,11 +67,13 @@ export default function EditPatientDialog({
       phone: patient.phone || '',
       address: patient.address || '',
       dob: patient.dob ? new Date(patient.dob).toISOString().split('T')[0] : '',
-      gender: '',
+      gender:
+        (patient.gender as 'male' | 'female' | 'other' | 'not-specified') ||
+        'not-specified',
     },
   });
 
-  const onSubmit = async (data: PatientFormData) => {
+  const onSubmit = async (data: PatientFormData): Promise<void> => {
     setIsSubmitting(true);
     try {
       const response = await fetch(`/api/patient/${patient.uuid}`, {
@@ -82,6 +84,7 @@ export default function EditPatientDialog({
         body: JSON.stringify({
           ...data,
           dob: data.dob ? new Date(data.dob).toISOString() : null,
+          gender: data.gender === 'not-specified' ? null : data.gender,
         }),
       });
 
@@ -89,7 +92,7 @@ export default function EditPatientDialog({
 
       if (response.ok) {
         toast.success('Patient updated successfully');
-        onPatientUpdated(result);
+        onPatientUpdated(result.data);
         onOpenChange(false);
       } else {
         toast.error('Failed to update patient', {
