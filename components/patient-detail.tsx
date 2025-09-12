@@ -116,7 +116,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
           Patient Details
         </h1>
 
-        <div className="container mx-auto p-6 max-w-4xl space-y-6">
+        <div className="space-y-6">
           {/* Patient Info Card */}
           <Card>
             <CardHeader>
@@ -153,7 +153,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                       <p className="font-medium text-muted-foreground">
                         Gender
                       </p>
-                      <p className="text-lg">
+                      <p className="text-lg capitalize">
                         {patient.gender || 'Not specified'}
                       </p>
                     </div>
@@ -217,13 +217,13 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
           </Card>
         </div>
 
-        <MedicalRecordsWidget />
-        {/* Appointments Section */}
-        <br></br>
-        <AppointmentWidget />
-        <br></br>
-        {/* Tests Section */}
-        <TestsWidget />
+        <div className="mt-6 space-y-6">
+          <MedicalRecordsWidget />
+          {/* Appointments Section */}
+          <AppointmentWidget />
+          {/* Tests Section */}
+          <TestsWidget />
+        </div>
       </div>
 
       <EditPatientDialog
