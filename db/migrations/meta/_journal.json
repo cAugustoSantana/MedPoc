@@ -27,6 +27,13 @@
       "when": 1756333597708,
       "tag": "0003_wild_adam_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1757471123364,
+      "tag": "0004_military_husk",
+      "breakpoints": true
     }
   ]
 }

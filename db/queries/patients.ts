@@ -2,6 +2,7 @@ import { Patient, NewPatient } from '@/types/patient';
 import { db } from '../index';
 import { patient, doctorPatient } from '../migrations/schema';
 import { eq, and } from 'drizzle-orm';
+import { randomUUID } from 'crypto';
 
 export async function getAllPatients(doctorId: number): Promise<Patient[]> {
   const patients = await db
@@ -85,6 +86,7 @@ export async function createPatient(
 
     // Create the doctor-patient relationship
     await tx.insert(doctorPatient).values({
+      uuid: randomUUID(),
       doctorId: doctorId,
       patientId: createdPatient[0].patientId,
     });

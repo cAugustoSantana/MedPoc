@@ -164,18 +164,6 @@ export const imagingTestRelations = relations(imagingTest, ({ one, many }) => ({
 export const prescriptionItemRelations = relations(
   prescriptionItem,
   ({ one }) => ({
-    dosageDetail: one(dosageDetail, {
-      fields: [prescriptionItem.dosageDetailId],
-      references: [dosageDetail.dosageDetailId],
-    }),
-    drug: one(drug, {
-      fields: [prescriptionItem.drugId],
-      references: [drug.drugId],
-    }),
-    frequencyDetail: one(frequencyDetail, {
-      fields: [prescriptionItem.frequencyDetailId],
-      references: [frequencyDetail.frequencyDetailId],
-    }),
     prescription: one(prescription, {
       fields: [prescriptionItem.prescriptionId],
       references: [prescription.prescriptionId],

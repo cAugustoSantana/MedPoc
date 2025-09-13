@@ -21,15 +21,7 @@ import {
 } from 'lucide-react';
 import { Patient } from '@/types/patient';
 import { Prescription } from '@/types/prescription';
-
-interface Medication {
-  id: string;
-  name: string;
-  dosage: string;
-  frequency: string;
-  duration: string;
-  instructions: string;
-}
+import { PrescriptionItem } from '@/types/prescription-item';
 
 interface PrescriptionDetailsProps {
   open: boolean;
@@ -43,7 +35,9 @@ export function PrescriptionDetails({
   prescription,
 }: PrescriptionDetailsProps) {
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [medications, setMedications] = useState<Medication[]>([]);
+  const [prescriptionItems, setPrescriptionItems] = useState<
+    PrescriptionItem[]
+  >([]);
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
 
   // Fetch patients on component mount
@@ -51,20 +45,10 @@ export function PrescriptionDetails({
     fetchPatients();
   }, []);
 
-  // Mock medications data for now - in a real app, this would come from prescription items
+  // Fetch prescription items when prescription changes
   useEffect(() => {
-    if (prescription) {
-      // For now, we'll use mock data since we haven't implemented prescription items yet
-      setMedications([
-        {
-          id: '1',
-          name: 'Amoxicillin',
-          dosage: '500mg',
-          frequency: '3 times daily',
-          duration: '7 days',
-          instructions: 'Take with food',
-        },
-      ]);
+    if (prescription?.prescriptionId) {
+      fetchPrescriptionItems(prescription.prescriptionId);
     }
   }, [prescription]);
 
@@ -81,6 +65,24 @@ export function PrescriptionDetails({
     } catch (error) {
       console.error('Error fetching patients:', error);
       setPatients([]);
+    }
+  };
+
+  const fetchPrescriptionItems = async (prescriptionId: number) => {
+    try {
+      const response = await fetch(
+        `/api/prescriptions/${prescriptionId}/items`
+      );
+      const result = await response.json();
+
+      if (result.success) {
+        setPrescriptionItems(result.data);
+      } else {
+        setPrescriptionItems([]);
+      }
+    } catch (error) {
+      console.error('Error fetching prescription items:', error);
+      setPrescriptionItems([]);
     }
   };
 
@@ -191,42 +193,58 @@ export function PrescriptionDetails({
           <div className="space-y-3">
             <h4 className="font-medium flex items-center gap-2">
               <Pill className="h-4 w-4" />
-              Medications ({medications.length})
+              Medications ({prescriptionItems.length})
             </h4>
             <div className="space-y-4">
-              {medications.map((medication, index) => (
-                <div
-                  key={medication.id}
-                  className="border rounded-lg p-4 space-y-2"
-                >
-                  <div className="flex items-center justify-between">
-                    <h5 className="font-medium text-base">{medication.name}</h5>
-                    <Badge variant="outline">Medication {index + 1}</Badge>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-muted-foreground">Dosage:</span>
-                      <div className="font-medium">{medication.dosage}</div>
+              {prescriptionItems.length > 0 ? (
+                prescriptionItems.map((item, index) => (
+                  <div
+                    key={item.itemId}
+                    className="border rounded-lg p-4 space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h5 className="font-medium text-base">
+                        {item.drugName || 'Unknown Medication'}
+                      </h5>
+                      <Badge variant="outline">Medication {index + 1}</Badge>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground">Frequency:</span>
-                      <div className="font-medium">{medication.frequency}</div>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Duration:</span>
-                      <div className="font-medium">{medication.duration}</div>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">
-                        Instructions:
-                      </span>
-                      <div className="font-medium">
-                        {medication.instructions || 'No specific instructions'}
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Dosage:</span>
+                        <div className="font-medium">
+                          {item.dosage || 'Not specified'}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">
+                          Frequency:
+                        </span>
+                        <div className="font-medium">
+                          {item.frequency || 'Not specified'}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Duration:</span>
+                        <div className="font-medium">
+                          {item.duration || 'Not specified'}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">
+                          Instructions:
+                        </span>
+                        <div className="font-medium">
+                          {item.instructions || 'No specific instructions'}
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No medications found for this prescription.
                 </div>
-              ))}
+              )}
             </div>
           </div>
 

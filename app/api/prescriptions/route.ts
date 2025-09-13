@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import {
-  getAllPrescriptions,
+  getAllPrescriptionsWithItems,
   createPrescription,
   getPrescriptionsByPatientId,
-  getPrescriptionsByDoctorId,
 } from '@/db/queries/prescriptions';
+import { createPrescriptionItem } from '@/db/queries/prescription-items';
 import { NewPrescription } from '@/types/prescription';
+import { NewPrescriptionItem } from '@/types/prescription-item';
+import { getCurrentUserId } from '@/lib/auth-utils';
+import { randomUUID } from 'crypto';
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,18 +23,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Get the current user's ID from authentication
+    const currentUserId = await getCurrentUserId();
+
+    if (!currentUserId) {
+      return NextResponse.json(
+        { success: false, error: 'User not found or onboarding incomplete' },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const patientId = searchParams.get('patientId');
-    const doctorId = searchParams.get('doctorId');
 
     let prescriptions;
 
     if (patientId) {
-      prescriptions = await getPrescriptionsByPatientId(parseInt(patientId));
-    } else if (doctorId) {
-      prescriptions = await getPrescriptionsByDoctorId(parseInt(doctorId));
+      prescriptions = await getPrescriptionsByPatientId(
+        parseInt(patientId),
+        currentUserId
+      );
     } else {
-      prescriptions = await getAllPrescriptions();
+      prescriptions = await getAllPrescriptionsWithItems(currentUserId);
     }
 
     return NextResponse.json({ success: true, data: prescriptions });
@@ -66,18 +79,65 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (
+      !body.medications ||
+      !Array.isArray(body.medications) ||
+      body.medications.length === 0
+    ) {
+      return NextResponse.json(
+        { success: false, error: 'At least one medication is required' },
+        { status: 400 }
+      );
+    }
+
+    // Get the current user's ID from authentication
+    const currentUserId = await getCurrentUserId();
+
+    if (!currentUserId) {
+      return NextResponse.json(
+        { success: false, error: 'User not found or onboarding incomplete' },
+        { status: 403 }
+      );
+    }
+
     const prescriptionData: NewPrescription = {
+      uuid: randomUUID(),
       patientId: parseInt(body.patientId),
-      appUserId: body.appUserId ? parseInt(body.appUserId) : null, // Optional, can be set by system
+      appUserId: currentUserId, // Set to current authenticated user
       appointmentId: body.appointmentId ? parseInt(body.appointmentId) : null,
       prescribedAt: body.prescribedAt || new Date().toISOString(),
       notes: body.notes || null,
     };
 
+    // Create the prescription
     const newPrescription = await createPrescription(prescriptionData);
 
+    // Create prescription items for each medication
+    const prescriptionItems = [];
+    for (const medication of body.medications) {
+      if (medication.name && medication.dosage && medication.frequency) {
+        const itemData: NewPrescriptionItem = {
+          prescriptionId: newPrescription.prescriptionId,
+          drugName: medication.name,
+          dosage: medication.dosage,
+          frequency: medication.frequency,
+          duration: medication.duration || null,
+          instructions: medication.instructions || null,
+        };
+
+        const newItem = await createPrescriptionItem(itemData);
+        prescriptionItems.push(newItem);
+      }
+    }
+
     return NextResponse.json(
-      { success: true, data: newPrescription },
+      {
+        success: true,
+        data: {
+          ...newPrescription,
+          items: prescriptionItems,
+        },
+      },
       { status: 201 }
     );
   } catch (error) {
