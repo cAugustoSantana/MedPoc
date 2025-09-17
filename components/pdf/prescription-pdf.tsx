@@ -228,15 +228,10 @@ export const PrescriptionPDF: React.FC<PrescriptionData> = ({
           prescriptionItems.map((item, index) => (
             <View key={index} style={styles.tableRow}>
               <Text style={styles.medicationName}>
-                {item.drugName || 'Unknown Medication'}{' '}
-                {item.drugStrength ? `(${item.drugStrength})` : ''}
+                {item.drugName || 'Unknown Medication'}
               </Text>
-              <Text style={styles.dosage}>
-                {item.dosageDescription || 'N/A'}
-              </Text>
-              <Text style={styles.frequency}>
-                {item.frequencyDescription || 'N/A'}
-              </Text>
+              <Text style={styles.dosage}>{item.dosage || 'N/A'}</Text>
+              <Text style={styles.frequency}>{item.frequency || 'N/A'}</Text>
               <Text style={styles.duration}>{item.duration || 'N/A'}</Text>
               <Text style={styles.instructions}>
                 {item.instructions || 'As directed'}

@@ -2,6 +2,7 @@ import { Patient, NewPatient } from '@/types/patient';
 import { db } from '../index';
 import { patient, doctorPatient } from '../migrations/schema';
 import { eq, and } from 'drizzle-orm';
+import { randomUUID } from 'crypto';
 
 export async function getAllPatients(doctorId: number): Promise<Patient[]> {
   const patients = await db
@@ -85,6 +86,7 @@ export async function createPatient(
 
     // Create the doctor-patient relationship
     await tx.insert(doctorPatient).values({
+      uuid: randomUUID(),
       doctorId: doctorId,
       patientId: createdPatient[0].patientId,
     });
@@ -97,7 +99,7 @@ export async function createPatient(
 }
 
 export async function updatePatient(
-  id: number,
+  uuid: string,
   updatedPatient: Partial<NewPatient>,
   doctorId: number
 ): Promise<Patient> {
@@ -106,7 +108,7 @@ export async function updatePatient(
     .select({ patientId: patient.patientId })
     .from(patient)
     .innerJoin(doctorPatient, eq(patient.patientId, doctorPatient.patientId))
-    .where(and(eq(patient.patientId, id), eq(doctorPatient.doctorId, doctorId)))
+    .where(and(eq(patient.uuid, uuid), eq(doctorPatient.doctorId, doctorId)))
     .limit(1);
 
   if (!patientCheck.length) {
@@ -116,7 +118,7 @@ export async function updatePatient(
   const updatedPatientResult = await db
     .update(patient)
     .set(updatedPatient)
-    .where(eq(patient.patientId, id))
+    .where(eq(patient.uuid, uuid))
     .returning();
   console.log('Updated patient:', updatedPatientResult);
   return updatedPatientResult[0];
