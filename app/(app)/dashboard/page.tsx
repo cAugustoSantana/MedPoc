@@ -22,9 +22,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Patient } from '@/types/patient';
+import { getTranslations, t } from '@/lib/translations';
 
 export default async function DashboardPage() {
   const { userId } = await auth();
+  const translations = await getTranslations();
 
   if (!userId) {
     redirect('/sign-in');
@@ -60,7 +62,9 @@ export default async function DashboardPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    {t(translations, 'Navigation.dashboard')}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -100,7 +104,9 @@ export default async function DashboardPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                <BreadcrumbPage>
+                  {t(translations, 'Navigation.dashboard')}
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -110,7 +116,7 @@ export default async function DashboardPage() {
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Schedule</CardTitle>
+              <CardTitle>{t(translations, 'Dashboard.schedule')}</CardTitle>
             </CardHeader>
             <CardContent>
               <Calendar />
@@ -119,20 +125,22 @@ export default async function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Quick Stats</CardTitle>
+              <CardTitle>{t(translations, 'Dashboard.quickStats')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span>Total Patients:</span>
+                  <span>{t(translations, 'Dashboard.totalPatients')}:</span>
                   <span className="font-semibold">{patientsData.length}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Today&apos;s Appointments:</span>
+                  <span>{t(translations, 'Dashboard.todayAppointments')}:</span>
                   <span className="font-semibold">0</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Pending Prescriptions:</span>
+                  <span>
+                    {t(translations, 'Dashboard.pendingPrescriptions')}:
+                  </span>
                   <span className="font-semibold">0</span>
                 </div>
               </div>
@@ -141,18 +149,18 @@ export default async function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t(translations, 'Dashboard.quickActions')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <Button className="w-full" variant="outline">
-                  Add Patient
+                  {t(translations, 'Dashboard.addPatient')}
                 </Button>
                 <Button className="w-full" variant="outline">
-                  Schedule Appointment
+                  {t(translations, 'Dashboard.scheduleAppointment')}
                 </Button>
                 <Button className="w-full" variant="outline">
-                  New Prescription
+                  {t(translations, 'Dashboard.newPrescription')}
                 </Button>
               </div>
             </CardContent>
@@ -161,16 +169,16 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Patients</CardTitle>
+            <CardTitle>{t(translations, 'Dashboard.recentPatients')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Gender</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Date of Birth</TableHead>
+                  <TableHead>{t(translations, 'Common.name')}</TableHead>
+                  <TableHead>{t(translations, 'Common.gender')}</TableHead>
+                  <TableHead>{t(translations, 'Common.email')}</TableHead>
+                  <TableHead>{t(translations, 'Common.dateOfBirth')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -189,7 +197,7 @@ export default async function DashboardPage() {
                       colSpan={4}
                       className="text-center text-gray-500"
                     >
-                      No patients found
+                      {t(translations, 'Dashboard.noPatientsFound')}
                     </TableCell>
                   </TableRow>
                 )}
