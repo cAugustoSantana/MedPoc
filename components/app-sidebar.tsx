@@ -22,24 +22,24 @@ import {
 import { useTranslations } from '@/hooks/use-translations';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { t } = useTranslations();
+  const { t, isLoading } = useTranslations();
 
   const data = {
     navMain: [
       {
-        title: t('Navigation.dashboard'),
+        title: isLoading ? 'Dashboard' : t('Navigation.dashboard'),
         url: '/dashboard',
         icon: Home,
         isActive: true,
       },
       {
-        title: t('Navigation.patients'),
+        title: isLoading ? 'Patients' : t('Navigation.patients'),
         url: '/patient',
         icon: UsersRound,
         isActive: true,
       },
       {
-        title: t('Navigation.appointments'),
+        title: isLoading ? 'Appointments' : t('Navigation.appointments'),
         url: '/appointments',
         icon: Calendar,
         isActive: true,
@@ -51,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: true,
       },
       {
-        title: t('Navigation.prescriptions'),
+        title: isLoading ? 'Prescriptions' : t('Navigation.prescriptions'),
         url: '/prescriptions',
         icon: Pill,
         isActive: true,

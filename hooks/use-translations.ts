@@ -9,6 +9,7 @@ export function useTranslations() {
     string,
     unknown
   > | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Get locale from cookie
@@ -19,16 +20,19 @@ export function useTranslations() {
         ?.split('=')[1] || 'en';
 
     setLocale(savedLocale);
+    setIsLoading(true);
 
     // Load translations based on locale
     import(`../messages/${savedLocale}.json`)
       .then((module) => {
         setTranslations(module.default);
+        setIsLoading(false);
       })
       .catch(() => {
         // Fallback to English if locale file doesn't exist
         import('../messages/en.json').then((module) => {
           setTranslations(module.default);
+          setIsLoading(false);
         });
       });
   }, []);
@@ -50,5 +54,5 @@ export function useTranslations() {
     return typeof value === 'string' ? value : key;
   };
 
-  return { t, locale };
+  return { t, locale, isLoading };
 }

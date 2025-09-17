@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Globe } from 'lucide-react';
+import { Globe, Loader2 } from 'lucide-react';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -17,6 +17,7 @@ const languages = [
 
 export function LanguageSwitcher() {
   const [locale, setLocale] = useState('en');
+  const [isChanging, setIsChanging] = useState(false);
 
   useEffect(() => {
     // Get locale from cookie or default to 'en'
@@ -29,6 +30,10 @@ export function LanguageSwitcher() {
   }, []);
 
   const handleLanguageChange = (newLocale: string) => {
+    if (newLocale === locale) return;
+
+    setIsChanging(true);
+
     // Save locale to cookie
     document.cookie = `locale=${newLocale}; path=/; max-age=31536000`;
     setLocale(newLocale);
@@ -42,8 +47,12 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Globe className="h-4 w-4 mr-2" />
+        <Button variant="outline" size="sm" disabled={isChanging}>
+          {isChanging ? (
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <Globe className="h-4 w-4 mr-2" />
+          )}
           {currentLanguage?.flag} {currentLanguage?.name}
         </Button>
       </DropdownMenuTrigger>
@@ -53,6 +62,7 @@ export function LanguageSwitcher() {
             key={language.code}
             onClick={() => handleLanguageChange(language.code)}
             className={locale === language.code ? 'bg-accent' : ''}
+            disabled={isChanging}
           >
             <span className="mr-2">{language.flag}</span>
             {language.name}
