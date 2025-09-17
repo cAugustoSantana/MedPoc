@@ -18,6 +18,7 @@ A comprehensive medical practice management system built with Next.js, featuring
 - **Prescription Management**: Track prescriptions and medication history
 - **Dashboard**: Overview with quick stats and recent activity
 - **Responsive Design**: Mobile-friendly interface with sidebar navigation
+- **Internationalization**: English and Spanish language support with smooth switching
 
 ### 🛠 Technical Stack
 
@@ -199,6 +200,36 @@ pnpm db:generate      # Generate migrations
 pnpm db:migrate       # Run migrations
 pnpm db:push          # Push schema changes
 pnpm db:studio        # Open Drizzle Studio
+```
+
+## 🌍 Internationalization (i18n)
+
+MedPoc supports **English and Spanish** languages with a simple, cookie-based approach:
+
+- **Language Switcher**: Located in the sidebar for easy access
+- **Persistent Choice**: Language preference saved in cookies
+- **Smooth Switching**: Loading states prevent flash of untranslated content
+- **Server & Client Support**: Works with both SSR and CSR components
+
+### i18n Documentation
+
+- **[Complete Implementation Guide](docs/I18N_IMPLEMENTATION.md)** - Detailed explanation of the i18n architecture
+- **[Quick Reference Guide](docs/I18N_QUICK_REFERENCE.md)** - Developer quick reference for adding translations
+
+### Adding New Translations
+
+```typescript
+// 1. Add to translation files
+// messages/en.json
+{ "MyFeature": { "title": "My Feature" } }
+
+// messages/es.json
+{ "MyFeature": { "title": "Mi Característica" } }
+
+// 2. Use in components
+const { t } = useTranslations(); // Client
+const translations = await getTranslations(); // Server
+return <h1>{t('MyFeature.title')}</h1>;
 ```
 
 ## 📚 Additional Resources
