@@ -21,7 +21,10 @@
     "dashboard": "Panel de Control",
     "patients": "Pacientes",
     "appointments": "Citas",
-    "prescriptions": "Recetas"
+    "prescriptions": "Recetas",
+    "records": "Registros",
+    "tests": "Pruebas",
+    "settings": "Configuración"
   },
   "Dashboard": {
     "schedule": "Horario",

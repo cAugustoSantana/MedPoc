@@ -21,7 +21,10 @@
     "dashboard": "Dashboard",
     "patients": "Patients",
     "appointments": "Appointments",
-    "prescriptions": "Prescriptions"
+    "prescriptions": "Prescriptions",
+    "records": "Records",
+    "tests": "Tests",
+    "settings": "Settings"
   },
   "Dashboard": {
     "schedule": "Schedule",

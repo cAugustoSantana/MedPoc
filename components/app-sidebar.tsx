@@ -1,16 +1,4 @@
-'use client';
-
 import * as React from 'react';
-import {
-  Calendar,
-  Home,
-  Pill,
-  Settings,
-  SquareLibrary,
-  UsersRound,
-} from 'lucide-react';
-
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import {
@@ -19,53 +7,57 @@ import {
   SidebarFooter,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { useTranslations } from '@/hooks/use-translations';
+import { getTranslations, t } from '@/lib/translations';
+import { NavMainClient } from '@/components/nav-main-client';
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { t, isLoading } = useTranslations();
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  // Get translations server-side to prevent flashing
+  const translations = await getTranslations();
 
-  const data = {
+  const navData = {
     navMain: [
       {
-        title: isLoading ? 'Dashboard' : t('Navigation.dashboard'),
+        title: t(translations, 'Navigation.dashboard'),
         url: '/dashboard',
-        icon: Home,
+        iconName: 'Home',
         isActive: true,
       },
       {
-        title: isLoading ? 'Patients' : t('Navigation.patients'),
+        title: t(translations, 'Navigation.patients'),
         url: '/patient',
-        icon: UsersRound,
+        iconName: 'UsersRound',
         isActive: true,
       },
       {
-        title: isLoading ? 'Appointments' : t('Navigation.appointments'),
+        title: t(translations, 'Navigation.appointments'),
         url: '/appointments',
-        icon: Calendar,
+        iconName: 'Calendar',
         isActive: true,
       },
       {
-        title: 'Records',
+        title: t(translations, 'Navigation.records'),
         url: '/records',
-        icon: SquareLibrary,
+        iconName: 'SquareLibrary',
         isActive: true,
       },
       {
-        title: isLoading ? 'Prescriptions' : t('Navigation.prescriptions'),
+        title: t(translations, 'Navigation.prescriptions'),
         url: '/prescriptions',
-        icon: Pill,
+        iconName: 'Pill',
         isActive: true,
       },
       {
-        title: 'Tests',
+        title: t(translations, 'Navigation.tests'),
         url: '#',
-        icon: Home,
+        iconName: 'Home',
         isActive: true,
       },
       {
-        title: 'Settings',
+        title: t(translations, 'Navigation.settings'),
         url: '#',
-        icon: Settings,
+        iconName: 'Settings',
         isActive: true,
       },
     ],
@@ -74,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMainClient items={navData.navMain} />
         <div className="p-4">
           <LanguageSwitcher />
         </div>
