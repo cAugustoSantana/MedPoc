@@ -67,11 +67,11 @@ export async function AppSidebar({
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
         <NavMainClient items={navData.navMain} />
-        <div className="p-4">
-          <LanguageSwitcher />
-        </div>
       </SidebarContent>
       <SidebarFooter>
+        <div className="p-2">
+          <LanguageSwitcher />
+        </div>
         <NavUser />
       </SidebarFooter>
       <SidebarRail />

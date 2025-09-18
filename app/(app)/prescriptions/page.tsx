@@ -408,7 +408,7 @@ export default function PrescriptionsPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
@@ -422,7 +422,7 @@ export default function PrescriptionsPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="flex flex-1 flex-col gap-4 p-4">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Prescriptions</h1>

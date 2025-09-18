@@ -61,40 +61,48 @@ export default function PatientPage() {
   // Don't render anything while checking authentication
   if (!isLoaded || !isSignedIn) {
     return (
-      <main className="min-h-screen bg-gray-100 p-4">
-        <div className="w-full max-w-6xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading...</div>
-          </div>
+      <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-muted-foreground">Loading...</div>
         </div>
-      </main>
+      </div>
     );
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-100 p-4">
-        <div className="w-full max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">Patients</h1>
-          <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading patients...</div>
+      <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Patients</h1>
+            <p className="text-muted-foreground">
+              Manage your patient records and information
+            </p>
           </div>
         </div>
-      </main>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-muted-foreground">Loading patients...</div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6">Patients</h1>
-        <PatientTable
-          data={patientsData}
-          addPatientComponent={
-            <PatientActions onPatientAdded={handlePatientAdded} />
-          }
-        />
+    <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Patients</h1>
+          <p className="text-muted-foreground">
+            Manage your patient records and information
+          </p>
+        </div>
       </div>
-    </main>
+      <PatientTable
+        data={patientsData}
+        addPatientComponent={
+          <PatientActions onPatientAdded={handlePatientAdded} />
+        }
+      />
+    </div>
   );
 }

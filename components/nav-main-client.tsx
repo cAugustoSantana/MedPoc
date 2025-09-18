@@ -9,6 +9,7 @@ import {
   SquareLibrary,
   UsersRound,
 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 import { Collapsible } from '@/components/ui/collapsible';
 import {
@@ -43,6 +44,12 @@ export function NavMainClient({
     }[];
   }[];
 }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <SidebarGroup>
       <SidebarHeader>
@@ -68,7 +75,7 @@ export function NavMainClient({
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
+              defaultOpen={isClient ? item.isActive : false}
               className="group/collapsible"
             >
               <SidebarMenuItem>
