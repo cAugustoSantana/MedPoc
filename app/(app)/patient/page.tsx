@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
 import PatientTable from '@/components/patient-table';
 import { PatientActions } from '@/components/patient-actions';
 import { Patient } from '@/types/patient';
 import { toast } from 'sonner';
+import { useOnboardingCheck } from '@/hooks/use-onboarding-check';
 
 export default function PatientPage() {
-  const { isSignedIn, isLoaded } = useAuth();
-  const router = useRouter();
+  const { isReady } = useOnboardingCheck();
   const [patientsData, setPatientsData] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -39,27 +37,20 @@ export default function PatientPage() {
     }
   };
 
-  // Check authentication
+  // Load patients when ready
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/sign-in');
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  // Load patients when authenticated
-  useEffect(() => {
-    if (isSignedIn) {
+    if (isReady) {
       loadPatients();
     }
-  }, [isSignedIn]);
+  }, [isReady]);
 
   const handlePatientAdded = () => {
     // Refresh the patient list when a new patient is added
     loadPatients();
   };
 
-  // Don't render anything while checking authentication
-  if (!isLoaded || !isSignedIn) {
+  // Don't render anything while checking authentication or onboarding
+  if (!isReady) {
     return (
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-center h-64">

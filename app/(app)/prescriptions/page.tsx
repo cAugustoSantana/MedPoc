@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { useOnboardingCheck } from '@/hooks/use-onboarding-check';
 import {
   Plus,
   Search,
@@ -79,8 +78,7 @@ type PrescriptionWithFormData = Omit<Prescription, 'patientId'> & {
 };
 
 export default function PrescriptionsPage() {
-  const { isSignedIn, isLoaded } = useAuth();
-  const router = useRouter();
+  const { isReady } = useOnboardingCheck();
   const [prescriptions, setPrescriptions] = useState<
     (Prescription & { items: PrescriptionItem[] })[]
   >([]);
@@ -106,13 +104,6 @@ export default function PrescriptionsPage() {
   const [loadingDelete, setLoadingDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-
-  // Check authentication
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/sign-in');
-    }
-  }, [isLoaded, isSignedIn, router]);
 
   const fetchPrescriptions = useCallback(async () => {
     try {
@@ -153,19 +144,19 @@ export default function PrescriptionsPage() {
 
   // Fetch prescriptions and patients on component mount
   useEffect(() => {
-    if (isSignedIn) {
+    if (isReady) {
       fetchPrescriptions();
       fetchPatients();
     }
-  }, [fetchPrescriptions, isSignedIn]);
+  }, [fetchPrescriptions, isReady]);
 
   // Reset to first page when search or filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, statusFilter]);
 
-  // Don't render anything while checking authentication
-  if (!isLoaded || !isSignedIn) {
+  // Don't render anything while checking authentication or onboarding
+  if (!isReady) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-gray-500">Loading...</div>
