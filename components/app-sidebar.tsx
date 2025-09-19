@@ -1,78 +1,77 @@
-'use client';
-
 import * as React from 'react';
-import {
-  Calendar,
-  Home,
-  Pill,
-  Settings,
-  SquareLibrary,
-  UsersRound,
-} from 'lucide-react';
-
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { getTranslations, t } from '@/lib/translations';
+import { NavMainClient } from '@/components/nav-main-client';
 
-const data = {
-  navMain: [
-    {
-      title: 'Home',
-      url: '/',
-      icon: Home,
-      isActive: true,
-    },
-    {
-      title: 'Patients',
-      url: '/patient',
-      icon: UsersRound,
-      isActive: true,
-    },
-    {
-      title: 'Appointments',
-      url: '/appointments',
-      icon: Calendar,
-      isActive: true,
-    },
-    {
-      title: 'Records',
-      url: '/records',
-      icon: SquareLibrary,
-      isActive: true,
-    },
-    {
-      title: 'Prescriptions',
-      url: '/prescriptions',
-      icon: Pill,
-      isActive: true,
-    },
-    {
-      title: 'Tests',
-      url: '#',
-      icon: Home,
-      isActive: true,
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: Settings,
-      isActive: true,
-    },
-  ],
-};
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  // Get translations server-side to prevent flashing
+  const translations = await getTranslations();
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const navData = {
+    navMain: [
+      {
+        title: t(translations, 'Navigation.dashboard'),
+        url: '/dashboard',
+        iconName: 'Home',
+        isActive: true,
+      },
+      {
+        title: t(translations, 'Navigation.patients'),
+        url: '/patient',
+        iconName: 'UsersRound',
+        isActive: true,
+      },
+      {
+        title: t(translations, 'Navigation.appointments'),
+        url: '/appointments',
+        iconName: 'Calendar',
+        isActive: true,
+      },
+      {
+        title: t(translations, 'Navigation.records'),
+        url: '/records',
+        iconName: 'SquareLibrary',
+        isActive: true,
+      },
+      {
+        title: t(translations, 'Navigation.prescriptions'),
+        url: '/prescriptions',
+        iconName: 'Pill',
+        isActive: true,
+      },
+      {
+        title: t(translations, 'Navigation.tests'),
+        url: '#',
+        iconName: 'Home',
+        isActive: true,
+      },
+      {
+        title: t(translations, 'Navigation.settings'),
+        url: '#',
+        iconName: 'Settings',
+        isActive: true,
+      },
+    ],
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMainClient items={navData.navMain} />
       </SidebarContent>
       <SidebarFooter>
+        <div className="p-2">
+          <LanguageSwitcher />
+        </div>
         <NavUser />
       </SidebarFooter>
       <SidebarRail />

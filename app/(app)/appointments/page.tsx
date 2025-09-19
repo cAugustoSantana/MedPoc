@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
 import { format, isSameDay } from 'date-fns';
 import { Calendar, Clock, User, Phone, FileText, Pill } from 'lucide-react';
+import { useOnboardingCheck } from '@/hooks/use-onboarding-check';
 
 import {
   Card,
@@ -22,8 +21,7 @@ import { AppointmentWithDetails } from '@/types/appointment';
 import { toast } from 'sonner';
 
 export default function AppointmentsPage() {
-  const { isSignedIn, isLoaded } = useAuth();
-  const router = useRouter();
+  const { isReady } = useOnboardingCheck();
   const [appointments, setAppointments] = useState<AppointmentWithDetails[]>(
     []
   );
@@ -35,16 +33,9 @@ export default function AppointmentsPage() {
   const [selectedAppointment, setSelectedAppointment] =
     useState<AppointmentWithDetails | null>(null);
 
-  // Check authentication
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/sign-in');
-    }
-  }, [isLoaded, isSignedIn, router]);
-
   // Load all appointments on component mount
   useEffect(() => {
-    if (isSignedIn) {
+    if (isReady) {
       const loadAllAppointments = async () => {
         setLoading(true);
         try {
@@ -72,7 +63,7 @@ export default function AppointmentsPage() {
 
       loadAllAppointments();
     }
-  }, [isSignedIn]);
+  }, [isReady]);
 
   // Load appointments for selected date
   const loadAppointmentsForDate = async (date: Date) => {
@@ -175,8 +166,8 @@ export default function AppointmentsPage() {
     return '30 min'; // Default duration
   };
 
-  // Don't render anything while checking authentication
-  if (!isLoaded || !isSignedIn) {
+  // Don't render anything while checking authentication or onboarding
+  if (!isReady) {
     return (
       <div className="flex h-screen bg-gray-50">
         <div className="flex items-center justify-center w-full">

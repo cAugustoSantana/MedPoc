@@ -1,0 +1,55 @@
+{
+  "HomePage": {
+    "title": "Bienvenido a MedPoc",
+    "subtitle": "Un sistema integral de gestión de consultorios médicos",
+    "patientManagement": {
+      "title": "Gestión de Pacientes",
+      "description": "Gestiona eficientemente los registros de pacientes, citas e historial médico."
+    },
+    "appointmentScheduling": {
+      "title": "Programación de Citas",
+      "description": "Reserva de citas simplificada y gestión de calendario."
+    },
+    "prescriptionTracking": {
+      "title": "Seguimiento de Recetas",
+      "description": "Gestión completa de recetas y seguimiento de medicamentos."
+    },
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse"
+  },
+  "Navigation": {
+    "dashboard": "Panel de Control",
+    "patients": "Pacientes",
+    "appointments": "Citas",
+    "prescriptions": "Recetas",
+    "records": "Registros",
+    "tests": "Pruebas",
+    "settings": "Configuración"
+  },
+  "Dashboard": {
+    "schedule": "Horario",
+    "quickStats": "Estadísticas Rápidas",
+    "quickActions": "Acciones Rápidas",
+    "recentPatients": "Pacientes Recientes",
+    "totalPatients": "Total de Pacientes",
+    "todayAppointments": "Citas de Hoy",
+    "pendingPrescriptions": "Recetas Pendientes",
+    "addPatient": "Agregar Paciente",
+    "scheduleAppointment": "Programar Cita",
+    "newPrescription": "Nueva Receta",
+    "noPatientsFound": "No se encontraron pacientes"
+  },
+  "Common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "add": "Agregar",
+    "search": "Buscar",
+    "name": "Nombre",
+    "gender": "Género",
+    "email": "Correo Electrónico",
+    "dateOfBirth": "Fecha de Nacimiento"
+  }
+}
