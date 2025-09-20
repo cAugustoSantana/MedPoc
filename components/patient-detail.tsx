@@ -1,7 +1,7 @@
 'use client';
-import AppointmentWidget from '@/components/patient-detail-widget/appoinmentsWidget';
-import TestsWidget from './patient-detail-widget/testsWidget';
-import MedicalRecordsWidget from './patient-detail-widget/medicalRecordsWidget';
+import AppointmentWidget from '@/components/patient-detail-widget/appointments-widget';
+import TestsWidget from './patient-detail-widget/tests-widget';
+import MedicalRecordsWidget from './patient-detail-widget/medical-records-widget';
 import EditPatientDialog from './edit-patient-dialog';
 import { useState, useEffect, useCallback } from 'react';
 import { Phone, Mail, MapPin, User } from 'lucide-react';
