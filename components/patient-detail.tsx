@@ -220,7 +220,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
         <div className="mt-6 space-y-6">
           <MedicalRecordsWidget />
           {/* Appointments Section */}
-          <AppointmentWidget />
+          <AppointmentWidget patientId={patientId} patient={patient} />
           {/* Tests Section */}
           <TestsWidget />
         </div>
