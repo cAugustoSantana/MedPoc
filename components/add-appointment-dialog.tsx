@@ -255,10 +255,12 @@ export function AddAppointmentDialog({
           Add Appointment
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Add New Appointment</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="w-[95vw] max-w-[500px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-lg sm:text-xl">
+            Add New Appointment
+          </DialogTitle>
+          <DialogDescription className="text-sm">
             {selectedPatient
               ? `Schedule a new appointment for ${selectedPatient.name}. Fill in the details below.`
               : "Fill in the appointment details below. Click save when you're done."}
@@ -266,7 +268,7 @@ export function AddAppointmentDialog({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="patientId"
@@ -339,8 +341,8 @@ export function AddAppointmentDialog({
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-3">
+            <div className="grid grid-cols-1 gap-4">
+              <div>
                 <AppointmentAvailabilityPicker
                   key={defaultDate?.toISOString()} // Force re-render when defaultDate changes
                   value={{
@@ -381,7 +383,7 @@ export function AddAppointmentDialog({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="type"
@@ -458,7 +460,7 @@ export function AddAppointmentDialog({
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -466,10 +468,15 @@ export function AddAppointmentDialog({
                   form.reset();
                   setOpen(false);
                 }}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full sm:w-auto"
+              >
                 {loading ? 'Saving...' : 'Save Appointment'}
               </Button>
             </DialogFooter>
