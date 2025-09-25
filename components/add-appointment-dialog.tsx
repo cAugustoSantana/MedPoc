@@ -57,11 +57,13 @@ const appointmentFormSchema = z.object({
 interface AddAppointmentDialogProps {
   onAppointmentAdded?: (appointment: Appointment) => void;
   defaultDate?: Date;
+  selectedPatient?: Patient;
 }
 
 export function AddAppointmentDialog({
   onAppointmentAdded,
   defaultDate,
+  selectedPatient,
 }: AddAppointmentDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,23 +75,25 @@ export function AddAppointmentDialog({
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
-      patientId: '',
+      patientId: selectedPatient?.patientId.toString() || '',
       date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
       time: '',
       duration: '30 min',
       type: '',
-      phone: '',
+      phone: selectedPatient?.phone
+        ? formatPhoneNumber(selectedPatient.phone)
+        : '',
       notes: '',
       status: 'confirmed',
     },
   });
 
-  // Fetch patients when dialog opens
+  // Fetch patients when dialog opens (only if no patient is pre-selected)
   useEffect(() => {
-    if (open && !patientsLoadedRef.current) {
+    if (open && !patientsLoadedRef.current && !selectedPatient) {
       fetchPatients();
     }
-  }, [open]);
+  }, [open, selectedPatient]);
 
   const fetchPatients = async () => {
     setPatientsLoading(true);
@@ -122,27 +126,31 @@ export function AddAppointmentDialog({
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (!newOpen) {
-      // Reset form with default date when closing
+      // Reset form with default values when closing
       form.reset({
-        patientId: '',
+        patientId: selectedPatient?.patientId.toString() || '',
         date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
         time: '',
         duration: '30 min',
         type: '',
-        phone: '',
+        phone: selectedPatient?.phone
+          ? formatPhoneNumber(selectedPatient.phone)
+          : '',
         notes: '',
         status: 'confirmed',
       });
       setPhoneAutoFilled(false);
     } else {
-      // Reset form with current default date when opening
+      // Reset form with current default values when opening
       form.reset({
-        patientId: '',
+        patientId: selectedPatient?.patientId.toString() || '',
         date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
         time: '',
         duration: '30 min',
         type: '',
-        phone: '',
+        phone: selectedPatient?.phone
+          ? formatPhoneNumber(selectedPatient.phone)
+          : '',
         notes: '',
         status: 'confirmed',
       });
@@ -159,10 +167,11 @@ export function AddAppointmentDialog({
         console.log('Created appointment:', result.data);
 
         // Get the selected patient name for the notification
-        const selectedPatient = patients.find(
-          (p) => p.patientId.toString() === data.patientId
-        );
-        const patientName = selectedPatient?.name || 'Unknown Patient';
+        const patientName =
+          selectedPatient?.name ||
+          patients.find((p) => p.patientId.toString() === data.patientId)
+            ?.name ||
+          'Unknown Patient';
 
         // Show success message with patient name
         toast.success(`Appointment created successfully for ${patientName}!`, {
@@ -176,7 +185,18 @@ export function AddAppointmentDialog({
         }
 
         // Reset form and close dialog
-        form.reset();
+        form.reset({
+          patientId: selectedPatient?.patientId.toString() || '',
+          date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : '',
+          time: '',
+          duration: '30 min',
+          type: '',
+          phone: selectedPatient?.phone
+            ? formatPhoneNumber(selectedPatient.phone)
+            : '',
+          notes: '',
+          status: 'confirmed',
+        });
         setOpen(false);
       } else {
         toast.error('Failed to create appointment', {
@@ -235,17 +255,20 @@ export function AddAppointmentDialog({
           Add Appointment
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Add New Appointment</DialogTitle>
-          <DialogDescription>
-            Fill in the appointment details below. Click save when you&apos;re
-            done.
+      <DialogContent className="w-[95vw] max-w-[500px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-lg sm:text-xl">
+            Add New Appointment
+          </DialogTitle>
+          <DialogDescription className="text-sm">
+            {selectedPatient
+              ? `Schedule a new appointment for ${selectedPatient.name}. Fill in the details below.`
+              : "Fill in the appointment details below. Click save when you're done."}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="patientId"
@@ -253,15 +276,26 @@ export function AddAppointmentDialog({
                   <FormItem>
                     <FormLabel>Patient *</FormLabel>
                     <FormControl>
-                      <Combobox
-                        options={patientOptions}
-                        value={field.value}
-                        onValueChange={handlePatientChange}
-                        placeholder="Select patient..."
-                        searchPlaceholder="Search patients..."
-                        emptyText="No patients found."
-                        disabled={patientsLoading}
-                      />
+                      {selectedPatient ? (
+                        <div className="flex items-center space-x-2 p-2 border rounded-md bg-muted/50">
+                          <span className="text-sm font-medium">
+                            {selectedPatient.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            (Pre-selected)
+                          </span>
+                        </div>
+                      ) : (
+                        <Combobox
+                          options={patientOptions}
+                          value={field.value}
+                          onValueChange={handlePatientChange}
+                          placeholder="Select patient..."
+                          searchPlaceholder="Search patients..."
+                          emptyText="No patients found."
+                          disabled={patientsLoading}
+                        />
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -279,6 +313,7 @@ export function AddAppointmentDialog({
                           type="tel"
                           placeholder="(555) 123-4567"
                           {...field}
+                          disabled={!!selectedPatient}
                           onChange={(e) => {
                             field.onChange(e);
                             if (phoneAutoFilled) {
@@ -306,8 +341,8 @@ export function AddAppointmentDialog({
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-3">
+            <div className="grid grid-cols-1 gap-4">
+              <div>
                 <AppointmentAvailabilityPicker
                   key={defaultDate?.toISOString()} // Force re-render when defaultDate changes
                   value={{
@@ -348,7 +383,7 @@ export function AddAppointmentDialog({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="type"
@@ -425,7 +460,7 @@ export function AddAppointmentDialog({
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -433,10 +468,15 @@ export function AddAppointmentDialog({
                   form.reset();
                   setOpen(false);
                 }}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full sm:w-auto"
+              >
                 {loading ? 'Saving...' : 'Save Appointment'}
               </Button>
             </DialogFooter>
