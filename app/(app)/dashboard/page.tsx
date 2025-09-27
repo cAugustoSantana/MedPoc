@@ -24,7 +24,7 @@ import {
 import { Patient } from '@/types/patient';
 import { getTranslations, t } from '@/lib/translations';
 
-export default async function DashboardPage() {
+export default async function dashboardPage() {
   const { userId } = await auth();
   const translations = await getTranslations();
 
@@ -63,7 +63,7 @@ export default async function DashboardPage() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage>
-                    {t(translations, 'Navigation.dashboard')}
+                    {t(translations, 'navigation.dashboard')}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -73,7 +73,7 @@ export default async function DashboardPage() {
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <Card>
             <CardHeader>
-              <CardTitle>Dashboard Error</CardTitle>
+              <CardTitle>dashboard Error</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
@@ -105,7 +105,7 @@ export default async function DashboardPage() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbPage>
-                  {t(translations, 'Navigation.dashboard')}
+                  {t(translations, 'navigation.dashboard')}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -116,7 +116,7 @@ export default async function DashboardPage() {
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>{t(translations, 'Dashboard.schedule')}</CardTitle>
+              <CardTitle>{t(translations, 'dashboard.schedule')}</CardTitle>
             </CardHeader>
             <CardContent>
               <Calendar />
@@ -125,21 +125,21 @@ export default async function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>{t(translations, 'Dashboard.quickStats')}</CardTitle>
+              <CardTitle>{t(translations, 'dashboard.quickStats')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span>{t(translations, 'Dashboard.totalPatients')}:</span>
+                  <span>{t(translations, 'dashboard.totalPatients')}:</span>
                   <span className="font-semibold">{patientsData.length}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>{t(translations, 'Dashboard.todayAppointments')}:</span>
+                  <span>{t(translations, 'dashboard.todayAppointments')}:</span>
                   <span className="font-semibold">0</span>
                 </div>
                 <div className="flex justify-between">
                   <span>
-                    {t(translations, 'Dashboard.pendingPrescriptions')}:
+                    {t(translations, 'dashboard.pendingPrescriptions')}:
                   </span>
                   <span className="font-semibold">0</span>
                 </div>
@@ -149,18 +149,18 @@ export default async function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>{t(translations, 'Dashboard.quickActions')}</CardTitle>
+              <CardTitle>{t(translations, 'dashboard.quickActions')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <Button className="w-full" variant="outline">
-                  {t(translations, 'Dashboard.addPatient')}
+                  {t(translations, 'dashboard.addPatient')}
                 </Button>
                 <Button className="w-full" variant="outline">
-                  {t(translations, 'Dashboard.scheduleAppointment')}
+                  {t(translations, 'dashboard.scheduleAppointment')}
                 </Button>
                 <Button className="w-full" variant="outline">
-                  {t(translations, 'Dashboard.newPrescription')}
+                  {t(translations, 'dashboard.newPrescription')}
                 </Button>
               </div>
             </CardContent>
@@ -169,16 +169,16 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{t(translations, 'Dashboard.recentPatients')}</CardTitle>
+            <CardTitle>{t(translations, 'dashboard.recentPatients')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{t(translations, 'Common.name')}</TableHead>
-                  <TableHead>{t(translations, 'Common.gender')}</TableHead>
-                  <TableHead>{t(translations, 'Common.email')}</TableHead>
-                  <TableHead>{t(translations, 'Common.dateOfBirth')}</TableHead>
+                  <TableHead>{t(translations, 'common.name')}</TableHead>
+                  <TableHead>{t(translations, 'common.gender')}</TableHead>
+                  <TableHead>{t(translations, 'common.email')}</TableHead>
+                  <TableHead>{t(translations, 'common.dateOfBirth')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -197,7 +197,7 @@ export default async function DashboardPage() {
                       colSpan={4}
                       className="text-center text-gray-500"
                     >
-                      {t(translations, 'Dashboard.noPatientsFound')}
+                      {t(translations, 'dashboard.noPatientsFound')}
                     </TableCell>
                   </TableRow>
                 )}

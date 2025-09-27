@@ -1,0 +1,13 @@
+{
+  "schedule": "Schedule",
+  "quickStats": "Quick Stats",
+  "quickActions": "Quick Actions",
+  "recentPatients": "Recent Patients",
+  "totalPatients": "Total Patients",
+  "todayAppointments": "Today's Appointments",
+  "pendingPrescriptions": "Pending Prescriptions",
+  "addPatient": "Add Patient",
+  "scheduleAppointment": "Schedule Appointment",
+  "newPrescription": "New Prescription",
+  "noPatientsFound": "No patients found"
+}

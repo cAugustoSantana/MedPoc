@@ -1,0 +1,13 @@
+{
+  "schedule": "Agenda",
+  "quickStats": "Estadísticas rápidas",
+  "quickActions": "Acciones rápidas",
+  "recentPatients": "Pacientes recientes",
+  "totalPatients": "Total de pacientes",
+  "todayAppointments": "Citas de hoy",
+  "pendingPrescriptions": "Recetas pendientes",
+  "addPatient": "Agregar paciente",
+  "scheduleAppointment": "Programar cita",
+  "newPrescription": "Nueva receta",
+  "noPatientsFound": "No se encontraron pacientes"
+}
