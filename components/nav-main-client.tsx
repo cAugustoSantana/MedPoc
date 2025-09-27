@@ -1,6 +1,6 @@
 'use client';
 
-import { GalleryVerticalEnd, type LucideIcon } from 'lucide-react';
+import { GalleryVerticalEnd, TestTube, type LucideIcon } from 'lucide-react';
 import {
   Calendar,
   Home,
@@ -27,6 +27,7 @@ const iconMap: Record<string, LucideIcon> = {
   SquareLibrary,
   Pill,
   Settings,
+  TestTube,
 };
 
 export function NavMainClient({

@@ -50,8 +50,8 @@ export async function AppSidebar({
       },
       {
         title: t(translations, 'Navigation.tests'),
-        url: '#',
-        iconName: 'Home',
+        url: '/tests',
+        iconName: 'TestTube',
         isActive: true,
       },
       {
