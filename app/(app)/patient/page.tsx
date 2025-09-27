@@ -84,10 +84,8 @@ export default function PatientPage() {
     <div className="flex flex-1 flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">{t('patient.Patient.title')}</h1>
-          <p className="text-muted-foreground">
-            Manage your patient records and information
-          </p>
+          <h1 className="text-3xl font-bold">{t('patient.title')}</h1>
+          <p className="text-muted-foreground">{t('patient.subheader')}</p>
         </div>
       </div>
       <PatientTable

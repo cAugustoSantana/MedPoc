@@ -1,16 +1,22 @@
 {
-  "Appointments": {
-    "title": "Appointments",
-    "upcoming": "Upcoming Appointments",
-    "recent": "Recent Appointments",
-    "selectDate": "Select a Date",
-    "selectDateSubheader": "Select a date to view appointments",
-    "subheader": "Choose a date to view appointments",
-    "subheaderDay": "Choose a date from the calendar to view appointments for that day.",
-    "noAppoinments": "No appointments scheduled",
-    "noAppoinmentsSubtitle": "There are no appointments scheduled for",
-    "addAppoinments": "Add Appointment",
-    "appointmentType": "Appoinment Type",
-    "fromAppointment": "from Appointment "
-  }
+  "title": "Appointments",
+  "upcoming": "Upcoming Appointments",
+  "recent": "Recent Appointments",
+  "selectDate": "Select a Date",
+  "selectDateSubheader": "Select a date to view appointments",
+  "subheader": "Choose a date to view appointments",
+  "subheaderDay": "Choose a date from the calendar to view appointments for that day.",
+  "noAppoinments": "No appointments scheduled",
+  "noAppoinmentsSubtitle": "There are no appointments scheduled for",
+  "addAppoinments": "Add Appointment",
+  "appointmentType": "Appoinment Type",
+  "fromAppointment": "from Appointment ",
+  "widgetTitle": "Add New Appointment",
+  "widgetSubtitle": "Fill in the appointment details below. Click save when finished.",
+  "widgetSubtitlehalf1": "Schedule a new appointment for",
+  "widgetType": "Appointment Type",
+  "widgetSelectType": "Select a Type",
+  "widgetEnterNotes": "Enter appointment notes...",
+  "widgetUpcoming": "Upcoming Appointments",
+  "widgetRecent": "Recent Appointments"
 }

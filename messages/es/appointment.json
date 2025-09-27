@@ -1,16 +1,22 @@
 {
-  "Appointments": {
-    "title": "Appointments",
-    "upcoming": "Upcoming Appointments",
-    "recent": "Recent Appointments",
-    "selectDate": "Select a Date",
-    "selectDateSubheader": "Select a date to view appointments",
-    "subheader": "Choose a date to view appointments",
-    "subheaderDay": "Choose a date from the calendar to view appointments for that day.",
-    "noAppoinments": "No appointments scheduled",
-    "noAppoinmentsSubtitle": "There are no appointments scheduled for",
-    "addAppoinments": "Add Appointment",
-    "appointmentType": "Appoinment Type",
-    "fromAppointment": "from Appointment "
-  }
+  "title": "Citas",
+  "upcoming": "Próximas citas",
+  "recent": "Citas recientes",
+  "selectDate": "Seleccionar una fecha",
+  "selectDateSubheader": "Seleccione una fecha para ver las citas",
+  "subheader": "Elija una fecha para ver las citas",
+  "subheaderDay": "Elija una fecha del calendario para ver las citas de ese día.",
+  "noAppoinments": "No hay citas programadas",
+  "noAppoinmentsSubtitle": "No hay citas programadas para",
+  "addAppoinments": "Agregar cita",
+  "appointmentType": "Tipo de cita",
+  "fromAppointment": "de la cita",
+  "widgetTitle": "Agregar nueva cita",
+  "widgetSubtitle": "Complete los detalles de la cita a continuación. Haga clic en guardar cuando finalice.",
+  "widgetSubtitlehalf1": "Programar una nueva cita para",
+  "widgetType": "Tipo de cita",
+  "widgetSelectType": "Seleccione un tipo",
+  "widgetEnterNotes": "Ingrese notas de la cita...",
+  "widgetUpcoming": "Próximas citas",
+  "widgetRecent": "Citas recientes"
 }

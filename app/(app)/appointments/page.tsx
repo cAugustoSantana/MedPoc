@@ -185,9 +185,9 @@ export default function AppointmentsPage() {
       <div className="w-80 bg-white border-r border-gray-200 p-6">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-2">
-            {t('appointment.Appointments.title')}
+            {t('appointment.title')}
           </h2>
-          <p className="text-sm text-gray-600">{t('Appointments.subheader')}</p>
+          <p className="text-sm text-gray-600">{t('appointment.subheader')}</p>
         </div>
 
         <CalendarComponent
@@ -205,7 +205,7 @@ export default function AppointmentsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                {t('Appointments.title')}
+                {t('appointment.title')}
               </h1>
               <p className="text-gray-600">
                 {selectedDate
@@ -224,9 +224,7 @@ export default function AppointmentsPage() {
         <div className="flex-1 p-6 overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="text-gray-500">
-                {t('Common.LoadingAppoinments')}
-              </div>
+              <div className="text-gray-500">{t('loading.Appointments')}</div>
             </div>
           ) : selectedDate ? (
             selectedDateAppointments.length > 0 ? (
@@ -292,7 +290,7 @@ export default function AppointmentsPage() {
                           className="flex items-center gap-2"
                         >
                           <Pill className="h-4 w-4" />
-                          {t('Prescriptions.create')}
+                          {t('prescription.create')}
                         </Button>
                       </div>
                     </CardContent>
@@ -303,10 +301,10 @@ export default function AppointmentsPage() {
               <div className="flex flex-col items-center justify-center h-64 text-gray-500">
                 <Calendar className="h-12 w-12 mb-4 text-gray-300" />
                 <h3 className="text-lg font-medium mb-2">
-                  {t('Appointments.noAppoinments')}
+                  {t('appointment.noAppoinments')}
                 </h3>
                 <p className="text-center mb-4">
-                  {t('Appointments.noAppoinmentsSubtitle')}{' '}
+                  {t('appointment.noAppoinmentsSubtitle')}{' '}
                   {format(selectedDate, 'MMMM d, yyyy')}.
                 </p>
                 <AddAppointmentDialog
@@ -319,9 +317,9 @@ export default function AppointmentsPage() {
             <div className="flex flex-col items-center justify-center h-64 text-gray-500">
               <Calendar className="h-12 w-12 mb-4 text-gray-300" />
               <h3 className="text-lg font-medium mb-2">
-                {t('Appointments.selectDate')}.
+                {t('appointment.selectDate')}.
               </h3>
-              <p className="text-center">{t('Appointments.subheaderDay')}.</p>
+              <p className="text-center">{t('appointment.subheaderDay')}.</p>
             </div>
           )}
         </div>

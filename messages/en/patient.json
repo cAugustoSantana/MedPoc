@@ -1,7 +1,17 @@
 {
-  "Patient": {
-    "title": "Pacientes modular",
-    "subheader": "Gestione los historiales e información de sus pacientes.",
-    "LoadingPatients": "Cargando pacientes"
-  }
+  "title": "Patients",
+  "subheader": "Manage your patient's records and information.",
+  "LoadingPatients": "Loading Patients",
+  "Unknown": "Unknown Patient",
+  "detailTitle": "Patient Details",
+  "edit": "Edit Patient",
+  "gender": "Gender",
+  "subheaderDetail": "Update patient information. Click save when you're done.",
+  "recordInfo": "Record Information",
+  "dob": "Date of Birth",
+  "age": "Age",
+  "created": "Created:",
+  "updated": "Updated",
+  "tableNameHeader": "Name",
+  "filterPlaceholder": "Filter by name or email"
 }

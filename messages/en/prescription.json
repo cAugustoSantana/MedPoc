@@ -1,27 +1,23 @@
 {
-  "Prescriptions": {
-    "title": "Prescriptions",
-    "subheader": "Manage patient prescriptions and medications",
-    "newPrescription": "New Prescription",
-    "cardTitle": "Prescription Management",
-    "cardDescription": "View and manage all patient prescriptions",
-    "create": "Create Prescriptions"
-  },
-  "PrescriptionsDetail": {
-    "title": "Prescriptions Details",
-    "notFound": "No medications found for this prescription.",
-    "prescriptionInfo": "Prescription Information",
-    "generalNotes": "General Notes",
-    "enterGeneralNotes": "Enter general prescription notes...",
-    "prescriptionDate": "Prescribed Date",
-    "completePrescription": "Complete prescription information for",
-    "specificInstrutctions": "Specific instructions for this medication",
-    "updatePrescription": "updatePrescription",
-    "createPrescription": "createPrescription",
-    "newPrescription": "New Prescription",
-    "newPrescriptionHeader": "Fill in the details to create a new prescription.",
-    "newPrescriptionHeaderPreSelect": "Fill in the details to create a new prescription.",
-    "editPrescriptionHeader": "Fill in the details to create a new prescription.",
-    "editPrescription": "Edit Prescription"
-  }
+  "title": "Prescriptions",
+  "subheader": "Manage patient prescriptions and medications",
+  "newPrescription": "New Prescription",
+  "cardTitle": "Prescription Management",
+  "cardDescription": "View and manage all patient prescriptions",
+  "create": "Create Prescriptions",
+  "titledetails": "Prescriptions Details",
+  "notFound": "No medications found for this prescription.",
+  "prescriptionInfo": "Prescription Information",
+  "generalNotes": "General Notes",
+  "enterGeneralNotes": "Enter general prescription notes...",
+  "prescriptionDate": "Prescribed Date",
+  "completePrescription": "Complete prescription information for",
+  "specificInstrutctions": "Specific instructions for this medication",
+  "updatePrescription": "updatePrescription",
+  "createPrescription": "createPrescription",
+
+  "newPrescriptionHeader": "Fill in the details to create a new prescription.",
+  "newPrescriptionHeaderPreSelect": "Fill in the details to create a new prescription.",
+  "editPrescriptionHeader": "Fill in the details to create a new prescription.",
+  "editPrescription": "Edit Prescription"
 }

@@ -240,11 +240,11 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="male">{t('Common.Male')}</SelectItem>
+                      <SelectItem value="male">{t('common.male')}</SelectItem>
                       <SelectItem value="female">
                         {t('Common.Female')}
                       </SelectItem>
-                      <SelectItem value="other">{t('Common.Other')}</SelectItem>
+                      <SelectItem value="other">{t('common.other')}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -256,7 +256,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('Common.phone')}</FormLabel>
+                  <FormLabel>{t('common.phone')}</FormLabel>
                   <FormControl>
                     <Input type="tel" placeholder="(123) 456-7890" {...field} />
                   </FormControl>
@@ -269,7 +269,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('Common.address')}</FormLabel>
+                  <FormLabel>{t('common.address')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter full address"
@@ -293,7 +293,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? t('Common.Saving') : t('Common.saveChanges')}
+                {loading ? t('common.Saving') : t('common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

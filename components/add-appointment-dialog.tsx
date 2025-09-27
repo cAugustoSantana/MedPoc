@@ -254,18 +254,18 @@ export function AddAppointmentDialog({
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <PlusIcon className="h-4 w-4" />
-          {t('AppointmentWidget.title')}
+          {t('appointment.widgetTitle')}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[95vw] max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-2">
           <DialogTitle className="text-lg sm:text-xl">
-            {t('AppointmentWidget.title')}
+            {t('appointment.widgetTitle')}
           </DialogTitle>
           <DialogDescription className="text-sm">
             {selectedPatient
               ? `${t('AppointmentWidget.subtitlehalf1')} ${selectedPatient.name}`
-              : t('AppointmentWidget.subtitle')}
+              : t('appointment.widgetSubtitle')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -276,7 +276,7 @@ export function AddAppointmentDialog({
                 name="patientId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel> {t('Common.patient')} *</FormLabel>
+                    <FormLabel> {t('common.patient')} *</FormLabel>
                     <FormControl>
                       {selectedPatient ? (
                         <div className="flex items-center space-x-2 p-2 border rounded-md bg-muted/50">
@@ -292,7 +292,7 @@ export function AddAppointmentDialog({
                           options={patientOptions}
                           value={field.value}
                           onValueChange={handlePatientChange}
-                          placeholder={t('Select.patient')}
+                          placeholder={t('select.patient')}
                           searchPlaceholder={t('Search.patients')}
                           emptyText={t('NotFound.patients')}
                           disabled={patientsLoading}
@@ -308,7 +308,7 @@ export function AddAppointmentDialog({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Common.phone')}</FormLabel>
+                    <FormLabel>{t('common.phone')}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -361,7 +361,7 @@ export function AddAppointmentDialog({
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Common.duration')}</FormLabel>
+                    <FormLabel>{t('common.duration')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -391,32 +391,31 @@ export function AddAppointmentDialog({
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Appointments.appointmentType')} *</FormLabel>
+                    <FormLabel>{t('appointment.appointmentType')}*</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('Select.selectType')} />
+                          <SelectValue placeholder={t('select.selectType')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="Consultation">
-                          {t('Common.consultation')}
+                          {t('common.consultation')}
                         </SelectItem>
                         <SelectItem value="Physical Exam">
-                          {t('Common.physicalExam')}
+                          {t('common.physicalExam')}
                         </SelectItem>
                         <SelectItem value="Follow-up">
-                          {' '}
-                          {t('Common.followUp')}
+                          {t('common.followUp')}
                         </SelectItem>
                         <SelectItem value="Check-up">
-                          {t('Common.followUp')}
+                          {t('common.followUp')}
                         </SelectItem>
                         <SelectItem value="Emergency">
-                          {t('Common.emergency')}
+                          {t('common.emergency')}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -429,7 +428,7 @@ export function AddAppointmentDialog({
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Common.years')}</FormLabel>
+                    <FormLabel>{t('common.years')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -441,13 +440,13 @@ export function AddAppointmentDialog({
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="confirmed">
-                          {t('Common.confirmed')}
+                          {t('common.confirmed')}
                         </SelectItem>
                         <SelectItem value="pending">
-                          {t('Common.pending')}
+                          {t('common.pending')}
                         </SelectItem>
                         <SelectItem value="cancelled">
-                          {t('Common.cancelled')}
+                          {t('common.cancelled')}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -462,10 +461,10 @@ export function AddAppointmentDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('Common.Notes')}</FormLabel>
+                  <FormLabel>{t('common.Notes')}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={t('Common.enterAppointment')}
+                      placeholder={t('common.enterAppointment')}
                       className="resize-none"
                       {...field}
                     />
@@ -485,14 +484,14 @@ export function AddAppointmentDialog({
                 }}
                 className="w-full sm:w-auto"
               >
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button
                 type="submit"
                 disabled={loading}
                 className="w-full sm:w-auto"
               >
-                {loading ? t('Common.Saving') : t('Common.saveChanges')}
+                {loading ? t('common.saving') : t('common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

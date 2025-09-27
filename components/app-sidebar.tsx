@@ -19,43 +19,43 @@ export async function AppSidebar({
   const navData = {
     navMain: [
       {
-        title: t(translations, 'Navigation.dashboard'),
+        title: t(translations, 'navigation.dashboard'),
         url: '/dashboard',
         iconName: 'Home',
         isActive: true,
       },
       {
-        title: t(translations, 'Navigation.patients'),
+        title: t(translations, 'navigation.patients'),
         url: '/patient',
         iconName: 'UsersRound',
         isActive: true,
       },
       {
-        title: t(translations, 'Navigation.appointments'),
+        title: t(translations, 'navigation.appointments'),
         url: '/appointments',
         iconName: 'Calendar',
         isActive: true,
       },
       {
-        title: t(translations, 'Navigation.records'),
+        title: t(translations, 'navigation.records'),
         url: '/records',
         iconName: 'SquareLibrary',
         isActive: true,
       },
       {
-        title: t(translations, 'Navigation.prescriptions'),
+        title: t(translations, 'navigation.prescriptions'),
         url: '/prescriptions',
         iconName: 'Pill',
         isActive: true,
       },
       {
-        title: t(translations, 'Navigation.tests'),
+        title: t(translations, 'navigation.tests'),
         url: '#',
         iconName: 'Home',
         isActive: true,
       },
       {
-        title: t(translations, 'Navigation.settings'),
+        title: t(translations, 'navigation.settings'),
         url: '#',
         iconName: 'Settings',
         isActive: true,

@@ -1,8 +1,16 @@
 {
-  "Patient": {
-    "title": "Patients modular",
-    "subheader": "Manage your patients’ records and information.",
-    "LoadingPatients": "Loading Patients",
-    "Unknown": "Unknown Patient"
-  }
+  "title": "Pacientes",
+  "subheader": "Gestione los registros e información de sus pacientes.",
+  "loadingPatients": "Cargando pacientes",
+  "unknown": "Paciente desconocido",
+  "detailTitle": "Detalles del paciente",
+  "edit": "Editar paciente",
+  "gender": "Género",
+  "subheaderDetail": "Actualice la información del paciente. Haga clic en guardar cuando haya terminado.",
+  "recordInfo": "Información del registro",
+  "dob": "Fecha de nacimiento",
+  "age": "Edad",
+  "created": "Creado:",
+  "updated": "Actualizado",
+  "tableNameHeader": "Nombre"
 }
