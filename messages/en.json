@@ -8,11 +8,11 @@
     },
     "appointmentScheduling": {
       "title": "Appointment Scheduling",
-      "description": "Streamlined appointment booking and calendar management."
+      "description": "Agile appointment booking and calendar management."
     },
     "prescriptionTracking": {
-      "title": "Prescription Tracking",
-      "description": "Complete prescription management and medication tracking."
+      "title": "Prescription Management",
+      "description": "Complete prescription administration and medication tracking."
     },
     "signIn": "Sign In",
     "signUp": "Sign Up"
@@ -42,14 +42,118 @@
   "Common": {
     "loading": "Loading...",
     "save": "Save",
+    "saving": "Saving",
+    "saveChanges": "Save Changes",
     "cancel": "Cancel",
     "edit": "Edit",
     "delete": "Delete",
     "add": "Add",
     "search": "Search",
+    "date": "Date",
+    "Result": "Result",
+    "type": "Type",
+    "Delete": "Delete",
+    "doctor": "Doctor",
     "name": "Name",
+    "Filters": "Filters",
     "gender": "Gender",
+    "accions": "Acciones",
     "email": "Email",
-    "dateOfBirth": "Date of Birth"
+    "dosage": "Dosage",
+    "medication": "Medication",
+    "frequency": "Frequency",
+    "dateOfBirth": "Date of Birth",
+    "phone": "Phone",
+    "address": "Address",
+    "LoadingAppoinments": "Loading Appointments",
+    "Patient": "Patient",
+    "toggleColumns": "Toggle columns",
+    "status": "Status",
+    "duration": "Duration",
+    "prescribedDate": "Prescribed Date",
+    "unknownMedication": "Unknown Medication",
+    "Notes": "Notes",
+    "Confirmed": "Confirmed",
+    "Test": "Test",
+    "View": "View",
+    "Pending": "Pending",
+    "Cancelled": "Cancelled",
+    "Diagnosis": "Diagnosis",
+    "Male": "Male",
+    "Female": "Female",
+    "Other": "Other",
+    "notSpecified": "Not Specified",
+    "years": "years"
+  },
+  "Patient": {
+    "title": "Patients",
+    "subheader": "Manage your patients’ records and information.",
+    "LoadingPatients": "Loading Patients"
+  },
+  "PatientTable": {
+    "nameHeader": "Name"
+  },
+  "PatientDetail": {
+    "title": "Patient Details",
+    "edit": "Edit Patient",
+    "gender": "Gender",
+    "subheader": "Update patient information. Click save when you're done.",
+    "recordInfo": "Record Information",
+    "dob": "Date of Birth",
+    "age": "Age",
+    "Created": "Created:",
+    "Updated": "Updated"
+  },
+  "MedicalRecords": {
+    "title": "Medical Records",
+    "date": "Date",
+    "diagnosis": "Diagnosis",
+    "treatment": "Treatment",
+    "doctor": "Doctor",
+    "visitType": "Visit Type"
+  },
+  "Tests": {
+    "title": "Tests",
+    "widgetTitle": "Tests & Lab Results",
+    "RecentLabResults": "Recent Lab Results",
+    "Imaging & Other Tests": "Imaging & Other Tests",
+    "Report": "View Report",
+    "TestColumn": "Test",
+    "ResultColumn": "Result",
+    "ReferenceRange": "Reference Range",
+    "date": "Date",
+    "status": "Status"
+  },
+  "Appointments": {
+    "title": "Appointments",
+    "upcoming": "Upcoming Appointments",
+    "recent": "Recent Appointments",
+    "selectDate": "Select a Date",
+    "selectDateSubheader": "Select a date to view appointments",
+    "subheader": "Choose a date to view appointments",
+    "subheaderDay": "Choose a date from the calendar to view appointments for that day.",
+    "noAppoinments": "No appointments scheduled",
+    "noAppoinmentsSubtitle": "There are no appointments scheduled for",
+    "addAppoinments": "Add Appointment",
+    "appointmentType": "Appoinment Type"
+  },
+  "AppoinmentWidget": {
+    "title": "Add New Appointment",
+    "subtitle": "Fill in the appointment details below. Click save when finished.",
+    "Type": "Appointment Type",
+    "SelectType": "Select a Type",
+    "EnterNotes": "Enter appointment notes...",
+    "Upcoming": "Upcoming Appointments",
+    "Recent": "Recent Appointments"
+  },
+  "Prescriptions": {
+    "title": "Prescriptions",
+    "subheader": "Manage patient prescriptions and medications",
+    "newPrescription": "New Prescription",
+    "cardTitle": "Prescription Management",
+    "cardDescription": "View and manage all patient prescriptions"
+  },
+  "PrescriptionsDetail": {
+    "title": "Prescriptions Details"
   }
 }

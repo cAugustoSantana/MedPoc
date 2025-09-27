@@ -41,6 +41,7 @@ import { toast } from 'sonner';
 import { Patient } from '@/types/patient';
 import { AppointmentFormData, Appointment } from '@/types/appointment';
 import { AppointmentAvailabilityPicker } from './appointment-availability-picker';
+import { useTranslations } from '@/hooks/use-translations';
 
 // Appointment form schema
 const appointmentFormSchema = z.object({
@@ -66,6 +67,7 @@ export function AddAppointmentDialog({
   selectedPatient,
 }: AddAppointmentDialogProps) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslations();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patientsLoading, setPatientsLoading] = useState(false);
@@ -252,7 +254,7 @@ export function AddAppointmentDialog({
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <PlusIcon className="h-4 w-4" />
-          Add Appointment
+          {t('AppoinmentWidget.title')}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[95vw] max-w-[500px] max-h-[90vh] overflow-y-auto">
@@ -359,7 +361,7 @@ export function AddAppointmentDialog({
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Duration</FormLabel>
+                    <FormLabel>{t('Common.duration')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -389,7 +391,7 @@ export function AddAppointmentDialog({
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Appointment Type *</FormLabel>
+                    <FormLabel>{t('Appointments.appointmentType')} *</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -420,7 +422,7 @@ export function AddAppointmentDialog({
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>{t('Common.years')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -447,7 +449,7 @@ export function AddAppointmentDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>{t('Common.Notes')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter appointment notes..."
@@ -477,7 +479,7 @@ export function AddAppointmentDialog({
                 disabled={loading}
                 className="w-full sm:w-auto"
               >
-                {loading ? 'Saving...' : 'Save Appointment'}
+                {loading ? t('Common.Saving') : t('Common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

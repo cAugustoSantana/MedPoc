@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import type { Patient } from '@/types/patient';
 import { toast } from 'sonner';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface PatientDetailProps {
   patientId: string;
@@ -20,6 +21,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const { t } = useTranslations();
 
   const loadPatient = useCallback(async () => {
     setLoading(true);
@@ -68,7 +70,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
       <main className="min-h-screen bg-gray-100 p-4">
         <div className="w-full max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            Patient Details
+            {t('PatientDetail.title')}
           </h1>
           <div className="flex items-center justify-center h-64">
             <div className="text-gray-500">Loading patient...</div>
@@ -113,7 +115,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     <main className="min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-6">
-          Patient Details
+          {t('PatientDetail.title')}
         </h1>
 
         <div className="space-y-6">
@@ -122,13 +124,13 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl font-bold">
-                  Patient Details
+                  {t('PatientDetail.title')}
                 </CardTitle>
                 <Button
                   variant="outline"
                   onClick={() => setIsEditDialogOpen(true)}
                 >
-                  Edit Patient
+                  {t('PatientDetail.edit')}
                 </Button>
               </div>
             </CardHeader>
@@ -144,14 +146,16 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
 
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="font-medium text-muted-foreground">Age</p>
+                      <p className="font-medium text-muted-foreground">
+                        {t('PatientDetail.age')}
+                      </p>
                       <p className="text-lg">
-                        {calculateAge(patient.dob)} years
+                        {calculateAge(patient.dob)} {t('Common.years')}
                       </p>
                     </div>
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        Gender
+                        {t('PatientDetail.gender')}
                       </p>
                       <p className="text-lg capitalize">
                         {patient.gender || 'Not specified'}
@@ -159,7 +163,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                     </div>
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        Date of Birth
+                        {t('PatientDetail.dob')}
                       </p>
                       <p className="text-lg">
                         {patient.dob
@@ -196,16 +200,16 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
 
                   <div className="space-y-2">
                     <p className="font-medium text-sm text-muted-foreground">
-                      Record Info
+                      {t('PatientDetail.recordInfo')}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Created:{' '}
+                      {t('PatientDetail.Created')}:{' '}
                       {patient.createdAt
                         ? new Date(patient.createdAt).toLocaleDateString()
                         : 'Unknown'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Updated:{' '}
+                      {t('PatientDetail.Updated')}:{' '}
                       {patient.updatedAt
                         ? new Date(patient.updatedAt).toLocaleDateString()
                         : 'Never'}

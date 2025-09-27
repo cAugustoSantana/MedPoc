@@ -32,6 +32,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
 import type { Patient } from '@/types/patient';
+import { useTranslations } from '@/hooks/use-translations';
 
 const patientSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -58,6 +59,7 @@ export default function EditPatientDialog({
   onPatientUpdated,
 }: EditPatientDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslations();
 
   const form = useForm<PatientFormData>({
     resolver: zodResolver(patientSchema),
@@ -113,10 +115,8 @@ export default function EditPatientDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Patient</DialogTitle>
-          <DialogDescription>
-            Update patient information. Click save when you &apos;re done.
-          </DialogDescription>
+          <DialogTitle>{t('PatientDetail.edit')}</DialogTitle>
+          <DialogDescription>{t('PatientDetail.subheader')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -125,7 +125,7 @@ export default function EditPatientDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name *</FormLabel>
+                  <FormLabel>{t('Common.name')} *</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter patient name" {...field} />
                   </FormControl>
@@ -139,7 +139,7 @@ export default function EditPatientDialog({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('Common.email')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -157,7 +157,7 @@ export default function EditPatientDialog({
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel> {t('Common.phone')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter phone number" {...field} />
                   </FormControl>
@@ -171,7 +171,7 @@ export default function EditPatientDialog({
               name="dob"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date of Birth</FormLabel>
+                  <FormLabel>{t('PatientDetail.dob')}</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -185,7 +185,7 @@ export default function EditPatientDialog({
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Gender</FormLabel>
+                  <FormLabel>{t('Common.gender')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -197,11 +197,13 @@ export default function EditPatientDialog({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="not-specified">
-                        Not specified
+                        {t('Common.notSpecified')}
                       </SelectItem>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="male">{t('Common.Male')}</SelectItem>
+                      <SelectItem value="female">
+                        {t('Common.Female')}
+                      </SelectItem>
+                      <SelectItem value="other">{t('Common.Other')}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -214,7 +216,7 @@ export default function EditPatientDialog({
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('Common.address')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter address"
@@ -237,7 +239,7 @@ export default function EditPatientDialog({
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : 'Save Changes'}
+                {isSubmitting ? t('Common.Saving') : t('Common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

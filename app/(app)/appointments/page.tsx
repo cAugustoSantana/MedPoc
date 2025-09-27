@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { format, isSameDay } from 'date-fns';
 import { Calendar, Clock, User, Phone, FileText, Pill } from 'lucide-react';
 import { useOnboardingCheck } from '@/hooks/use-onboarding-check';
+import { useTranslations } from '@/hooks/use-translations';
 
 import {
   Card,
@@ -29,6 +30,7 @@ export default function AppointmentsPage() {
     new Date()
   ); // Today's date
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslations();
   const [isPrescriptionFormOpen, setIsPrescriptionFormOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] =
     useState<AppointmentWithDetails | null>(null);
@@ -183,11 +185,9 @@ export default function AppointmentsPage() {
       <div className="w-80 bg-white border-r border-gray-200 p-6">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-2">
-            Select Date
+            {t('Appointments.title')}
           </h2>
-          <p className="text-sm text-gray-600">
-            Choose a date to view appointments
-          </p>
+          <p className="text-sm text-gray-600">{t('Appointments.subheader')}</p>
         </div>
 
         <CalendarComponent
@@ -204,7 +204,9 @@ export default function AppointmentsPage() {
         <div className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {t('Appointments.title')}
+              </h1>
               <p className="text-gray-600">
                 {selectedDate
                   ? format(selectedDate, 'EEEE, MMMM d, yyyy')
@@ -222,7 +224,9 @@ export default function AppointmentsPage() {
         <div className="flex-1 p-6 overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="text-gray-500">Loading appointments...</div>
+              <div className="text-gray-500">
+                {t('Common.LoadingAppoinments')}
+              </div>
             </div>
           ) : selectedDate ? (
             selectedDateAppointments.length > 0 ? (
@@ -299,10 +303,10 @@ export default function AppointmentsPage() {
               <div className="flex flex-col items-center justify-center h-64 text-gray-500">
                 <Calendar className="h-12 w-12 mb-4 text-gray-300" />
                 <h3 className="text-lg font-medium mb-2">
-                  No appointments scheduled
+                  {t('Appointments.noAppoinments')}
                 </h3>
                 <p className="text-center mb-4">
-                  There are no appointments scheduled for{' '}
+                  {t('Appointments.noAppoinmentsSubtitle')}{' '}
                   {format(selectedDate, 'MMMM d, yyyy')}.
                 </p>
                 <AddAppointmentDialog
@@ -314,11 +318,10 @@ export default function AppointmentsPage() {
           ) : (
             <div className="flex flex-col items-center justify-center h-64 text-gray-500">
               <Calendar className="h-12 w-12 mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium mb-2">Select a date</h3>
-              <p className="text-center">
-                Choose a date from the calendar to view appointments for that
-                day.
-              </p>
+              <h3 className="text-lg font-medium mb-2">
+                {t('Appointments.selectDate')}.
+              </h3>
+              <p className="text-center">{t('Appointments.subheaderDay')}.</p>
             </div>
           )}
         </div>
