@@ -292,7 +292,7 @@ export default function AppointmentsPage() {
                           className="flex items-center gap-2"
                         >
                           <Pill className="h-4 w-4" />
-                          Create Prescription
+                          {t('Prescriptions.create')}
                         </Button>
                       </div>
                     </CardContent>

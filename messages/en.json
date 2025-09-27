@@ -207,7 +207,8 @@
     "subheader": "Manage patient prescriptions and medications",
     "newPrescription": "New Prescription",
     "cardTitle": "Prescription Management",
-    "cardDescription": "View and manage all patient prescriptions"
+    "cardDescription": "View and manage all patient prescriptions",
+    "create": "Create Prescriptions"
   },
   "PrescriptionsDetail": {
     "title": "Prescriptions Details",
