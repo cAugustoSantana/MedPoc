@@ -1,0 +1,7 @@
+{
+  "Patient": {
+    "title": "Pacientes modular",
+    "subheader": "Gestione los historiales e información de sus pacientes.",
+    "LoadingPatients": "Cargando pacientes"
+  }
+}

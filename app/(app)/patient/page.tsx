@@ -5,12 +5,14 @@ import PatientTable from '@/components/patient-table';
 import { PatientActions } from '@/components/patient-actions';
 import { Patient } from '@/types/patient';
 import { toast } from 'sonner';
+import { useTranslations } from '@/hooks/use-translations';
 import { useOnboardingCheck } from '@/hooks/use-onboarding-check';
 
 export default function PatientPage() {
   const { isReady } = useOnboardingCheck();
   const [patientsData, setPatientsData] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslations();
 
   const loadPatients = async () => {
     setLoading(true);
@@ -82,7 +84,7 @@ export default function PatientPage() {
     <div className="flex flex-1 flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Patients</h1>
+          <h1 className="text-3xl font-bold">{t('patient.Patient.title')}</h1>
           <p className="text-muted-foreground">
             Manage your patient records and information
           </p>

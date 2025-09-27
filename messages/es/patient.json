@@ -1,0 +1,8 @@
+{
+  "Patient": {
+    "title": "Patients modular",
+    "subheader": "Manage your patients’ records and information.",
+    "LoadingPatients": "Loading Patients",
+    "Unknown": "Unknown Patient"
+  }
+}

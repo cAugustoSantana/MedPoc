@@ -185,7 +185,7 @@ export default function AppointmentsPage() {
       <div className="w-80 bg-white border-r border-gray-200 p-6">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-2">
-            {t('Appointments.title')}
+            {t('appointment.Appointments.title')}
           </h2>
           <p className="text-sm text-gray-600">{t('Appointments.subheader')}</p>
         </div>
