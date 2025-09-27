@@ -32,6 +32,7 @@ import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Patient } from '@/types/patient';
 import { Prescription } from '@/types/prescription';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface Medication {
   id: string;
@@ -84,6 +85,7 @@ export function PrescriptionForm({
     ],
   });
   const [date, setDate] = useState<Date>(new Date());
+  const { t } = useTranslations();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patientsLoading, setPatientsLoading] = useState(false);
 
@@ -106,7 +108,7 @@ export function PrescriptionForm({
         setPatients([]);
       }
     } catch (error) {
-      console.error('Error fetching patients:', error);
+      console.error(t('Common.lastUpdate'), error);
       setPatients([]);
     } finally {
       setPatientsLoading(false);
@@ -223,19 +225,21 @@ export function PrescriptionForm({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'edit' ? 'Edit Prescription' : 'New Prescription'}
+            {mode === 'edit'
+              ? t('PrescriptionsDetail.editPrescription')
+              : t('PrescriptionsDetail.newPrescription')}
             {appointmentId && (
               <span className="text-sm font-normal text-muted-foreground ml-2">
-                (from Appointment #{appointmentId})
+                ({t('Appointments.fromAppointment')} #{appointmentId})
               </span>
             )}
           </DialogTitle>
           <DialogDescription>
             {mode === 'edit'
-              ? 'Update the prescription details below.'
+              ? t('PrescriptionsDetail.editPrescriptionHeader')
               : appointmentId
-                ? 'Create a prescription for this appointment. Patient and appointment are pre-selected.'
-                : 'Fill in the details to create a new prescription.'}
+                ? t('PrescriptionsDetail.newPrescriptionHeaderPreSelect')
+                : t('PrescriptionsDetail.newPrescriptionHeader')}
           </DialogDescription>
         </DialogHeader>
 
@@ -243,18 +247,20 @@ export function PrescriptionForm({
           {/* Patient Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Patient Information</CardTitle>
+              <CardTitle className="text-lg">
+                {t('Common.patientInformation')}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="patient">Patient *</Label>
+                <Label htmlFor="patient">{t('Common.patient')} *</Label>
                 <Combobox
                   options={patientOptions}
                   value={formData.patientId}
                   onValueChange={handlePatientChange}
-                  placeholder="Select patient..."
-                  searchPlaceholder="Search patients..."
-                  emptyText="No patients found."
+                  placeholder={t('Select.patient')}
+                  searchPlaceholder={t('Search.patients')}
+                  emptyText={t('NotFound.patients')}
                   disabled={
                     patientsLoading ||
                     (appointmentId !== null && appointmentId !== undefined)
@@ -268,10 +274,12 @@ export function PrescriptionForm({
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">Medications</CardTitle>
+                <CardTitle className="text-lg">
+                  {t('Common.patients')}
+                </CardTitle>
                 <Button type="button" onClick={addMedication} size="sm">
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Medication
+                  {t('Add.medication')}
                 </Button>
               </div>
             </CardHeader>
@@ -282,7 +290,9 @@ export function PrescriptionForm({
                   className="border rounded-lg p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Medication {index + 1}</h4>
+                    <h4 className="font-medium">
+                      {t('Common.medication')} {index + 1}
+                    </h4>
                     {formData.medications.length > 1 && (
                       <Button
                         type="button"
@@ -298,7 +308,7 @@ export function PrescriptionForm({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor={`medication-${index}`}>
-                        Medication Name *
+                        {t('Common.medicationName')} *
                       </Label>
                       <Input
                         id={`medication-${index}`}
@@ -310,7 +320,9 @@ export function PrescriptionForm({
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor={`dosage-${index}`}>Dosage *</Label>
+                      <Label htmlFor={`dosage-${index}`}>
+                        {t('Common.dosage')} *
+                      </Label>
                       <Input
                         id={`dosage-${index}`}
                         placeholder="e.g., 500mg"
@@ -329,7 +341,9 @@ export function PrescriptionForm({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`frequency-${index}`}>Frequency *</Label>
+                      <Label htmlFor={`frequency-${index}`}>
+                        {t('Common.frequency')} *
+                      </Label>
                       <Select
                         value={medication.frequency}
                         onValueChange={(value) =>
@@ -337,34 +351,40 @@ export function PrescriptionForm({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select frequency" />
+                          <SelectValue placeholder="{t('Select.frequency')}" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Once daily">Once daily</SelectItem>
+                          <SelectItem value="Once daily">
+                            {t('Frequency.daily')}
+                          </SelectItem>
                           <SelectItem value="Twice daily">
-                            Twice daily
+                            {t('Frequency.twice')}
                           </SelectItem>
                           <SelectItem value="3 times daily">
-                            3 times daily
+                            {t('Frequency.3times')}
                           </SelectItem>
                           <SelectItem value="4 times daily">
-                            4 times daily
+                            {t('Frequency.4times')}
                           </SelectItem>
                           <SelectItem value="Every 4 hours">
-                            Every 4 hours
+                            {t('Frequency.4hours')}
                           </SelectItem>
                           <SelectItem value="Every 6 hours">
-                            Every 6 hours
+                            {t('Frequency.6hours')}
                           </SelectItem>
                           <SelectItem value="Every 8 hours">
-                            Every 8 hours
+                            {t('Frequency.8hours')}
                           </SelectItem>
-                          <SelectItem value="As needed">As needed</SelectItem>
+                          <SelectItem value="As needed">
+                            {t('Frequency.asNeeded')}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor={`duration-${index}`}>Duration *</Label>
+                      <Label htmlFor={`duration-${index}`}>
+                        {t('Common.duration')} *
+                      </Label>
                       <Input
                         id={`duration-${index}`}
                         placeholder="e.g., 7 days, 30 days"
@@ -383,11 +403,11 @@ export function PrescriptionForm({
 
                   <div className="space-y-2">
                     <Label htmlFor={`instructions-${index}`}>
-                      Specific Instructions
+                      {t('PrescriptionsDetail.specificInstrutctions')}
                     </Label>
                     <Textarea
                       id={`instructions-${index}`}
-                      placeholder="Specific instructions for this medication..."
+                      placeholder="{t('PrescriptionsDetail.specificInstrutctions')}..."
                       value={medication.instructions}
                       onChange={(e) =>
                         handleMedicationChange(
@@ -407,11 +427,13 @@ export function PrescriptionForm({
           {/* Prescription Details */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Prescription Details</CardTitle>
+              <CardTitle className="text-lg">
+                {t('PrescriptionsDetail.title')}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Prescribed Date *</Label>
+                <Label>{t('PrescriptionsDetail.prescriptionDate')} *</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -434,10 +456,12 @@ export function PrescriptionForm({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notes">General Notes</Label>
+                <Label htmlFor="notes">
+                  {t('PrescriptionsDetail.generalNotes')}
+                </Label>
                 <Textarea
                   id="notes"
-                  placeholder="Enter general prescription notes..."
+                  placeholder={t('PrescriptionsDetail.generalNotes')}
                   value={formData.notes}
                   onChange={(e) => handleInputChange('notes', e.target.value)}
                   rows={3}
@@ -452,10 +476,12 @@ export function PrescriptionForm({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t('PrescriptionsDetail.cancel')}
             </Button>
             <Button type="submit">
-              {mode === 'edit' ? 'Update Prescription' : 'Create Prescription'}
+              {mode === 'edit'
+                ? t('PrescriptionsDetail.updatePrescription')
+                : t('PrescriptionsDetail.createPrescription')}
             </Button>
           </DialogFooter>
         </form>

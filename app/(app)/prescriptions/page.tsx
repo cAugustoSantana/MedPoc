@@ -441,7 +441,7 @@ export default function PrescriptionsPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by patient name, medication, or notes..."
+                placeholder={t('Search.prescriptionTable')}
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
@@ -455,10 +455,14 @@ export default function PrescriptionsPage() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="all">{t('Common.allStatus')}</SelectItem>
+                <SelectItem value="active">{t('Common.active')}</SelectItem>
+                <SelectItem value="completed">
+                  {t('Common.completed')}
+                </SelectItem>
+                <SelectItem value="cancelled">
+                  {t('Common.cancelled')}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -474,7 +478,7 @@ export default function PrescriptionsPage() {
                   <TableHead>{t('Common.status')}</TableHead>
                   <TableHead>{t('Common.prescribedDate')}</TableHead>
                   <TableHead className="text-right">
-                    {t('Common.accions')}
+                    {t('Common.actions')}
                   </TableHead>
                 </TableRow>
               </TableHeader>

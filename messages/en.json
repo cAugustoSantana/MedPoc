@@ -39,15 +39,47 @@
     "newPrescription": "New Prescription",
     "noPatientsFound": "No patients found"
   },
+
+  "Search": {
+    "patients": "Search patients",
+    "prescriptionTable": "Search by patient name, medication, or notes..."
+  },
+  "Select": {
+    "date": "Select a Date",
+    "patient": "Select patient...",
+    "frequency": "Select frequency",
+    "selectType": "Select type"
+  },
+  "Add": {
+    "medication": "Medication"
+  },
+  "NotFound": {
+    "patients": "No patients found"
+  },
+  "Frequency": {
+    "daily": "Once daily",
+    "twice": "Twice daily",
+    "3times": "3 times daily",
+    "4times": " 4 times daily",
+    "4hours": "Every 4 hours",
+    "6hours": "Every 6 hours",
+    "8hours": "Every 8 hours",
+    "asNeeded": "As needed"
+  },
   "Common": {
     "loading": "Loading...",
+    "consultation": "Consultation",
     "save": "Save",
     "saving": "Saving",
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
     "edit": "Edit",
+    "physicalExam": "Physical Exam",
     "delete": "Delete",
     "add": "Add",
+    "followUp": "Follow Up",
+    "checkUP": "Check Up",
+    "emergency": "Emergency",
     "search": "Search",
     "date": "Date",
     "Result": "Result",
@@ -57,7 +89,7 @@
     "name": "Name",
     "Filters": "Filters",
     "gender": "Gender",
-    "accions": "Acciones",
+    "actions": "Actions",
     "email": "Email",
     "dosage": "Dosage",
     "medication": "Medication",
@@ -65,8 +97,8 @@
     "dateOfBirth": "Date of Birth",
     "phone": "Phone",
     "address": "Address",
-    "LoadingAppoinments": "Loading Appointments",
-    "Patient": "Patient",
+    "LoadingAppoinme  nts": "Loading Appointments",
+    "patient": "Patient",
     "toggleColumns": "Toggle columns",
     "status": "Status",
     "duration": "Duration",
@@ -83,12 +115,34 @@
     "Female": "Female",
     "Other": "Other",
     "notSpecified": "Not Specified",
-    "years": "years"
+    "years": "years",
+    "prescription": "Prescription",
+    "patientInformation": "Patient Information",
+    "patientName": "Patient Name",
+    "medications": "Medications",
+    "instructions": "Instructions",
+    "createdDate": "Created Date",
+    "lastUpdate": "Last Update",
+    "active": "Active",
+    "generating": "Generating",
+    "downloadPDF": "Download PDF",
+    "medicationName": "Medication Name",
+    "allStatus": "All Status",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "enterAppointment": "Enter appointment notes..."
+  },
+  "Error": {
+    "fetchingPatients": "Error fetching patients",
+    "fetchingPrescriptions": "Error fetching prescription items:",
+    "generatePDF": "Failed to generate PDF",
+    "downloadPDF": " Error downloading PDF:"
   },
   "Patient": {
     "title": "Patients",
     "subheader": "Manage your patients’ records and information.",
-    "LoadingPatients": "Loading Patients"
+    "LoadingPatients": "Loading Patients",
+    "Unknown": "Unknown Patient"
   },
   "PatientTable": {
     "nameHeader": "Name"
@@ -135,11 +189,13 @@
     "noAppoinments": "No appointments scheduled",
     "noAppoinmentsSubtitle": "There are no appointments scheduled for",
     "addAppoinments": "Add Appointment",
-    "appointmentType": "Appoinment Type"
+    "appointmentType": "Appoinment Type",
+    "fromAppointment": "from Appointment "
   },
-  "AppoinmentWidget": {
+  "AppointmentWidget": {
     "title": "Add New Appointment",
     "subtitle": "Fill in the appointment details below. Click save when finished.",
+    "subtitlehalf1": "Schedule a new appointment for",
     "Type": "Appointment Type",
     "SelectType": "Select a Type",
     "EnterNotes": "Enter appointment notes...",
@@ -154,6 +210,20 @@
     "cardDescription": "View and manage all patient prescriptions"
   },
   "PrescriptionsDetail": {
-    "title": "Prescriptions Details"
+    "title": "Prescriptions Details",
+    "notFound": "No medications found for this prescription.",
+    "prescriptionInfo": "Prescription Information",
+    "generalNotes": "General Notes",
+    "enterGeneralNotes": "Enter general prescription notes...",
+    "prescriptionDate": "Prescribed Date",
+    "completePrescription": "Complete prescription information for",
+    "specificInstrutctions": "Specific instructions for this medication",
+    "updatePrescription": "updatePrescription",
+    "createPrescription": "createPrescription",
+    "newPrescription": "New Prescription",
+    "newPrescriptionHeader": "Fill in the details to create a new prescription.",
+    "newPrescriptionHeaderPreSelect": "Fill in the details to create a new prescription.",
+    "editPrescriptionHeader": "Fill in the details to create a new prescription.",
+    "editPrescription": "Edit Prescription"
   }
 }
