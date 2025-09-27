@@ -17,7 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import AddResultsDialog from '@/components/add-results-dialog';
+import AddResultsDialog from '@/components/add-results';
 import {
   Pagination,
   PaginationContent,
