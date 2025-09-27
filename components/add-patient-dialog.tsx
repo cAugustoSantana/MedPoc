@@ -46,6 +46,7 @@ import {
 import { createPatientAction } from '@/app/(app)/patient/actions';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface AddPatientDialogProps {
   onPatientAdded: () => void;
@@ -54,6 +55,7 @@ interface AddPatientDialogProps {
 export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslations();
 
   const form = useForm<CreatePatientData>({
     resolver: zodResolver(createPatientSchema),
@@ -227,7 +229,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Gender</FormLabel>
+                  <FormLabel>{t('Common.gender')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -238,9 +240,11 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="male">{t('Common.Male')}</SelectItem>
+                      <SelectItem value="female">
+                        {t('Common.Female')}
+                      </SelectItem>
+                      <SelectItem value="other">{t('Common.Other')}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -252,7 +256,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>{t('Common.phone')}</FormLabel>
                   <FormControl>
                     <Input type="tel" placeholder="(123) 456-7890" {...field} />
                   </FormControl>
@@ -265,7 +269,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('Common.address')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter full address"
@@ -289,7 +293,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Saving...' : 'Save Patient'}
+                {loading ? t('Common.Saving') : t('Common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

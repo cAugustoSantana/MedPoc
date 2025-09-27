@@ -41,6 +41,7 @@ import { toast } from 'sonner';
 import { Patient } from '@/types/patient';
 import { AppointmentFormData, Appointment } from '@/types/appointment';
 import { AppointmentAvailabilityPicker } from './appointment-availability-picker';
+import { useTranslations } from '@/hooks/use-translations';
 
 // Appointment form schema
 const appointmentFormSchema = z.object({
@@ -66,6 +67,7 @@ export function AddAppointmentDialog({
   selectedPatient,
 }: AddAppointmentDialogProps) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslations();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patientsLoading, setPatientsLoading] = useState(false);
@@ -252,18 +254,18 @@ export function AddAppointmentDialog({
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <PlusIcon className="h-4 w-4" />
-          Add Appointment
+          {t('AppointmentWidget.title')}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[95vw] max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-2">
           <DialogTitle className="text-lg sm:text-xl">
-            Add New Appointment
+            {t('AppointmentWidget.title')}
           </DialogTitle>
           <DialogDescription className="text-sm">
             {selectedPatient
-              ? `Schedule a new appointment for ${selectedPatient.name}. Fill in the details below.`
-              : "Fill in the appointment details below. Click save when you're done."}
+              ? `${t('AppointmentWidget.subtitlehalf1')} ${selectedPatient.name}`
+              : t('AppointmentWidget.subtitle')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -274,7 +276,7 @@ export function AddAppointmentDialog({
                 name="patientId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Patient *</FormLabel>
+                    <FormLabel> {t('Common.patient')} *</FormLabel>
                     <FormControl>
                       {selectedPatient ? (
                         <div className="flex items-center space-x-2 p-2 border rounded-md bg-muted/50">
@@ -290,9 +292,9 @@ export function AddAppointmentDialog({
                           options={patientOptions}
                           value={field.value}
                           onValueChange={handlePatientChange}
-                          placeholder="Select patient..."
-                          searchPlaceholder="Search patients..."
-                          emptyText="No patients found."
+                          placeholder={t('Select.patient')}
+                          searchPlaceholder={t('Search.patients')}
+                          emptyText={t('NotFound.patients')}
                           disabled={patientsLoading}
                         />
                       )}
@@ -306,7 +308,7 @@ export function AddAppointmentDialog({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>{t('Common.phone')}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -359,7 +361,7 @@ export function AddAppointmentDialog({
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Duration</FormLabel>
+                    <FormLabel>{t('Common.duration')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -389,26 +391,33 @@ export function AddAppointmentDialog({
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Appointment Type *</FormLabel>
+                    <FormLabel>{t('Appointments.appointmentType')} *</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select type" />
+                          <SelectValue placeholder={t('Select.selectType')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="Consultation">
-                          Consultation
+                          {t('Common.consultation')}
                         </SelectItem>
                         <SelectItem value="Physical Exam">
-                          Physical Exam
+                          {t('Common.physicalExam')}
                         </SelectItem>
-                        <SelectItem value="Follow-up">Follow-up</SelectItem>
-                        <SelectItem value="Check-up">Check-up</SelectItem>
-                        <SelectItem value="Emergency">Emergency</SelectItem>
+                        <SelectItem value="Follow-up">
+                          {' '}
+                          {t('Common.followUp')}
+                        </SelectItem>
+                        <SelectItem value="Check-up">
+                          {t('Common.followUp')}
+                        </SelectItem>
+                        <SelectItem value="Emergency">
+                          {t('Common.emergency')}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -420,7 +429,7 @@ export function AddAppointmentDialog({
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>{t('Common.years')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -431,9 +440,15 @@ export function AddAppointmentDialog({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="confirmed">Confirmed</SelectItem>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                        <SelectItem value="confirmed">
+                          {t('Common.confirmed')}
+                        </SelectItem>
+                        <SelectItem value="pending">
+                          {t('Common.pending')}
+                        </SelectItem>
+                        <SelectItem value="cancelled">
+                          {t('Common.cancelled')}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -447,10 +462,10 @@ export function AddAppointmentDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>{t('Common.Notes')}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter appointment notes..."
+                      placeholder={t('Common.enterAppointment')}
                       className="resize-none"
                       {...field}
                     />
@@ -477,7 +492,7 @@ export function AddAppointmentDialog({
                 disabled={loading}
                 className="w-full sm:w-auto"
               >
-                {loading ? 'Saving...' : 'Save Appointment'}
+                {loading ? t('Common.Saving') : t('Common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

@@ -19,6 +19,9 @@ import {
   useReactTable,
   type VisibilityState,
 } from '@tanstack/react-table';
+
+import { useTranslations } from '@/hooks/use-translations';
+
 import {
   ChevronDownIcon,
   ChevronFirstIcon,
@@ -126,6 +129,7 @@ export default function PatientTable({
   addPatientComponent?: React.ReactNode;
 }>) {
   const id = useId();
+  const { t } = useTranslations();
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -388,7 +392,7 @@ export default function PatientTable({
             <PopoverContent className="w-auto min-w-36 p-3" align="start">
               <div className="space-y-3">
                 <div className="text-muted-foreground text-xs font-medium">
-                  Filters
+                  {t('Common.Filters')}
                 </div>
                 <div className="space-y-3">
                   {uniqueStatusValues.map((value, i) => (
@@ -424,11 +428,11 @@ export default function PatientTable({
                   size={16}
                   aria-hidden="true"
                 />
-                View
+                {t('Common.View')}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('Common.toggleColumns')}</DropdownMenuLabel>
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -461,7 +465,7 @@ export default function PatientTable({
                     size={16}
                     aria-hidden="true"
                   />
-                  Delete
+                  {t('Common.Delete')}
                   <span className="bg-background text-muted-foreground/70 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
                     {table.getSelectedRowModel().rows.length}
                   </span>
@@ -491,13 +495,13 @@ export default function PatientTable({
                 </div>
                 <AlertDialogFooter>
                   <AlertDialogCancel disabled={isDeleting}>
-                    Cancel
+                    {t('Common.cancel')}
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeleteRows}
                     disabled={isDeleting}
                   >
-                    {isDeleting ? 'Deleting...' : 'Delete'}
+                    {isDeleting ? t('Common.Saving') : t('Common.saveChanges')}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
