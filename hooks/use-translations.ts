@@ -18,6 +18,9 @@ export function useTranslations() {
     'patient',
     'appointment',
     'prescription',
+    'medicalRecord',
+    'tests',
+    'navigation',
   ] as const;
 
   // Load a single namespace with per-file fallback to English

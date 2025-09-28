@@ -70,10 +70,10 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
       <main className="min-h-screen bg-gray-100 p-4">
         <div className="w-full max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            {t('PatientDetail.title')}
+            {t('patient.title')}
           </h1>
           <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading patient...</div>
+            <div className="text-gray-500"> {t('loading.title')}...</div>
           </div>
         </div>
       </main>
@@ -85,7 +85,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
       <main className="min-h-screen bg-gray-100 p-4">
         <div className="w-full max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            Patient Details
+            {t('patient.details')}
           </h1>
           <div className="flex items-center justify-center h-64">
             <div className="text-red-500">{error || 'Patient not found'}</div>
@@ -115,7 +115,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     <main className="min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-6">
-          {t('PatientDetail.title')}
+          {t('patient.title')}
         </h1>
 
         <div className="space-y-6">
@@ -124,13 +124,13 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl font-bold">
-                  {t('PatientDetail.title')}
+                  {t('patient.title')}
                 </CardTitle>
                 <Button
                   variant="outline"
                   onClick={() => setIsEditDialogOpen(true)}
                 >
-                  {t('PatientDetail.edit')}
+                  {t('patient.edit')}
                 </Button>
               </div>
             </CardHeader>
@@ -147,15 +147,15 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        {t('PatientDetail.age')}
+                        {t('patient.age')}
                       </p>
                       <p className="text-lg">
-                        {calculateAge(patient.dob)} {t('Common.years')}
+                        {calculateAge(patient.dob)} {t('common.years')}
                       </p>
                     </div>
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        {t('PatientDetail.gender')}
+                        {t('patient.gender')}
                       </p>
                       <p className="text-lg capitalize">
                         {patient.gender || 'Not specified'}
@@ -163,7 +163,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                     </div>
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        {t('PatientDetail.dob')}
+                        {t('patient.dob')}
                       </p>
                       <p className="text-lg">
                         {patient.dob
@@ -200,16 +200,16 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
 
                   <div className="space-y-2">
                     <p className="font-medium text-sm text-muted-foreground">
-                      {t('PatientDetail.recordInfo')}
+                      {t('patient.recordInfo')}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {t('PatientDetail.Created')}:{' '}
+                      {t('patient.created')}:{' '}
                       {patient.createdAt
                         ? new Date(patient.createdAt).toLocaleDateString()
                         : 'Unknown'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {t('PatientDetail.Updated')}:{' '}
+                      {t('patient.updated')}:{' '}
                       {patient.updatedAt
                         ? new Date(patient.updatedAt).toLocaleDateString()
                         : 'Never'}

@@ -1,0 +1,8 @@
+{
+  "title": "Medical Records",
+  "date": "Date",
+  "diagnosis": "Diagnosis",
+  "treatment": "Treatment",
+  "doctor": "Doctor",
+  "visitType": "Visit Type"
+}

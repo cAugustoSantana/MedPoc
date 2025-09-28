@@ -350,9 +350,9 @@ export default function PatientTable({
               onChange={(e) =>
                 table.getColumn('name')?.setFilterValue(e.target.value)
               }
-              placeholder={t('common.filterPlaceholder')}
+              placeholder={t('patient.filterPlaceholder')}
               type="text"
-              aria-label={t('common.filterPlaceholder')}
+              aria-label={t('patient.filterPlaceholder')}
             />
             <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
               <ListFilterIcon size={16} aria-hidden="true" />
@@ -648,7 +648,7 @@ export default function PatientTable({
         {/* Results per page */}
         <div className="flex items-center gap-3">
           <Label htmlFor={id} className="max-sm:sr-only">
-            Rows per page
+            {t('common.rowFooter')}
           </Label>
           <Select
             value={table.getState().pagination.pageSize.toString()}

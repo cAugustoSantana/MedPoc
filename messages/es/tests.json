@@ -1,0 +1,12 @@
+{
+  "title": "Exámenes",
+  "widgetTitle": "Exámenes y Resultados de Laboratorio",
+  "recentLabResults": "Resultados Recientes de Laboratorio",
+  "imagingAndOtherTests": "Imágenes y Otros Exámenes",
+  "report": "Ver Informe",
+  "testColumn": "Examen",
+  "resultColumn": "Resultado",
+  "referenceRange": "Rango de Referencia",
+  "date": "Fecha",
+  "status": "Estado"
+}

@@ -161,7 +161,7 @@ export default function PrescriptionsPage() {
   if (!isReady) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-500">{t('Common.loading')}</div>
+        <div className="text-gray-500">{t('common.loading')}</div>
       </div>
     );
   }
@@ -406,7 +406,7 @@ export default function PrescriptionsPage() {
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
             <p className="mt-2 text-muted-foreground">
-              Loading prescriptions...
+              {t('common.Loading.prescriptions')}
             </p>
           </div>
         </div>
@@ -418,30 +418,26 @@ export default function PrescriptionsPage() {
     <div className="flex flex-1 flex-col gap-4 p-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">{t('Prescriptions.title')}</h1>
-          <p className="text-muted-foreground">
-            {t('Prescriptions.subheader')}
-          </p>
+          <h1 className="text-3xl font-bold">{t('prescription.title')}</h1>
+          <p className="text-muted-foreground">{t('prescription.subheader')}</p>
         </div>
         <Button onClick={() => setIsFormOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          {t('Prescriptions.newPrescription')}
+          {t('prescription.newPrescription')}
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('Prescriptions.cardTitle')}</CardTitle>
-          <CardDescription>
-            {t('Prescriptions.cardDescription')}
-          </CardDescription>
+          <CardTitle>{t('prescription.cardTitle')}</CardTitle>
+          <CardDescription>{t('prescription.cardDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={t('Search.prescriptionTable')}
+                placeholder={t('search.prescriptionTable')}
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
@@ -455,13 +451,13 @@ export default function PrescriptionsPage() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('Common.allStatus')}</SelectItem>
-                <SelectItem value="active">{t('Common.active')}</SelectItem>
+                <SelectItem value="all">{t('common.allStatus')}</SelectItem>
+                <SelectItem value="active">{t('common.active')}</SelectItem>
                 <SelectItem value="completed">
-                  {t('Common.completed')}
+                  {t('common.completed')}
                 </SelectItem>
                 <SelectItem value="cancelled">
-                  {t('Common.cancelled')}
+                  {t('common.cancelled')}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -471,14 +467,14 @@ export default function PrescriptionsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{t('Common.Patient')}</TableHead>
-                  <TableHead>{t('Common.medication')}</TableHead>
-                  <TableHead>{t('Common.dosage')}</TableHead>
-                  <TableHead>{t('Common.frequency')}</TableHead>
-                  <TableHead>{t('Common.status')}</TableHead>
-                  <TableHead>{t('Common.prescribedDate')}</TableHead>
+                  <TableHead>{t('common.patient')}</TableHead>
+                  <TableHead>{t('common.medication')}</TableHead>
+                  <TableHead>{t('common.dosage')}</TableHead>
+                  <TableHead>{t('common.frequency')}</TableHead>
+                  <TableHead>{t('common.status')}</TableHead>
+                  <TableHead>{t('common.prescribedDate')}</TableHead>
                   <TableHead className="text-right">
-                    {t('Common.actions')}
+                    {t('common.actions')}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -498,7 +494,7 @@ export default function PrescriptionsPage() {
                             items.map((item, index) => (
                               <div key={item.itemId} className="text-sm">
                                 <span className="font-medium">
-                                  {item.drugName || t('Common.prescribedDate')}
+                                  {item.drugName || t('common.prescribedDate')}
                                 </span>
                                 {index < items.length - 1 && (
                                   <span className="text-muted-foreground">

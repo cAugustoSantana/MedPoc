@@ -20,6 +20,10 @@ export async function getTranslations() {
     'appointment.json',
     'prescription.json',
     'common.json',
+    'medicalRecord.json',
+    'navigation.json',
+    'dashboard.json',
+    'tests.json',
   ];
 
   const translations: Record<string, unknown> = {};

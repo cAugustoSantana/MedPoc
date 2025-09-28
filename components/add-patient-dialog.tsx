@@ -124,7 +124,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <PlusIcon className="h-4 w-4" />
-          Add Patient
+          {t('patient.add')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -142,7 +142,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name *</FormLabel>
+                  <FormLabel>{t('common.name')} *</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter patient name" {...field} />
                   </FormControl>
@@ -155,7 +155,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('common.email')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -172,7 +172,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="dob"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date of Birth</FormLabel>
+                  <FormLabel>{t('common.dob')}</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -229,7 +229,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('Common.gender')}</FormLabel>
+                  <FormLabel>{t('common.gender')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -242,7 +242,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                     <SelectContent>
                       <SelectItem value="male">{t('common.male')}</SelectItem>
                       <SelectItem value="female">
-                        {t('Common.Female')}
+                        {t('common.Female')}
                       </SelectItem>
                       <SelectItem value="other">{t('common.other')}</SelectItem>
                     </SelectContent>
@@ -293,7 +293,7 @@ export function AddPatientDialog({ onPatientAdded }: AddPatientDialogProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? t('common.Saving') : t('common.saveChanges')}
+                {loading ? t('common.saving') : t('common.saveChanges')}
               </Button>
             </DialogFooter>
           </form>

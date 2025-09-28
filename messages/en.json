@@ -26,19 +26,6 @@
     "tests": "Tests",
     "settings": "Settings"
   },
-  "Dashboard": {
-    "schedule": "Schedule",
-    "quickStats": "Quick Stats",
-    "quickActions": "Quick Actions",
-    "recentPatients": "Recent Patients",
-    "totalPatients": "Total Patients",
-    "todayAppointments": "Today's Appointments",
-    "pendingPrescriptions": "Pending Prescriptions",
-    "addPatient": "Add Patient",
-    "scheduleAppointment": "Schedule Appointment",
-    "newPrescription": "New Prescription",
-    "noPatientsFound": "No patients found"
-  },
 
   "Search": {
     "patients": "Search patients",
@@ -137,70 +124,6 @@
     "fetchingPrescriptions": "Error fetching prescription items:",
     "generatePDF": "Failed to generate PDF",
     "downloadPDF": " Error downloading PDF:"
-  },
-  "Patient": {
-    "title": "Patients",
-    "subheader": "Manage your patients’ records and information.",
-    "LoadingPatients": "Loading Patients",
-    "Unknown": "Unknown Patient"
-  },
-  "PatientTable": {
-    "nameHeader": "Name"
-  },
-  "PatientDetail": {
-    "title": "Patient Details",
-    "edit": "Edit Patient",
-    "gender": "Gender",
-    "subheader": "Update patient information. Click save when you're done.",
-    "recordInfo": "Record Information",
-    "dob": "Date of Birth",
-    "age": "Age",
-    "Created": "Created:",
-    "Updated": "Updated"
-  },
-  "MedicalRecords": {
-    "title": "Medical Records",
-    "date": "Date",
-    "diagnosis": "Diagnosis",
-    "treatment": "Treatment",
-    "doctor": "Doctor",
-    "visitType": "Visit Type"
-  },
-  "Tests": {
-    "title": "Tests",
-    "widgetTitle": "Tests & Lab Results",
-    "RecentLabResults": "Recent Lab Results",
-    "Imaging & Other Tests": "Imaging & Other Tests",
-    "Report": "View Report",
-    "TestColumn": "Test",
-    "ResultColumn": "Result",
-    "ReferenceRange": "Reference Range",
-    "date": "Date",
-    "status": "Status"
-  },
-  "Appointments": {
-    "title": "Appointments",
-    "upcoming": "Upcoming Appointments",
-    "recent": "Recent Appointments",
-    "selectDate": "Select a Date",
-    "selectDateSubheader": "Select a date to view appointments",
-    "subheader": "Choose a date to view appointments",
-    "subheaderDay": "Choose a date from the calendar to view appointments for that day.",
-    "noAppoinments": "No appointments scheduled",
-    "noAppoinmentsSubtitle": "There are no appointments scheduled for",
-    "addAppoinments": "Add Appointment",
-    "appointmentType": "Appoinment Type",
-    "fromAppointment": "from Appointment "
-  },
-  "AppointmentWidget": {
-    "title": "Add New Appointment",
-    "subtitle": "Fill in the appointment details below. Click save when finished.",
-    "subtitlehalf1": "Schedule a new appointment for",
-    "Type": "Appointment Type",
-    "SelectType": "Select a Type",
-    "EnterNotes": "Enter appointment notes...",
-    "Upcoming": "Upcoming Appointments",
-    "Recent": "Recent Appointments"
   },
   "Prescriptions": {
     "title": "Prescriptions",

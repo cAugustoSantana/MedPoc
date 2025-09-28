@@ -10,8 +10,9 @@
   "recordInfo": "Record Information",
   "dob": "Date of Birth",
   "age": "Age",
-  "created": "Created:",
+  "created": "Created",
   "updated": "Updated",
   "tableNameHeader": "Name",
-  "filterPlaceholder": "Filter by name or email"
+  "filterPlaceholder": "Filter by name or email",
+  "add": "Add Patient"
 }

@@ -6,11 +6,13 @@
   "detailTitle": "Detalles del paciente",
   "edit": "Editar paciente",
   "gender": "Género",
-  "subheaderDetail": "Actualice la información del paciente. Haga clic en guardar cuando haya terminado.",
+  "subheaderDetail": "Actualice la información del paciente. Haga clic en guardar cuando termine.",
   "recordInfo": "Información del registro",
   "dob": "Fecha de nacimiento",
   "age": "Edad",
-  "created": "Creado:",
+  "created": "Creado",
   "updated": "Actualizado",
-  "tableNameHeader": "Nombre"
+  "tableNameHeader": "Nombre",
+  "filterPlaceholder": "Filtrar por nombre o correo electrónico",
+  "add": "Agregar paciente"
 }

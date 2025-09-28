@@ -1,0 +1,8 @@
+{
+  "title": "Historial Clínico",
+  "date": "Fecha",
+  "diagnosis": "Diagnóstico",
+  "treatment": "Tratamiento",
+  "doctor": "Médico",
+  "visitType": "Tipo de Consulta"
+}

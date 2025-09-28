@@ -26,19 +26,6 @@
     "tests": "Exámenes",
     "settings": "Configuración"
   },
-  "Dashboard": {
-    "schedule": "Agenda",
-    "quickStats": "Estadísticas rápidas",
-    "quickActions": "Acciones rápidas",
-    "recentPatients": "Pacientes recientes",
-    "totalPatients": "Pacientes totales",
-    "todayAppointments": "Citas de hoy",
-    "pendingPrescriptions": "Recetas pendientes",
-    "addPatient": "Agregar paciente",
-    "scheduleAppointment": "Programar cita",
-    "newPrescription": "Nueva receta",
-    "noPatientsFound": "No se encontraron pacientes"
-  },
   "Common": {
     "loading": "Cargando...",
     "save": "Guardar",
@@ -78,66 +65,5 @@
     "Other": "Otro",
     "notSpecified": "No especificado",
     "years": "Años"
-  },
-  "Patient": {
-    "title": "Pacientes",
-    "subheader": "Gestione los historiales e información de sus pacientes.",
-    "LoadingPatients": "Cargando pacientes"
-  },
-  "PatientTable": {
-    "nameHeader": "Nombre"
-  },
-  "PatientDetail": {
-    "title": "Detalles del paciente",
-    "edit": "Editar paciente",
-    "gender": "Género",
-    "subheader": "Actualice la información del paciente. Haga clic en guardar cuando finalice.",
-    "recordInfo": "Información del historial",
-    "dob": "Fecha de nacimiento",
-    "age": "Edad",
-    "Created": "Creado:",
-    "Updated": "Actualizado"
-  },
-  "MedicalRecords": {
-    "title": "Historial médico",
-    "date": "Fecha",
-    "diagnosis": "Diagnóstico",
-    "treatment": "Tratamiento",
-    "doctor": "Doctor",
-    "visitType": "Tipo de visita"
-  },
-  "Appointments": {
-    "title": "Citas",
-    "upcoming": "Próximas citas",
-    "recent": "Citas recientes"
-  },
-  "Tests": {
-    "title": "Exámenes",
-    "widgetTitle": "Exámenes y resultados de laboratorio",
-    "RecentLabResults": "Resultados de laboratorio recientes",
-    "Imaging & Other Tests": "Imágenes y otros exámenes",
-    "Report": "Ver informe",
-    "TestColumn": "Examen",
-    "ResultColumn": "Resultado",
-    "ReferenceRange": "Rango de referencia",
-    "date": "Fecha",
-    "status": "Estado"
-  },
-  "Appoinments": {
-    "title": "Citas",
-    "SelectDate": "Seleccione una fecha",
-    "SelectDateSubheader": "Seleccione una fecha para ver las citas",
-    "NoAppoinments": "No hay citas programadas",
-    "NoAppoinmentsSubtitle": "No hay citas programadas para",
-    "AddAppoinments": "Agregar cita"
-  },
-  "AppoinmentWidget": {
-    "title": "Agregar nueva cita",
-    "subtitle": "Complete los detalles de la cita a continuación. Haga clic en guardar cuando finalice.",
-    "Type": "Tipo de cita",
-    "SelectType": "Seleccione un tipo",
-    "EnterNotes": "Ingrese notas de la cita...",
-    "Upcoming": "Próximas citas",
-    "Recent": "Citas recientes"
   }
 }

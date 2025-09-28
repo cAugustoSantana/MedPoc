@@ -37,7 +37,6 @@
   "dateOfBirth": "Date of Birth",
   "phone": "Phone",
   "address": "Address",
-  "loadingAppointments": "Loading Appointments",
   "patient": "Patient",
   "toggleColumns": "Toggle columns",
   "status": "Status",
@@ -69,5 +68,31 @@
   "medicationName": "Medication Name",
   "allStatus": "All Status",
   "completed": "Completed",
-  "enterAppointment": "Enter appointment notes..."
+  "enterAppointment": "Enter appointment notes...",
+  "rowFooter": "Rows per page",
+  "Frequency": {
+    "daily": "Once daily",
+    "twice": "Twice daily",
+    "3times": "3 times daily",
+    "4times": " 4 times daily",
+    "4hours": "Every 4 hours",
+    "6hours": "Every 6 hours",
+    "8hours": "Every 8 hours",
+    "asNeeded": "As needed"
+  },
+  "Select": {
+    "date": "Select a Date",
+    "patient": "Select patient...",
+    "frequency": "Select frequency",
+    "selectType": "Select type",
+    "gender": "Select Gender"
+  },
+  "Loading": {
+    "patients": "Loading patients",
+    "appointments": "Loading appointments",
+    "prescriptions": "Loading prescriptions"
+  },
+  "Search": {
+    "patients": "Searching Patients"
+  }
 }

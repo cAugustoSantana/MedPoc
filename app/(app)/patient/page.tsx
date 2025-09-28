@@ -56,7 +56,7 @@ export default function PatientPage() {
     return (
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-center h-64">
-          <div className="text-muted-foreground">Loading...</div>
+          <div className="text-muted-foreground"> {t('common.loading')}</div>
         </div>
       </div>
     );
@@ -67,14 +67,14 @@ export default function PatientPage() {
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Patients</h1>
-            <p className="text-muted-foreground">
-              Manage your patient records and information
-            </p>
+            <h1 className="text-3xl font-bold">{t('patient.title')}</h1>
+            <p className="text-muted-foreground">{t('patient.subheader')}</p>
           </div>
         </div>
         <div className="flex items-center justify-center h-64">
-          <div className="text-muted-foreground">Loading patients...</div>
+          <div className="text-muted-foreground">
+            {t('common.Loading.patients')}
+          </div>
         </div>
       </div>
     );

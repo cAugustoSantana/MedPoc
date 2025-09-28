@@ -29,7 +29,7 @@ export default function MedicalRecordsWidget() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <FileText className="h-5 w-5" />
-                <CardTitle>{t('MedicalRecords.title')}</CardTitle>
+                <CardTitle>{t('medicalRecord.title')}</CardTitle>
                 <Badge variant="secondary">12 records</Badge>
               </div>{' '}
               {medicalRecordsOpen ? (
@@ -45,11 +45,11 @@ export default function MedicalRecordsWidget() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{t('MedicalRecords.date')}</TableHead>
-                  <TableHead>{t('MedicalRecords.visitType')}</TableHead>
-                  <TableHead>{t('Common.Diagnosis')}</TableHead>
-                  <TableHead>{t('MedicalRecords.treatment')}</TableHead>
-                  <TableHead>{t('MedicalRecords.doctor')}</TableHead>
+                  <TableHead>{t('common.date')}</TableHead>
+                  <TableHead>{t('medicalRecord.visitType')}</TableHead>
+                  <TableHead>{t('common.diagnosis')}</TableHead>
+                  <TableHead>{t('medicalRecord.treatment')}</TableHead>
+                  <TableHead>{t('common.doctor')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

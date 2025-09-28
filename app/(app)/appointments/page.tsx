@@ -224,7 +224,9 @@ export default function AppointmentsPage() {
         <div className="flex-1 p-6 overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="text-gray-500">{t('loading.Appointments')}</div>
+              <div className="text-gray-500">
+                {t('common.Loading.appointments')}
+              </div>
             </div>
           ) : selectedDate ? (
             selectedDateAppointments.length > 0 ? (

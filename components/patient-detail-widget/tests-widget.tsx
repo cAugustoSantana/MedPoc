@@ -32,7 +32,7 @@ export default function TestsWidget() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <TestTube className="h-5 w-5" />
-                <CardTitle>{t('Tests.widgetTitle')}</CardTitle>
+                <CardTitle>{t('tests.widgetTitle')}</CardTitle>
                 <Badge variant="secondary">8 results</Badge>
               </div>
               {testsOpen ? (
@@ -48,16 +48,16 @@ export default function TestsWidget() {
             <div className="space-y-4">
               <div>
                 <h4 className="font-semibold mb-3 text-blue-700">
-                  {t('Tests.RecentLabResults')}
+                  {t('tests.recentLabResults')}
                 </h4>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead> {t('Common.Test')}</TableHead>
-                      <TableHead>{t('Common.Result')}</TableHead>
-                      <TableHead>{t('Tests.ReferenceRange')}</TableHead>
-                      <TableHead>{t('Common.date')}</TableHead>
-                      <TableHead>{t('Common.Status')}</TableHead>
+                      <TableHead> {t('common.test')}</TableHead>
+                      <TableHead>{t('common.result')}</TableHead>
+                      <TableHead>{t('tests.referenceRange')}</TableHead>
+                      <TableHead>{t('common.date')}</TableHead>
+                      <TableHead>{t('common.status')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -113,7 +113,7 @@ export default function TestsWidget() {
 
               <div>
                 <h4 className="font-semibold mb-3 text-purple-700">
-                  {t('Tests.RecentLabResults')}
+                  {t('tests.recentLabResults')}
                 </h4>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -127,7 +127,7 @@ export default function TestsWidget() {
                       </p>
                     </div>
                     <Button variant="outline" size="sm">
-                      {t('Tests.Report')}
+                      {t('tests.report')}
                     </Button>
                   </div>
 
@@ -142,7 +142,7 @@ export default function TestsWidget() {
                       </p>
                     </div>
                     <Button variant="outline" size="sm">
-                      {t('Tests.Report')}
+                      {t('tests.report')}
                     </Button>
                   </div>
                 </div>

@@ -116,7 +116,7 @@ export default function AppointmentWidget({
       return (
         <Badge variant="secondary">
           <CheckCircle className="h-3 w-3 mr-1" />
-          Completed
+          {t('common.completed')}
         </Badge>
       );
     }
@@ -125,7 +125,7 @@ export default function AppointmentWidget({
       return (
         <Badge variant="outline">
           <CheckCircle className="h-3 w-3 mr-1" />
-          Confirmed
+          {t('common.confirmed')}
         </Badge>
       );
     }
@@ -133,7 +133,7 @@ export default function AppointmentWidget({
     return (
       <Badge variant="outline">
         <AlertCircle className="h-3 w-3 mr-1" />
-        Pending
+        {t('common.pending')}
       </Badge>
     );
   };
@@ -162,7 +162,7 @@ export default function AppointmentWidget({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Calendar className="h-5 w-5" />
-                <CardTitle>{t('Appoinments.title')}</CardTitle>
+                <CardTitle>{t('appointment.title')}</CardTitle>
                 <Badge variant="secondary">
                   {loading && appointments.length === 0
                     ? 'Loading...'
@@ -199,7 +199,7 @@ export default function AppointmentWidget({
                 {upcomingAppointments.length > 0 && (
                   <div>
                     <h4 className="font-semibold mb-3 text-green-700">
-                      {t('AppoinmentWidget.Upcoming')}
+                      {t('appointment.upcoming')}
                     </h4>
                     <div className="space-y-3">
                       {upcomingAppointments.map((appointment) => {
@@ -245,14 +245,14 @@ export default function AppointmentWidget({
                 {recentAppointments.length > 0 && (
                   <div>
                     <h4 className="font-semibold mb-3 text-muted-foreground">
-                      {t('AppoinmentWidget.Recent')}
+                      {t('appointment.recent')}
                     </h4>
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>{t('Common.date')}</TableHead>
-                          <TableHead>{t('Common.type')}</TableHead>
-                          <TableHead>{t('Common.doctor')}</TableHead>
+                          <TableHead>{t('common.date')}</TableHead>
+                          <TableHead>{t('common.type')}</TableHead>
+                          <TableHead>{t('common.doctor')}</TableHead>
                           <TableHead>Status</TableHead>
                         </TableRow>
                       </TableHeader>

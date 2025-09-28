@@ -264,7 +264,7 @@ export function AddAppointmentDialog({
           </DialogTitle>
           <DialogDescription className="text-sm">
             {selectedPatient
-              ? `${t('AppointmentWidget.subtitlehalf1')} ${selectedPatient.name}`
+              ? `${t('appointment.widgetSubtitle')} ${selectedPatient.name}`
               : t('appointment.widgetSubtitle')}
           </DialogDescription>
         </DialogHeader>
@@ -461,7 +461,7 @@ export function AddAppointmentDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('common.Notes')}</FormLabel>
+                  <FormLabel>{t('common.notes')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder={t('common.enterAppointment')}

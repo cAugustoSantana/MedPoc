@@ -108,7 +108,7 @@ export function PrescriptionForm({
         setPatients([]);
       }
     } catch (error) {
-      console.error(t('Common.lastUpdate'), error);
+      console.error(t('common.lastUpdate'), error);
       setPatients([]);
     } finally {
       setPatientsLoading(false);
@@ -226,20 +226,20 @@ export function PrescriptionForm({
         <DialogHeader>
           <DialogTitle>
             {mode === 'edit'
-              ? t('PrescriptionsDetail.editPrescription')
-              : t('PrescriptionsDetail.newPrescription')}
+              ? t('prescription.editPrescription')
+              : t('prescription.newPrescription')}
             {appointmentId && (
               <span className="text-sm font-normal text-muted-foreground ml-2">
-                ({t('Appointments.fromAppointment')} #{appointmentId})
+                ({t('appointment.fromAppointment')} #{appointmentId})
               </span>
             )}
           </DialogTitle>
           <DialogDescription>
             {mode === 'edit'
-              ? t('PrescriptionsDetail.editPrescriptionHeader')
+              ? t('prescription.editPrescriptionHeader')
               : appointmentId
-                ? t('PrescriptionsDetail.newPrescriptionHeaderPreSelect')
-                : t('PrescriptionsDetail.newPrescriptionHeader')}
+                ? t('prescription.newPrescriptionHeaderPreSelect')
+                : t('prescription.newPrescriptionHeader')}
           </DialogDescription>
         </DialogHeader>
 
@@ -248,18 +248,18 @@ export function PrescriptionForm({
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">
-                {t('Common.patientInformation')}
+                {t('common.patientInformation')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="patient">{t('Common.patient')} *</Label>
+                <Label htmlFor="patient">{t('common.patient')}*</Label>
                 <Combobox
                   options={patientOptions}
                   value={formData.patientId}
                   onValueChange={handlePatientChange}
-                  placeholder={t('Select.patient')}
-                  searchPlaceholder={t('Search.patients')}
+                  placeholder={t('common.Select.patient')}
+                  searchPlaceholder={t('common.Search.patients')}
                   emptyText={t('NotFound.patients')}
                   disabled={
                     patientsLoading ||
@@ -274,12 +274,10 @@ export function PrescriptionForm({
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">
-                  {t('Common.patients')}
-                </CardTitle>
+                <CardTitle className="text-lg">{t('common.patient')}</CardTitle>
                 <Button type="button" onClick={addMedication} size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  {t('Add.medication')}
+                  <Plus className="h-4 w-4 mr-0" />
+                  {t('prescription.addMedication')}
                 </Button>
               </div>
             </CardHeader>
@@ -291,7 +289,7 @@ export function PrescriptionForm({
                 >
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium">
-                      {t('Common.medication')} {index + 1}
+                      {t('common.medication')} {index + 1}
                     </h4>
                     {formData.medications.length > 1 && (
                       <Button
@@ -308,7 +306,7 @@ export function PrescriptionForm({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor={`medication-${index}`}>
-                        {t('Common.medicationName')} *
+                        {t('common.medicationName')}*
                       </Label>
                       <Input
                         id={`medication-${index}`}
@@ -321,7 +319,7 @@ export function PrescriptionForm({
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor={`dosage-${index}`}>
-                        {t('Common.dosage')} *
+                        {t('common.dosage')}*
                       </Label>
                       <Input
                         id={`dosage-${index}`}
@@ -342,7 +340,7 @@ export function PrescriptionForm({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor={`frequency-${index}`}>
-                        {t('Common.frequency')} *
+                        {t('common.frequency')}*
                       </Label>
                       <Select
                         value={medication.frequency}
@@ -351,39 +349,41 @@ export function PrescriptionForm({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="{t('Select.frequency')}" />
+                          <SelectValue
+                            placeholder={t('common.Select.frequency')}
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Once daily">
-                            {t('Frequency.daily')}
+                            {t('common.Frequency.daily')}
                           </SelectItem>
                           <SelectItem value="Twice daily">
-                            {t('Frequency.twice')}
+                            {t('common.Frequency.twice')}
                           </SelectItem>
                           <SelectItem value="3 times daily">
-                            {t('Frequency.3times')}
+                            {t('common.Frequency.3times')}
                           </SelectItem>
                           <SelectItem value="4 times daily">
-                            {t('Frequency.4times')}
+                            {t('common.Frequency.4times')}
                           </SelectItem>
                           <SelectItem value="Every 4 hours">
-                            {t('Frequency.4hours')}
+                            {t('common.Frequency.4hours')}
                           </SelectItem>
                           <SelectItem value="Every 6 hours">
-                            {t('Frequency.6hours')}
+                            {t('common.Frequency.6hours')}
                           </SelectItem>
                           <SelectItem value="Every 8 hours">
-                            {t('Frequency.8hours')}
+                            {t('common.Frequency.8hours')}
                           </SelectItem>
                           <SelectItem value="As needed">
-                            {t('Frequency.asNeeded')}
+                            {t('common.Frequency.asNeeded')}
                           </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor={`duration-${index}`}>
-                        {t('Common.duration')} *
+                        {t('common.duration')}*
                       </Label>
                       <Input
                         id={`duration-${index}`}
@@ -403,11 +403,11 @@ export function PrescriptionForm({
 
                   <div className="space-y-2">
                     <Label htmlFor={`instructions-${index}`}>
-                      {t('PrescriptionsDetail.specificInstrutctions')}
+                      {t('prescription.specificInstructions')}
                     </Label>
                     <Textarea
                       id={`instructions-${index}`}
-                      placeholder="{t('PrescriptionsDetail.specificInstrutctions')}..."
+                      placeholder={`${t('prescription.specificInstructions')}...`}
                       value={medication.instructions}
                       onChange={(e) =>
                         handleMedicationChange(
@@ -428,12 +428,12 @@ export function PrescriptionForm({
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">
-                {t('PrescriptionsDetail.title')}
+                {t('prescription.title')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>{t('PrescriptionsDetail.prescriptionDate')} *</Label>
+                <Label>{t('prescription.prescriptionDate')}*</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -456,12 +456,10 @@ export function PrescriptionForm({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notes">
-                  {t('PrescriptionsDetail.generalNotes')}
-                </Label>
+                <Label htmlFor="notes">{t('prescription.generalNotes')}</Label>
                 <Textarea
                   id="notes"
-                  placeholder={t('PrescriptionsDetail.generalNotes')}
+                  placeholder={t('prescription.generalNotes')}
                   value={formData.notes}
                   onChange={(e) => handleInputChange('notes', e.target.value)}
                   rows={3}
@@ -476,12 +474,12 @@ export function PrescriptionForm({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              {t('PrescriptionsDetail.cancel')}
+              {t('common.cancel')}
             </Button>
             <Button type="submit">
               {mode === 'edit'
-                ? t('PrescriptionsDetail.updatePrescription')
-                : t('PrescriptionsDetail.createPrescription')}
+                ? t('prescription.updatePrescription')
+                : t('prescription.createPrescription')}
             </Button>
           </DialogFooter>
         </form>
