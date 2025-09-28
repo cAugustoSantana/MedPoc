@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import type { Patient } from '@/types/patient';
 import { toast } from 'sonner';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface PatientDetailProps {
   patientId: string;
@@ -20,6 +21,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const { t } = useTranslations();
 
   const loadPatient = useCallback(async () => {
     setLoading(true);
@@ -68,10 +70,10 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
       <main className="min-h-screen bg-gray-100 p-4">
         <div className="w-full max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            Patient Details
+            {t('patient.title')}
           </h1>
           <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading patient...</div>
+            <div className="text-gray-500"> {t('loading.title')}...</div>
           </div>
         </div>
       </main>
@@ -83,7 +85,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
       <main className="min-h-screen bg-gray-100 p-4">
         <div className="w-full max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            Patient Details
+            {t('patient.details')}
           </h1>
           <div className="flex items-center justify-center h-64">
             <div className="text-red-500">{error || 'Patient not found'}</div>
@@ -113,7 +115,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
     <main className="min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-6">
-          Patient Details
+          {t('patient.title')}
         </h1>
 
         <div className="space-y-6">
@@ -122,13 +124,13 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl font-bold">
-                  Patient Details
+                  {t('patient.title')}
                 </CardTitle>
                 <Button
                   variant="outline"
                   onClick={() => setIsEditDialogOpen(true)}
                 >
-                  Edit Patient
+                  {t('patient.edit')}
                 </Button>
               </div>
             </CardHeader>
@@ -144,14 +146,16 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
 
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="font-medium text-muted-foreground">Age</p>
+                      <p className="font-medium text-muted-foreground">
+                        {t('patient.age')}
+                      </p>
                       <p className="text-lg">
-                        {calculateAge(patient.dob)} years
+                        {calculateAge(patient.dob)} {t('common.years')}
                       </p>
                     </div>
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        Gender
+                        {t('patient.gender')}
                       </p>
                       <p className="text-lg capitalize">
                         {patient.gender || 'Not specified'}
@@ -159,7 +163,7 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
                     </div>
                     <div>
                       <p className="font-medium text-muted-foreground">
-                        Date of Birth
+                        {t('patient.dob')}
                       </p>
                       <p className="text-lg">
                         {patient.dob
@@ -196,16 +200,16 @@ export default function PatientDetail({ patientId }: PatientDetailProps) {
 
                   <div className="space-y-2">
                     <p className="font-medium text-sm text-muted-foreground">
-                      Record Info
+                      {t('patient.recordInfo')}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Created:{' '}
+                      {t('patient.created')}:{' '}
                       {patient.createdAt
                         ? new Date(patient.createdAt).toLocaleDateString()
                         : 'Unknown'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Updated:{' '}
+                      {t('patient.updated')}:{' '}
                       {patient.updatedAt
                         ? new Date(patient.updatedAt).toLocaleDateString()
                         : 'Never'}

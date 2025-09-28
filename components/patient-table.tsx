@@ -19,6 +19,9 @@ import {
   useReactTable,
   type VisibilityState,
 } from '@tanstack/react-table';
+
+import { useTranslations } from '@/hooks/use-translations';
+
 import {
   ChevronDownIcon,
   ChevronFirstIcon,
@@ -126,6 +129,7 @@ export default function PatientTable({
   addPatientComponent?: React.ReactNode;
 }>) {
   const id = useId();
+  const { t } = useTranslations();
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -168,7 +172,7 @@ export default function PatientTable({
       enableHiding: false,
     },
     {
-      header: 'Name',
+      header: t('common.name'),
       accessorKey: 'name',
       cell: ({ row }) => (
         <div className="font-medium text-left">{row.getValue('name')}</div>
@@ -178,7 +182,7 @@ export default function PatientTable({
       enableHiding: false,
     },
     {
-      header: 'Email',
+      header: t('common.email'),
       accessorKey: 'email',
       cell: ({ row }) => (
         <div className="text-left">{row.getValue('email')}</div>
@@ -186,7 +190,7 @@ export default function PatientTable({
       size: 220,
     },
     {
-      header: 'Address',
+      header: t('common.address'),
       accessorKey: 'address',
       cell: ({ row }) => (
         <div className="text-left"> {row.getValue('address')}</div>
@@ -194,7 +198,7 @@ export default function PatientTable({
       size: 180,
     },
     {
-      header: 'Phone',
+      header: t('common.phone'),
       accessorKey: 'phone',
       cell: ({ row }) => {
         const phone: string = row.getValue('phone');
@@ -346,9 +350,9 @@ export default function PatientTable({
               onChange={(e) =>
                 table.getColumn('name')?.setFilterValue(e.target.value)
               }
-              placeholder="Filter by name or email..."
+              placeholder={t('patient.filterPlaceholder')}
               type="text"
-              aria-label="Filter by name or email"
+              aria-label={t('patient.filterPlaceholder')}
             />
             <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
               <ListFilterIcon size={16} aria-hidden="true" />
@@ -377,7 +381,7 @@ export default function PatientTable({
                   size={16}
                   aria-hidden="true"
                 />
-                Status
+                {t('common.status')}
                 {selectedStatuses.length > 0 && (
                   <span className="bg-background text-muted-foreground/70 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
                     {selectedStatuses.length}
@@ -388,7 +392,7 @@ export default function PatientTable({
             <PopoverContent className="w-auto min-w-36 p-3" align="start">
               <div className="space-y-3">
                 <div className="text-muted-foreground text-xs font-medium">
-                  Filters
+                  {t('common.filters')}
                 </div>
                 <div className="space-y-3">
                   {uniqueStatusValues.map((value, i) => (
@@ -424,11 +428,11 @@ export default function PatientTable({
                   size={16}
                   aria-hidden="true"
                 />
-                View
+                {t('common.view')}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('common.toggleColumns')}</DropdownMenuLabel>
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -461,7 +465,7 @@ export default function PatientTable({
                     size={16}
                     aria-hidden="true"
                   />
-                  Delete
+                  {t('common.delete')}
                   <span className="bg-background text-muted-foreground/70 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
                     {table.getSelectedRowModel().rows.length}
                   </span>
@@ -491,13 +495,13 @@ export default function PatientTable({
                 </div>
                 <AlertDialogFooter>
                   <AlertDialogCancel disabled={isDeleting}>
-                    Cancel
+                    {t('common.cancel')}
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeleteRows}
                     disabled={isDeleting}
                   >
-                    {isDeleting ? 'Deleting...' : 'Delete'}
+                    {isDeleting ? t('common.saving') : t('common.saveChanges')}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -644,7 +648,7 @@ export default function PatientTable({
         {/* Results per page */}
         <div className="flex items-center gap-3">
           <Label htmlFor={id} className="max-sm:sr-only">
-            Rows per page
+            {t('common.rowFooter')}
           </Label>
           <Select
             value={table.getState().pagination.pageSize.toString()}
@@ -758,6 +762,7 @@ export default function PatientTable({
 
 function RowActions({ patient }: { patient: Patient }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { t } = useTranslations();
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -804,28 +809,28 @@ function RowActions({ patient }: { patient: Patient }) {
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <span>Edit</span>
+            <span>{t('common.edit')}</span>
             <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <span>Duplicate</span>
+            <span>{t('common.duplicate')}</span>
             <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <span>Archive</span>
+            <span>{t('common.archive')}</span>
             <DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger>{t('common.more')}</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>Move to project</DropdownMenuItem>
-                <DropdownMenuItem>Move to folder</DropdownMenuItem>
+                <DropdownMenuItem>{t('common.moveProject')}</DropdownMenuItem>
+                <DropdownMenuItem>{t('common.moveFolder')}</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Advanced options</DropdownMenuItem>
+                <DropdownMenuItem>{t('common.moveFolder')} </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
@@ -833,11 +838,11 @@ function RowActions({ patient }: { patient: Patient }) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <span>Share</span>
+            <span>{t('common.share')}</span>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <span>Add to favorites</span>
+            <span>{t('common.addFavorites')}</span>
             <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -871,10 +876,10 @@ function RowActions({ patient }: { patient: Patient }) {
             </div>
             <AlertDialogFooter>
               <AlertDialogCancel disabled={isDeleting}>
-                Cancel
+                {t('common.cancel')}
               </AlertDialogCancel>
               <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                {isDeleting ? t('common.deleting') : t('common.delete')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

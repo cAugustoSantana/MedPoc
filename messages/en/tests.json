@@ -1,0 +1,12 @@
+{
+  "title": "Tests",
+  "widgetTitle": "Tests & Lab Results",
+  "recentLabResults": "Recent Lab Results",
+  "imagingAndOtherTests": "Imaging & Other Tests",
+  "report": "View Report",
+  "testColumn": "Test",
+  "resultColumn": "Result",
+  "referenceRange": "Reference Range",
+  "date": "Date",
+  "status": "Status"
+}

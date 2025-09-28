@@ -53,6 +53,7 @@ import { Patient } from '@/types/patient';
 import { Prescription } from '@/types/prescription';
 import { PrescriptionItem } from '@/types/prescription-item';
 import { toast } from 'sonner';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface Medication {
   id: string;
@@ -104,6 +105,7 @@ export default function PrescriptionsPage() {
   const [loadingDelete, setLoadingDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const { t } = useTranslations();
 
   const fetchPrescriptions = useCallback(async () => {
     try {
@@ -159,7 +161,7 @@ export default function PrescriptionsPage() {
   if (!isReady) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">{t('common.loading')}</div>
       </div>
     );
   }
@@ -404,7 +406,7 @@ export default function PrescriptionsPage() {
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
             <p className="mt-2 text-muted-foreground">
-              Loading prescriptions...
+              {t('common.Loading.prescriptions')}
             </p>
           </div>
         </div>
@@ -416,30 +418,26 @@ export default function PrescriptionsPage() {
     <div className="flex flex-1 flex-col gap-4 p-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Prescriptions</h1>
-          <p className="text-muted-foreground">
-            Manage patient prescriptions and medications
-          </p>
+          <h1 className="text-3xl font-bold">{t('prescription.title')}</h1>
+          <p className="text-muted-foreground">{t('prescription.subheader')}</p>
         </div>
         <Button onClick={() => setIsFormOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          New Prescription
+          {t('prescription.newPrescription')}
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Prescription Management</CardTitle>
-          <CardDescription>
-            View and manage all patient prescriptions
-          </CardDescription>
+          <CardTitle>{t('prescription.cardTitle')}</CardTitle>
+          <CardDescription>{t('prescription.cardDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by patient name, medication, or notes..."
+                placeholder={t('search.prescriptionTable')}
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
@@ -453,10 +451,14 @@ export default function PrescriptionsPage() {
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="all">{t('common.allStatus')}</SelectItem>
+                <SelectItem value="active">{t('common.active')}</SelectItem>
+                <SelectItem value="completed">
+                  {t('common.completed')}
+                </SelectItem>
+                <SelectItem value="cancelled">
+                  {t('common.cancelled')}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -465,13 +467,15 @@ export default function PrescriptionsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Medication</TableHead>
-                  <TableHead>Dosage</TableHead>
-                  <TableHead>Frequency</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Prescribed Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('common.patient')}</TableHead>
+                  <TableHead>{t('common.medication')}</TableHead>
+                  <TableHead>{t('common.dosage')}</TableHead>
+                  <TableHead>{t('common.frequency')}</TableHead>
+                  <TableHead>{t('common.status')}</TableHead>
+                  <TableHead>{t('common.prescribedDate')}</TableHead>
+                  <TableHead className="text-right">
+                    {t('common.actions')}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -490,7 +494,7 @@ export default function PrescriptionsPage() {
                             items.map((item, index) => (
                               <div key={item.itemId} className="text-sm">
                                 <span className="font-medium">
-                                  {item.drugName || 'Unknown Medication'}
+                                  {item.drugName || t('common.prescribedDate')}
                                 </span>
                                 {index < items.length - 1 && (
                                   <span className="text-muted-foreground">

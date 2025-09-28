@@ -1,0 +1,21 @@
+{
+  "title": "Citas",
+  "upcoming": "Próximas citas",
+  "recent": "Citas recientes",
+  "selectDate": "Seleccionar fecha",
+  "selectDateSubheader": "Seleccione una fecha para ver las citas",
+  "subheader": "Elija una fecha para ver las citas",
+  "subheaderDay": "Seleccione una fecha del calendario para ver las citas de ese día.",
+  "noAppoinments": "No hay citas programadas",
+  "noAppoinmentsSubtitle": "No existen citas programadas para",
+  "addAppoinments": "Agregar cita",
+  "appointmentType": "Tipo de cita",
+  "fromAppointment": "de la cita",
+  "widgetTitle": "Agregar nueva cita",
+  "widgetSubtitle": "Programar una nueva cita para",
+  "widgetType": "Tipo de cita",
+  "widgetSelectType": "Seleccione un tipo",
+  "widgetEnterNotes": "Ingrese notas de la cita...",
+  "widgetUpcoming": "Próximas citas",
+  "widgetRecent": "Citas recientes"
+}

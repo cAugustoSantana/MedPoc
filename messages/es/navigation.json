@@ -1,0 +1,9 @@
+{
+  "dashboard": "Panel de control",
+  "patients": "Pacientes",
+  "appointments": "Citas",
+  "prescriptions": "Prescripciones",
+  "records": "Historial clínico",
+  "tests": "Pruebas",
+  "settings": "Configuración"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Prescripciones",
+  "subheader": "Gestione las prescripciones y medicamentos de los pacientes",
+  "newPrescription": "Nueva prescripción",
+  "cardTitle": "Gestión de prescripciones",
+  "cardDescription": "Ver y gestionar todas las prescripciones de los pacientes",
+  "create": "Crear prescripción",
+  "titleDetails": "Detalles de la prescripción",
+  "notFound": "No se encontraron medicamentos para esta prescripción.",
+  "prescriptionInfo": "Información de la prescripción",
+  "generalNotes": "Notas generales",
+  "enterGeneralNotes": "Ingrese notas generales de la prescripción...",
+  "prescriptionDate": "Fecha de prescripción",
+  "completePrescription": "Información completa de la prescripción para",
+  "specificInstructions": "Instrucciones específicas para este medicamento",
+  "updatePrescription": "Actualizar prescripción",
+  "createPrescription": "Crear prescripción",
+  "addMedication": "Agregar medicamento",
+  "newPrescriptionHeader": "Complete los datos para crear una nueva prescripción.",
+  "newPrescriptionHeaderPreSelect": "Complete los datos para crear una nueva prescripción.",
+  "editPrescriptionHeader": "Complete los datos para editar la prescripción.",
+  "editPrescription": "Editar prescripción"
+}

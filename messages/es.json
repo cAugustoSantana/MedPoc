@@ -1,55 +1,69 @@
 {
   "HomePage": {
     "title": "Bienvenido a MedPoc",
-    "subtitle": "Un sistema integral de gestión de consultorios médicos",
+    "subtitle": "Un sistema integral de gestión para consultorios médicos",
     "patientManagement": {
-      "title": "Gestión de Pacientes",
-      "description": "Gestiona eficientemente los registros de pacientes, citas e historial médico."
+      "title": "Gestión de pacientes",
+      "description": "Administre de manera eficiente los historiales de pacientes, citas y antecedentes médicos."
     },
     "appointmentScheduling": {
-      "title": "Programación de Citas",
-      "description": "Reserva de citas simplificada y gestión de calendario."
+      "title": "Programación de citas",
+      "description": "Reserva de citas y gestión de calendario de manera ágil."
     },
     "prescriptionTracking": {
-      "title": "Seguimiento de Recetas",
-      "description": "Gestión completa de recetas y seguimiento de medicamentos."
+      "title": "Gestión de recetas",
+      "description": "Administración completa de recetas y control de medicamentos."
     },
-    "signIn": "Iniciar Sesión",
+    "signIn": "Iniciar sesión",
     "signUp": "Registrarse"
   },
   "Navigation": {
-    "dashboard": "Panel de Control",
+    "dashboard": "Panel",
     "patients": "Pacientes",
     "appointments": "Citas",
     "prescriptions": "Recetas",
     "records": "Registros",
-    "tests": "Pruebas",
+    "tests": "Exámenes",
     "settings": "Configuración"
-  },
-  "Dashboard": {
-    "schedule": "Horario",
-    "quickStats": "Estadísticas Rápidas",
-    "quickActions": "Acciones Rápidas",
-    "recentPatients": "Pacientes Recientes",
-    "totalPatients": "Total de Pacientes",
-    "todayAppointments": "Citas de Hoy",
-    "pendingPrescriptions": "Recetas Pendientes",
-    "addPatient": "Agregar Paciente",
-    "scheduleAppointment": "Programar Cita",
-    "newPrescription": "Nueva Receta",
-    "noPatientsFound": "No se encontraron pacientes"
   },
   "Common": {
     "loading": "Cargando...",
     "save": "Guardar",
+    "saving": "Guardando",
+    "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
     "edit": "Editar",
     "delete": "Eliminar",
     "add": "Agregar",
     "search": "Buscar",
+    "date": "Fecha",
+    "Result": "Resultado",
+    "type": "Tipo",
+    "Delete": "Eliminar",
+    "doctor": "Doctor",
     "name": "Nombre",
+    "Filters": "Filtros",
     "gender": "Género",
-    "email": "Correo Electrónico",
-    "dateOfBirth": "Fecha de Nacimiento"
+    "email": "Correo electrónico",
+    "dateOfBirth": "Fecha de nacimiento",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "LoadingAppoinments": "Cargando citas",
+    "Patient": "Paciente",
+    "toggleColumns": "Mostrar/ocultar columnas",
+    "Status": "Estado",
+    "Duration": "Duración",
+    "Notes": "Notas",
+    "Confirmed": "Confirmada",
+    "Test": "Examen",
+    "View": "Ver",
+    "Pending": "Pendiente",
+    "Cancelled": "Cancelada",
+    "Diagnosis": "Diagnóstico",
+    "Male": "Masculino",
+    "Female": "Femenino",
+    "Other": "Otro",
+    "notSpecified": "No especificado",
+    "years": "Años"
   }
 }

@@ -1,17 +1,40 @@
 import { cookies } from 'next/headers';
 
+// Helper to safely import multiple JSON modules
+async function loadModule(locale: string, file: string) {
+  try {
+    const mod = await import(`../messages/${locale}/${file}`);
+    return mod.default;
+  } catch {
+    const fallback = await import(`../messages/en/${file}`);
+    return fallback.default;
+  }
+}
+
 export async function getTranslations() {
   const cookieStore = await cookies();
   const locale = cookieStore.get('locale')?.value || 'en';
 
-  try {
-    const translations = await import(`../messages/${locale}.json`);
-    return translations.default;
-  } catch {
-    // Fallback to English
-    const translations = await import('../messages/en.json');
-    return translations.default;
+  const modules = [
+    'patient.json',
+    'appointment.json',
+    'prescription.json',
+    'common.json',
+    'medicalRecord.json',
+    'navigation.json',
+    'dashboard.json',
+    'tests.json',
+  ];
+
+  const translations: Record<string, unknown> = {};
+
+  for (const file of modules) {
+    const namespace = file.replace('.json', ''); // e.g. "patient"
+    const content = await loadModule(locale, file);
+    translations[namespace] = content;
   }
+
+  return translations;
 }
 
 export function t(translations: Record<string, unknown>, key: string): string {

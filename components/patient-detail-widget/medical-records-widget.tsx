@@ -15,9 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useTranslations } from '@/hooks/use-translations';
 import { Badge } from '@/components/ui/badge';
 export default function MedicalRecordsWidget() {
   const [medicalRecordsOpen, setMedicalRecordsOpen] = useState(false);
+  const { t } = useTranslations();
 
   return (
     <Collapsible open={medicalRecordsOpen} onOpenChange={setMedicalRecordsOpen}>
@@ -27,7 +29,7 @@ export default function MedicalRecordsWidget() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <FileText className="h-5 w-5" />
-                <CardTitle>Medical Records</CardTitle>
+                <CardTitle>{t('medicalRecord.title')}</CardTitle>
                 <Badge variant="secondary">12 records</Badge>
               </div>{' '}
               {medicalRecordsOpen ? (
@@ -43,11 +45,11 @@ export default function MedicalRecordsWidget() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Visit Type</TableHead>
-                  <TableHead>Diagnosis</TableHead>
-                  <TableHead>Treatment</TableHead>
-                  <TableHead>Doctor</TableHead>
+                  <TableHead>{t('common.date')}</TableHead>
+                  <TableHead>{t('medicalRecord.visitType')}</TableHead>
+                  <TableHead>{t('common.diagnosis')}</TableHead>
+                  <TableHead>{t('medicalRecord.treatment')}</TableHead>
+                  <TableHead>{t('common.doctor')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

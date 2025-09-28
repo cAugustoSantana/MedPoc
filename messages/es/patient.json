@@ -1,0 +1,18 @@
+{
+  "title": "Pacientes",
+  "subheader": "Gestione los registros e información de sus pacientes.",
+  "loadingPatients": "Cargando pacientes",
+  "unknown": "Paciente desconocido",
+  "detailTitle": "Detalles del paciente",
+  "edit": "Editar paciente",
+  "gender": "Género",
+  "subheaderDetail": "Actualice la información del paciente. Haga clic en guardar cuando termine.",
+  "recordInfo": "Información del registro",
+  "dob": "Fecha de nacimiento",
+  "age": "Edad",
+  "created": "Creado",
+  "updated": "Actualizado",
+  "tableNameHeader": "Nombre",
+  "filterPlaceholder": "Filtrar por nombre o correo electrónico",
+  "add": "Agregar paciente"
+}

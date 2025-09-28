@@ -1,0 +1,23 @@
+{
+  "title": "Prescriptions",
+  "subheader": "Manage patient prescriptions and medications",
+  "newPrescription": "New Prescription",
+  "cardTitle": "Prescription Management",
+  "cardDescription": "View and manage all patient prescriptions",
+  "create": "Create Prescriptions",
+  "titledetails": "Prescriptions Details",
+  "notFound": "No medications found for this prescription.",
+  "prescriptionInfo": "Prescription Information",
+  "generalNotes": "General Notes",
+  "enterGeneralNotes": "Enter general prescription notes...",
+  "prescriptionDate": "Prescribed Date",
+  "completePrescription": "Complete prescription information for",
+  "specificInstructions": "Specific instructions for this medication",
+  "updatePrescription": "Update ",
+  "createPrescription": "Create ",
+  "addMedication": "Add Medication",
+  "newPrescriptionHeader": "Fill in the details to create a new prescription.",
+  "newPrescriptionHeaderPreSelect": "Fill in the details to create a new prescription.",
+  "editPrescriptionHeader": "Fill in the details to create a new prescription.",
+  "editPrescription": "Edit Prescription"
+}

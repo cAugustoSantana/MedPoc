@@ -22,6 +22,7 @@ import {
 import { Patient } from '@/types/patient';
 import { Prescription } from '@/types/prescription';
 import { PrescriptionItem } from '@/types/prescription-item';
+import { useTranslations } from '@/hooks/use-translations';
 
 interface PrescriptionDetailsProps {
   open: boolean;
@@ -35,6 +36,7 @@ export function PrescriptionDetails({
   prescription,
 }: PrescriptionDetailsProps) {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const { t } = useTranslations();
   const [prescriptionItems, setPrescriptionItems] = useState<
     PrescriptionItem[]
   >([]);
@@ -63,7 +65,7 @@ export function PrescriptionDetails({
         setPatients([]);
       }
     } catch (error) {
-      console.error('Error fetching patients:', error);
+      console.error(t('Error.fetchingPatients'), error);
       setPatients([]);
     }
   };
@@ -81,7 +83,7 @@ export function PrescriptionDetails({
         setPrescriptionItems([]);
       }
     } catch (error) {
-      console.error('Error fetching prescription items:', error);
+      console.error(t('Error.fetchingPatients'), error);
       setPrescriptionItems([]);
     }
   };
@@ -96,7 +98,7 @@ export function PrescriptionDetails({
       );
 
       if (!response.ok) {
-        throw new Error('Failed to generate PDF');
+        throw new Error(t('Error.fetchingPatients'));
       }
 
       const blob = await response.blob();
@@ -109,7 +111,7 @@ export function PrescriptionDetails({
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+      console.error(t('Error.downloadPDF'), error);
       // You might want to show a toast notification here
     } finally {
       setIsDownloadingPDF(false);
@@ -118,16 +120,20 @@ export function PrescriptionDetails({
 
   // Helper function to get patient name by ID
   const getPatientName = (patientId: number | null) => {
-    if (!patientId) return 'Unknown Patient';
+    if (!patientId) return t('Patient.Unknown');
     const patient = patients.find((p) => p.patientId === patientId);
-    return patient?.name || 'Unknown Patient';
+    return patient?.name || t('Patient.Unknown');
   };
 
   if (!prescription) return null;
 
   const getStatusBadge = () => {
     // For now, we'll show a default status since the schema doesn't have a status field
-    return <Badge className="bg-green-100 text-green-800">Active</Badge>;
+    return (
+      <Badge className="bg-green-100 text-green-800">
+        {t('Common.active')}
+      </Badge>
+    );
   };
 
   return (
@@ -138,10 +144,10 @@ export function PrescriptionDetails({
             <div>
               <DialogTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
-                Prescription Details
+                {t('PrescriptionsDetail.title')}
               </DialogTitle>
               <DialogDescription>
-                Complete prescription information for{' '}
+                {t('completePrescription.active')}{' '}
                 {getPatientName(prescription.patientId)}
               </DialogDescription>
             </div>
@@ -153,7 +159,9 @@ export function PrescriptionDetails({
               className="flex items-center gap-2"
             >
               <Download className="h-4 w-4" />
-              {isDownloadingPDF ? 'Generating...' : 'Download PDF'}
+              {isDownloadingPDF
+                ? t('Common.generating')
+                : t('Common.downloadPDF')}
             </Button>
           </div>
         </DialogHeader>
@@ -163,7 +171,7 @@ export function PrescriptionDetails({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-semibold">
-                Prescription #{prescription.prescriptionId}
+                {t('Common.Prescription')} #{prescription.prescriptionId}
               </h3>
               {getStatusBadge()}
             </div>
@@ -175,11 +183,13 @@ export function PrescriptionDetails({
           <div className="space-y-3">
             <h4 className="font-medium flex items-center gap-2">
               <User className="h-4 w-4" />
-              Patient Information
+              {t('Common.patientInformation')}
             </h4>
             <div className="grid grid-cols-1 gap-4 text-sm">
               <div>
-                <span className="text-muted-foreground">Patient Name:</span>
+                <span className="text-muted-foreground">
+                  {t('Common.patientName')}:
+                </span>
                 <div className="font-medium">
                   {getPatientName(prescription.patientId)}
                 </div>
@@ -193,7 +203,7 @@ export function PrescriptionDetails({
           <div className="space-y-3">
             <h4 className="font-medium flex items-center gap-2">
               <Pill className="h-4 w-4" />
-              Medications ({prescriptionItems.length})
+              {t('Common.medications')} ({prescriptionItems.length})
             </h4>
             <div className="space-y-4">
               {prescriptionItems.length > 0 ? (
@@ -206,32 +216,38 @@ export function PrescriptionDetails({
                       <h5 className="font-medium text-base">
                         {item.drugName || 'Unknown Medication'}
                       </h5>
-                      <Badge variant="outline">Medication {index + 1}</Badge>
+                      <Badge variant="outline">
+                        {t('Common.medication')} {index + 1}
+                      </Badge>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Dosage:</span>
+                        <span className="text-muted-foreground">
+                          {t('Common.dosage')}:
+                        </span>
                         <div className="font-medium">
                           {item.dosage || 'Not specified'}
                         </div>
                       </div>
                       <div>
                         <span className="text-muted-foreground">
-                          Frequency:
+                          {t('Common.dosage')}
                         </span>
                         <div className="font-medium">
                           {item.frequency || 'Not specified'}
                         </div>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Duration:</span>
+                        <span className="text-muted-foreground">
+                          {t('Common.duration')}:
+                        </span>
                         <div className="font-medium">
                           {item.duration || 'Not specified'}
                         </div>
                       </div>
                       <div>
                         <span className="text-muted-foreground">
-                          Instructions:
+                          {t('Common.instructions')}:
                         </span>
                         <div className="font-medium">
                           {item.instructions || 'No specific instructions'}
@@ -242,7 +258,7 @@ export function PrescriptionDetails({
                 ))
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
-                  No medications found for this prescription.
+                  {t('PrescriptionsDetail.notFound')}
                 </div>
               )}
             </div>
@@ -254,12 +270,15 @@ export function PrescriptionDetails({
           <div className="space-y-3">
             <h4 className="font-medium flex items-center gap-2">
               <Stethoscope className="h-4 w-4" />
-              Prescription Information
+              {t('PrescriptionsDetail.prescriptionInfo')}
             </h4>
             <div className="grid grid-cols-1 gap-4 text-sm">
               {prescription.notes && (
                 <div>
-                  <span className="text-muted-foreground">General Notes:</span>
+                  <span className="text-muted-foreground">
+                    {' '}
+                    {t('PrescriptionsDetail.generalNotes')}
+                  </span>
                   <div className="font-medium">{prescription.notes}</div>
                 </div>
               )}
@@ -272,11 +291,13 @@ export function PrescriptionDetails({
           <div className="space-y-3">
             <h4 className="font-medium flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              Prescription Details
+              {t('PrescriptionsDetail.title')}
             </h4>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-muted-foreground">Prescribed Date:</span>
+                <span className="text-muted-foreground">
+                  {t('PrescriptionsDetail.prescriptionDate')}:
+                </span>
                 <div className="font-medium flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {prescription.prescribedAt
@@ -285,7 +306,9 @@ export function PrescriptionDetails({
                 </div>
               </div>
               <div>
-                <span className="text-muted-foreground">Created Date:</span>
+                <span className="text-muted-foreground">
+                  {t('Common.createdDate')}:
+                </span>
                 <div className="font-medium flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {prescription.createdAt
@@ -294,12 +317,16 @@ export function PrescriptionDetails({
                 </div>
               </div>
               <div>
-                <span className="text-muted-foreground">Status:</span>
+                <span className="text-muted-foreground">
+                  {t('Common.status')}:
+                </span>
                 <div className="font-medium">{getStatusBadge()}</div>
               </div>
               {prescription.updatedAt && (
                 <div>
-                  <span className="text-muted-foreground">Last Updated:</span>
+                  <span className="text-muted-foreground">
+                    {t('Common.lastUpdate')}:
+                  </span>
                   <div className="font-medium flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {new Date(prescription.updatedAt).toLocaleDateString()}
